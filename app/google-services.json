@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "704304803080",
+    "project_id": "letsgodaengdaeng",
+    "storage_bucket": "letsgodaengdaeng.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704304803080:android:149593b4f0d01cddc110bd",
+        "android_client_info": {
+          "package_name": "kr.or.mrhi.letsgodaengdaeng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704304803080-0vsf0uh8p31iehnop3cq8emfughfiifn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwMlWm9KmSeFgDeBJ-w_fYHTFSbb_lRPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704304803080-0vsf0uh8p31iehnop3cq8emfughfiifn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
