@@ -6,10 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
-    companion object {
-        val DB_NAME = "test"
-        var VERSION = 1
-    }
 
     private val TAG = this.javaClass.simpleName
     private var userCode: String? = null
