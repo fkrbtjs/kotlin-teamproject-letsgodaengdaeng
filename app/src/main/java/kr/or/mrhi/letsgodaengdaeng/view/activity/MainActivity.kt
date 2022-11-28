@@ -1,11 +1,5 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
-/**
- 프로젝트 생성 2022-11-25 이한용
- 메인액티비티 5 프래그먼트  생성
- 홈, 커뮤니티, 산책하기, 스토어, 프로필
- */
-
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
