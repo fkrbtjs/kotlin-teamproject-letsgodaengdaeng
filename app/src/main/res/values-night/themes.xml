@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.Letsgodaengdaeng" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/burly_wood</item>
+        <item name="colorPrimaryVariant">@color/burly_wood</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/papaya_whip</item>
+        <item name="colorSecondaryVariant">@color/papaya_whip</item>
+        <item name="colorOnSecondary">@color/rosy_brown</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
