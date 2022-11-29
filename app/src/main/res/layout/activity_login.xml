@@ -10,12 +10,12 @@ android:orientation="vertical"
 tools:context=".view.activity.LoginActivity">
 
     <EditText
-        android:id="@+id/edtID"
+        android:id="@+id/edtPhone"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/edt_text"
-        android:hint="아이디"
+        android:hint="핸드폰"
         android:paddingLeft="10dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@ tools:context=".view.activity.LoginActivity">
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <EditText
-        android:id="@+id/edtIPassword"
+        android:id="@+id/edtPassword"
         android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="40dp"
@@ -35,7 +35,7 @@ tools:context=".view.activity.LoginActivity">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtID" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPhone" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
@@ -61,7 +61,7 @@ tools:context=".view.activity.LoginActivity">
         android:text="로그인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtIPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPassword" />
 
     <TextView
         android:id="@+id/tvFindID"
