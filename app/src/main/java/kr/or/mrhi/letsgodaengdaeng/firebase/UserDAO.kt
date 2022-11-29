@@ -19,14 +19,16 @@ class UserDAO {
         storage = Firebase.storage
     }
 
-    /**********************************************************************************************/
-
     fun signUpUser(userCode: String, user: User?): Task<Void> {
         return databaseReference!!.child(userCode).setValue(user)
     }
 
     fun selectUser(): Query? {
         return databaseReference
+    }
+
+    fun selectUserPhone(phone: String): Query? {
+        return databaseReference?.orderByChild("phone")?.equalTo(phone)
     }
 
     fun updateUser(key: String, hashMap: HashMap<String, Any>): Task<Void> {
