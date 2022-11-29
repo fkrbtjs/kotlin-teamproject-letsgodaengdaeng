@@ -17,14 +17,14 @@
         android:theme="@style/Theme.Letsgodaengdaeng"
         tools:targetApi="31" >
         <activity
-            android:name=".SignupPuppyActivity"
+            android:name=".view.activity.SignupUserActivity"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".view.activity.SignupUserActivity"
+            android:name=".view.activity.SignupPuppyActivity"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

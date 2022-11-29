@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" >
+        android:theme="?attr/actionBarTheme">
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="@color/burly_wood"
                 android:gravity="center"
                 android:text="유저 정보"
@@ -50,26 +50,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtID"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edt_text"
-                android:hint="아이디"
-                android:paddingLeft="10dp"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/edtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edt_text"
-                android:hint="비밀번호"
-                android:paddingLeft="10dp"
-                android:textSize="14sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -77,55 +57,50 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/edtPasswordConfirm"
+                    android:id="@+id/edtPhone1"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/edt_text"
-                    android:hint="비밀번호 확인"
-                    android:paddingLeft="10dp"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/btnPasswordConfirm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="확인하기" />
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/edtNickname"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edt_text"
-                android:hint="닉네임"
-                android:paddingLeft="10dp"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/edtPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edt_text"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center"
                     android:hint="핸드폰"
-                    android:paddingLeft="10dp"
-                    android:textSize="14sp" />
+                    android:text="010"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edtPhone2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edt_text"
+                    android:gravity="center"
+                    android:hint="0000"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edtPhone3"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edt_text"
+                    android:gravity="center"
+                    android:hint="0000"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/btnPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="번호받기" />
+                    android:enabled="false"
+                    android:text="인증받기" />
             </LinearLayout>
 
             <LinearLayout
@@ -135,54 +110,136 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/edtPhoneCheck"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edt_text"
-                    android:hint="인증 번호를 입력하세요"
-                    android:paddingLeft="10dp"
-                    android:textSize="14sp" />
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/edtPhoneCheck"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edt_text"
+                        android:hint="인증 번호를 입력하세요"
+                        android:textSize="14sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/btnPhoneCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:enabled="false"
                     android:text="번호확인" />
+
+
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/edtIntroduce"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/edt_text"
-                android:gravity="start"
-                android:hint="소개글 (50자)"
-                android:inputType="text|textMultiLine"
-                android:maxLength="50"
-                android:maxLines="3"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:textSize="14sp" />
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edt_text"
+                    android:hint="비밀번호"
+                    android:inputType="textPassword"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/edtPasswordCheck"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/edt_text"
+                    android:hint="비밀번호 확인"
+                    android:inputType="textPassword"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/edtNickname"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/edt_text"
+                        android:hint="닉네임"
+                        android:inputType="text"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnNicknameCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:enabled="false"
+                    android:text="중복확인" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="50">
+
+                <EditText
+                    android:id="@+id/edtIntroduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@drawable/edt_text"
+                    android:gravity="left"
+                    android:hint="소개글"
+                    android:maxLength="50"
+                    android:paddingTop="15dp"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="40dp"
-                android:orientation="horizontal"/>
+                android:layout_marginBottom="60dp"
+                android:orientation="horizontal" />
 
             <Button
                 android:id="@+id/btnNext"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_horizontal"
                 android:layout_weight="1"
-                android:backgroundTint="@color/burly_wood"
-                android:password="false"
-                android:text="다음" />
+                android:enabled="false"
+                android:text="다음"
+                android:textColor="@color/white_antique" />
 
         </LinearLayout>
 
