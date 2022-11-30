@@ -14,12 +14,11 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = this.javaClass.simpleName
-
+    lateinit var use: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         /** 로그인 */
         binding.btnLogin.setOnClickListener {
@@ -55,9 +54,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
-
     }
 }
+
 

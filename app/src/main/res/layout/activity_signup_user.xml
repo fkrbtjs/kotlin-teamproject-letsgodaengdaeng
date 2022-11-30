@@ -139,10 +139,13 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
                 app:passwordToggleEnabled="true">
 
                 <EditText
@@ -152,14 +155,18 @@
                     android:background="@drawable/edt_text"
                     android:hint="비밀번호"
                     android:inputType="textPassword"
+                    android:maxLength="10"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPasswordCheck"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
                 app:passwordToggleEnabled="true">
 
                 <EditText
@@ -169,6 +176,7 @@
                     android:background="@drawable/edt_text"
                     android:hint="비밀번호 확인"
                     android:inputType="textPassword"
+                    android:maxLength="10"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -176,14 +184,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilNickname"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="10">
 
                     <EditText
                         android:id="@+id/edtNickname"
@@ -193,6 +204,7 @@
                         android:background="@drawable/edt_text"
                         android:hint="닉네임"
                         android:inputType="text"
+                        android:maxLength="10"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,8 +212,9 @@
                     android:id="@+id/btnNicknameCheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="top"
                     android:enabled="false"
+                    android:paddingTop="10dp"
                     android:text="중복확인" />
             </LinearLayout>
 
