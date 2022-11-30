@@ -31,6 +31,10 @@ class UserDAO {
         return databaseReference?.orderByChild("phone")?.equalTo(phone)
     }
 
+    fun selectUser2(userCode: String): Query? {
+        return databaseReference!!.child(userCode)
+    }
+
     fun updateUser(key: String, hashMap: HashMap<String, Any>): Task<Void> {
         return databaseReference!!.child(key).updateChildren(hashMap)
     }

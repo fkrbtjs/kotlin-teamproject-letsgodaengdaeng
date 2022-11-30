@@ -2,16 +2,28 @@ package kr.or.mrhi.letsgodaengdaeng.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.R
+import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
+import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMainBinding
 import kr.or.mrhi.letsgodaengdaeng.databinding.TabMainBinding
+import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
 
+    companion object{
+        var userCode: String? = null
+        lateinit var userInfo: User
+    }
+
+    lateinit var binding: ActivityMainBinding
     lateinit var homeFragment: HomeFragment
     lateinit var communityFragment: CommunityFragment
     lateinit var walkFragment: WalkFragment
@@ -29,7 +41,22 @@ class MainActivity : AppCompatActivity() {
         storeFragment = StoreFragment()
         profileFragment = ProfileFragment()
 
+        userCode = intent.getStringExtra("uid")
+        val userDAO = UserDAO()
+        userDAO.selectUser2(userCode!!)?.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: User? = snapshot.getValue(User::class.java)
+
+                userInfo = User("${user?.phone}", "${user?.password}", "${user?.nickname}","${user?.introduce}")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+
         addTab()
+
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

@@ -99,10 +99,11 @@ class WriteActivity : AppCompatActivity() {
             val communityDAO = CommunityDAO()
             val content = binding.edtContent.text.toString()
             val date = SimpleDateFormat("yy-MM-dd").format(Date())
+            val nickname = MainActivity.userInfo.nickname!!
 
             //firebase realtime database diary 테이블에 입력할때 가져오는 key
             val key = communityDAO.databaseReference?.push()?.key
-            val community = CommunityVO(key,"규선","성동구",date,category,content)
+            val community = CommunityVO(key,nickname,"성동구",date,category,content)
 
             //firebase storage 이미지를 업로드 경로명 셋팅한다.
             val imageReference = communityDAO.storage?.reference?.child("images/${community.docID}.jpg")
