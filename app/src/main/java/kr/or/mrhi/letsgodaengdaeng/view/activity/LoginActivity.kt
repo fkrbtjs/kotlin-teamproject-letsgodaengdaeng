@@ -14,7 +14,7 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = this.javaClass.simpleName
-    lateinit var use: User
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             var loginFlag = false
             val userDAO = UserDAO()
-            userDAO.selectUserPhone("${binding.edtPhone.text}")?.addValueEventListener(object: ValueEventListener{
+            userDAO.selectUserType("phone","${binding.edtPhone.text}")?.addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     Log.e(TAG, "${snapshot.value}")
                     for (userData in snapshot.children) {

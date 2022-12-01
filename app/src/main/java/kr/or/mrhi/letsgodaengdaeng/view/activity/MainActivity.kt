@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         userCode = intent.getStringExtra("uid")
         val userDAO = UserDAO()
-        userDAO.selectUser2(userCode!!)?.addValueEventListener(object :ValueEventListener{
+        userDAO.selectUser(userCode!!)?.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
 
