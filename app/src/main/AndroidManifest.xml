@@ -16,6 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Letsgodaengdaeng"
         tools:targetApi="31" >
+        <activity android:name=".view.fragment.profile.InfoActivity"
+            android:exported="false"/>
+        <activity android:name=".view.fragment.profile.SettingActivity"
+            android:exported="false"/>
+        <activity android:name=".view.fragment.profile.UpdateActivity"
+            android:exported="false"/>
+        <activity android:name=".view.activity.SearchActivity"
+            android:exported="false"/>
+        <activity android:name=".view.activity.NotificationActivity"
+            android:exported="false"/>
+        <activity android:name=".view.activity.WriteActivity"
+            android:exported="false"/>
         <activity
             android:name=".view.activity.SignupUserActivity"
             android:exported="false" >

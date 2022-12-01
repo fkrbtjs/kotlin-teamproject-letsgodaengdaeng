@@ -57,22 +57,24 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="80dp"
-                app:cardElevation="20dp">
+                app:cardElevation="10dp">
 
                 <ImageView
                     android:id="@+id/ivPuppyPicture"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:srcCompat="@drawable/ic_dog" />
 
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/tilName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="5dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
 
                 <EditText
                     android:id="@+id/edtName"
@@ -117,10 +119,13 @@
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/tilBreed"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="5dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
 
                 <EditText
                     android:id="@+id/edtBreed"
@@ -135,7 +140,7 @@
 
             <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
@@ -179,10 +184,13 @@
             </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:id="@+id/tilTendency"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
 
                 <EditText
                     android:id="@+id/edtTendency"

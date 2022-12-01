@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -65,4 +66,6 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:8.0.0'
 
     implementation 'com.airbnb.android:lottie:5.2.0'
+
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.1.0'
 }

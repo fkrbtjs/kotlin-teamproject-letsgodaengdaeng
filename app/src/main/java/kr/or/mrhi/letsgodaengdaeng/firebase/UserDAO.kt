@@ -23,13 +23,14 @@ class UserDAO {
         return databaseReference!!.child(userCode).setValue(user)
     }
 
-    fun selectUser(): Query? {
-        return databaseReference
+    fun selectUser(userCode: String): Query? {
+        return databaseReference!!.child(userCode)
     }
 
-    fun selectUserPhone(phone: String): Query? {
-        return databaseReference?.orderByChild("phone")?.equalTo(phone)
+    fun selectUserType(type: String, data: String): Query? {
+        return databaseReference?.orderByChild(type)?.equalTo(data)
     }
+
 
     fun updateUser(key: String, hashMap: HashMap<String, Any>): Task<Void> {
         return databaseReference!!.child(key).updateChildren(hashMap)
