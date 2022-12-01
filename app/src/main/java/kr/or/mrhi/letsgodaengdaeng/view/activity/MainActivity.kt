@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         storeFragment = StoreFragment()
         profileFragment = ProfileFragment()
 
-        userCode = intent.getStringExtra("uid")
+        userCode = intent.getStringExtra("userCode")
         val userDAO = UserDAO()
         userDAO.selectUser(userCode!!)?.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {

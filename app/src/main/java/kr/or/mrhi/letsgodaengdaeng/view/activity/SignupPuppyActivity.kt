@@ -65,7 +65,7 @@ class SignupPuppyActivity : AppCompatActivity() {
             Glide.with(this@SignupPuppyActivity)
                 .load(R.drawable.default_person)
                 .into(binding.ivPuppyPicture)
-
+            puppyImageUri = null
             return@setOnLongClickListener true
         }
 
@@ -148,7 +148,10 @@ class SignupPuppyActivity : AppCompatActivity() {
             val user = intent.getParcelableExtra<User>("user")
             val userDAO = UserDAO()
             /** 유저 이미지 */
-            val userImageUri: Uri = intent.getStringExtra("userImageUri") as Uri
+            var userImageUri: Uri? = null
+            if (intent.hasExtra("userImageUri")) {
+                userImageUri = intent.getParcelableExtra("userImageUri")
+            }
 
             /** 퍼피 정보 */
             puppy = Puppy(name, gender, breed, size, tendency)
@@ -156,26 +159,29 @@ class SignupPuppyActivity : AppCompatActivity() {
             /** 유저 이미지 = puppyImageUri */
 
             /** 파이어베이스 리얼타임 & 스토리지 저장 */
-            userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)?.addOnSuccessListener {
-                userDAO.signUpUser(userCode!!, user)
-            }?.addOnFailureListener {
-                Log.e(TAG, "putFile(userImageUri) $it")
-            }
-            puppyDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(puppyImageUri!!)?.addOnSuccessListener {
-                puppyDAO.signUpPuppy(userCode!!, puppy!!)
-            }?.addOnFailureListener {
-                Log.e(TAG, "putFile(userImageUri) $it")
+            if (userImageUri != null) {
+                userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)?.addOnSuccessListener {
+                }?.addOnFailureListener {
+                    Log.e(TAG, "putFile(userImageUri) $it")
+                }
             }
 
-//            val userImageRef = userDAO.storage?.reference?.child("userImage/$uid.jpg")
-//            val puppyImageRef = userDAO.storage?.reference?.child("puppyImage/$uid.jpg")
+            if (puppyImageUri != null) {
+                puppyDAO.storage?.reference?.child("puppyImage/$userCode.jpg")?.putFile(puppyImageUri!!)?.addOnSuccessListener {
+                }?.addOnFailureListener {
+                    Log.e(TAG, "putFile(userImageUri) $it")
+                }
+            }
 
+            userDAO.signUpUser(userCode!!, user)
+            puppyDAO.signUpPuppy(userCode!!, puppy!!)
 
             val intent = Intent(this@SignupPuppyActivity, MainActivity::class.java)
             intent.putExtra("userCode", userCode)
             startActivity(intent)
             overridePendingTransition(R.anim.activity_right_enter, R.anim.activity_right_exit)
             finish()
+
         }
     }
 

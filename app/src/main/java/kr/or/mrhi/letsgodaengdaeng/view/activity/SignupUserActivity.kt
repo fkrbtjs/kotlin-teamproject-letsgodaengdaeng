@@ -123,7 +123,7 @@ class SignupUserActivity : AppCompatActivity() {
             Glide.with(this@SignupUserActivity)
                 .load(R.drawable.default_person)
                 .into(binding.ivUserImage)
-
+            userImageUri = null
             return@setOnLongClickListener true
         }
 
@@ -141,12 +141,7 @@ class SignupUserActivity : AppCompatActivity() {
                             binding.edtPhone2.text.clear()
                             binding.edtPhone3.text.clear()
                             softkeyboardHide(binding.edtPhone3)
-                            val toast = Toast.makeText(
-                                this@SignupUserActivity,
-                                "이미 가입된 전화번호 입니다.",
-                                Toast.LENGTH_SHORT
-                            )
-                            toast.setGravity(Gravity.CENTER, 200, 200)
+                            Toast.makeText(this@SignupUserActivity, "이미 가입된 전화번호 입니다.", Toast.LENGTH_SHORT).show()
                         } else {
                             val callbacks =
                                 object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -290,7 +285,7 @@ class SignupUserActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.value != null) {
                             nicknameFlag = false
-                            softkeyboardHide(binding.edtNickname)
+                            binding.edtNickname.requestFocus()
                             binding.tilNickname.error = "이미 있는 닉네임입니다."
                         } else {
                             nicknameFlag = true
@@ -299,9 +294,10 @@ class SignupUserActivity : AppCompatActivity() {
                                 "사용가능한 닉네임입니다.",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            softkeyboardHide(binding.edtNickname)
+                            binding.btnNicknameCheck.isEnabled = false
                         }
                     }
-
                     override fun onCancelled(error: DatabaseError) {
                         Log.e(TAG, "btnNicknameCheck $error")
                     }
@@ -325,7 +321,9 @@ class SignupUserActivity : AppCompatActivity() {
                 val intent = Intent(this@SignupUserActivity, SignupPuppyActivity::class.java)
                 intent.putExtra("userCode", userCode)
                 intent.putExtra("user", user)
-                intent.putExtra("userImageUri", userImageUri)
+                if (userImageUri != null) {
+                    intent.putExtra("userImageUri", userImageUri)
+                }
                 startActivity(intent)
                 overridePendingTransition(R.anim.activity_right_enter, R.anim.activity_right_exit)
                 finish()
