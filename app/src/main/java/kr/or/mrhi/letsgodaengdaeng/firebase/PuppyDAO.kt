@@ -3,6 +3,7 @@ package kr.or.mrhi.letsgodaengdaeng.firebase
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
@@ -21,6 +22,10 @@ class PuppyDAO {
 
     fun signUpPuppy(userCode: String, puppy: Puppy): Task<Void> {
         return databaseReference!!.child(userCode).setValue(puppy)
+    }
+
+    fun selectPuppy(userCode: String): Query? {
+        return databaseReference!!.child(userCode)
     }
 
 }

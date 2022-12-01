@@ -61,6 +61,8 @@ class SignupUserActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = null
 
+        auth.signOut()
+
         Listener()
 
         requestLauncher = registerForActivityResult(

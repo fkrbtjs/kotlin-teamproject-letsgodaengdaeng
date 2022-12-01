@@ -17,6 +17,7 @@ import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentProfileBinding
+import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
@@ -41,8 +42,6 @@ class ProfileFragment : Fragment() {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         val puppy = Puppy()
 
-        selectUser()
-
         //firebase storage 에서 사진 가져오기.
         val userDAO = UserDAO()
         //firebase storage 이미지 경로를 알려준다
@@ -66,29 +65,19 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.tvName.text = puppy.name
-        binding.tvGender.text = puppy.gender
-        binding.tvBreed.text = puppy.breed
-
-        return binding.root
-    }
-
-    private fun selectUser() {
-        val userDAO = UserDAO()
-        userDAO.selectUser()?.addValueEventListener(object : ValueEventListener{
+        val puppyDAO = PuppyDAO()
+        puppyDAO.selectPuppy(MainActivity.userCode!!)?.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){
-                    val user = userData.getValue(User::class.java)
-//                    user?.phone = userData.key.toString()
+                    val puppy: Puppy? = snapshot.getValue(Puppy::class.java)
+                    binding.tvName.text = puppy?.name
+                    binding.tvGender.text = puppy?.gender
+                    binding.tvBreed.text = puppy?.breed
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
         })
+        return binding.root
     }
-
-
 }
