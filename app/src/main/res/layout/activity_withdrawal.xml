@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#FFFAF0"
+    tools:context=".view.fragment.profile.WithdrawalActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="회원탈퇴"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#FFFAF0">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원 탈퇴 유의사항을 확인해주세요."
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="60dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/precautions"
+                android:textSize="12sp"
+                android:layout_marginLeft="25dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1) 나의 프로필 정보"
+                android:textColor="@color/black"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2) 맺은 친구목록 및 차단"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3) 이벤트 참여 및 보유 포인트"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4) 포인트 사용 및 적립내역"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5) 앱 내 전체 활동 내역"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6) 쇼핑 및 산책 활동 내역"
+                android:textColor="@color/black"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주의 : 삭제된 정보는 복구할수 없습니다."
+                android:textColor="#ED0808"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="70dp"/>
+
+            <CheckBox
+                android:id="@+id/cb_consent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="위 유의 사항을 모두 확인하였고, 회원 탈퇴에 동의합니다."
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="70dp"/>
+
+            <Button
+                android:id="@+id/btn_withdrawal"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="60dp"
+                android:backgroundTint="#DEB887"
+                android:text="회원 탈퇴하기"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

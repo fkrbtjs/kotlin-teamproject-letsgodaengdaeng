@@ -9,9 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.ktx.storageMetadata
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
+import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentProfileBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
@@ -37,9 +41,7 @@ class ProfileFragment : Fragment() {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         val puppy = Puppy()
 
-        binding.tvName.text = puppy.name
-        binding.tvGender.text = puppy.gender
-        binding.tvBreed.text = puppy.breed
+        selectUser()
 
         //firebase storage 에서 사진 가져오기.
         val userDAO = UserDAO()
@@ -64,7 +66,28 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.tvName.text = puppy.name
+        binding.tvGender.text = puppy.gender
+        binding.tvBreed.text = puppy.breed
+
         return binding.root
+    }
+
+    private fun selectUser() {
+        val userDAO = UserDAO()
+        userDAO.selectUser()?.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(userData in snapshot.children){
+                    val user = userData.getValue(User::class.java)
+//                    user?.phone = userData.key.toString()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
 
