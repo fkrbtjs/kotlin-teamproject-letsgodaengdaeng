@@ -1,12 +1,10 @@
 package kr.or.mrhi.letsgodaengdaeng.dataClass
 
-class CommunityVO(
+class CommentVO (
     var docID: String? = "",
+    var communityID : String? ="",
     var nickname: String = "",
     var local: String = "",
     var date: String = "",
-    var category: String = "",
-    var content: String = "",
-    var likeCount : String ="",
-    var commentCount : String =""
+    var content: String = ""
 )
