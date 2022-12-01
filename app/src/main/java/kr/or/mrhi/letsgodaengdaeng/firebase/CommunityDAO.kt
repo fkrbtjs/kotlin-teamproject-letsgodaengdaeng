@@ -1,5 +1,6 @@
 package kr.or.mrhi.letsgodaengdaeng.firebase
 
+import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -30,6 +31,26 @@ class CommunityDAO {
     fun selectCommunity(): Query? {
         return databaseReference
     }
+
+    fun selectCommunity2(docID: String): Query? {
+        return databaseReference!!.child(docID)
+    }
+
+//    fun updateLikeCount(docID:String,userCode:String): Query{
+//        Log.d("key1","${databaseReference!!.child(docID).child("like").key!!}")
+//        if(!databaseReference!!.child(docID).child("like")){
+//            Log.d("key2","${databaseReference!!.child(docID).child("like").child(userCode)}")
+//            val likeHashMap: HashMap<String, Any> = HashMap()
+//            likeHashMap[userCode] = userCode
+//            databaseReference!!.child(docID).child("like").updateChildren(likeHashMap)
+//        }else{
+//            Log.d("key3","${databaseReference!!.child(docID).child("like").child(userCode)}")
+//            databaseReference!!.child(docID).child("like").child(userCode).removeValue()
+//        }
+//        return databaseReference!!.child(docID).child("like").child(userCode)
+//    }
+
+
 
     fun selectFriendCommunity(): Query?{
         return databaseReference?.orderByChild("category")?.equalTo("친구해요")

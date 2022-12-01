@@ -36,7 +36,7 @@ class CommunityFragment : Fragment() {
     lateinit var friendFragment: FriendFragment
     lateinit var questionFragment: QuestionFragment
     lateinit var shareFragment: ShareFragment
-    var communityList: MutableList<CommunityVO> = mutableListOf()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -113,7 +113,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_content">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/iv_like"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginRight="10dp"
@@ -151,7 +151,7 @@
             app:layout_constraintTop_toTopOf="@+id/linear_likes">
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/iv_comment"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginRight="10dp"

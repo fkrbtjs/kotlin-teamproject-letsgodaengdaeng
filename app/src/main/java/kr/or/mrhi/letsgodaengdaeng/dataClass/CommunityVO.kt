@@ -6,5 +6,7 @@ class CommunityVO(
     var local: String = "",
     var date: String = "",
     var category: String = "",
-    var content: String = ""
+    var content: String = "",
+    var likeCount : String ="",
+    var commentCount : String =""
 )

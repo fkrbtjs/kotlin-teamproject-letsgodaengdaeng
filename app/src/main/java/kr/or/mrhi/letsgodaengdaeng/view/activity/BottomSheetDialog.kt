@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kr.or.mrhi.letsgodaengdaeng.R
+import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBottomSheetDialogBinding
 
 
 class BottomSheetDialog : BottomSheetDialogFragment() {
+
+    lateinit var binding : FragmentBottomSheetDialogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +22,12 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bottom_sheet_dialog, container, false)
+        binding = FragmentBottomSheetDialogBinding.inflate(layoutInflater, container, false)
+
+
+
+
+        return binding.root
     }
 
 }
