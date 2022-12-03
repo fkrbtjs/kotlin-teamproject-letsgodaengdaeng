@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".view.fragment.HomeFragment"
+android:id="@+id/drawerLayout">
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.HomeFragment"/>
+    android:id="@+id/main_content">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="242dp"
+        android:background="@color/white"
+        android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
+        android:visibility="visible">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/CollapsingToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="242dp"
+            android:background="@color/white"
+            app:contentScrim="@color/white"
+            app:expandedTitleGravity="center"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title=" ">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:tabMode="scrollable">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpagerBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tablayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white"
+                    app:layout_collapseMode="parallax"
+                    app:tabGravity="center"
+                    app:tabMode="scrollable"
+                    app:tabTextColor="@color/black"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/viewpager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>
