@@ -79,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
 
     /** 외부 저장소 읽을 권한 체크 */
     fun isPermitted(): Boolean {
-        return ContextCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED}
+        return ContextCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED
+    }
 }
-
-
