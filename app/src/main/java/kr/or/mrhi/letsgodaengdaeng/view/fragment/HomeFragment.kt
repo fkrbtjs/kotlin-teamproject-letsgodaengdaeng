@@ -11,15 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentHomeBinding
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.BannerAdapter
-import me.relex.circleindicator.CircleIndicator
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.home.HomeViewFragment
 import me.relex.circleindicator.CircleIndicator2
-
 
 class HomeFragment : Fragment() {
     val TAG = this.javaClass.simpleName
@@ -30,6 +28,8 @@ class HomeFragment : Fragment() {
     var bannerJobFlag = false
 
     var mainActivity: MainActivity? = null
+    lateinit var homeViewFragment: HomeViewFragment
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,9 +52,9 @@ class HomeFragment : Fragment() {
 
         bannerList.clear()
 
-        bannerList.add(R.drawable.bannerdog1)
-        bannerList.add(R.drawable.ic_dog)
-        bannerList.add(R.drawable.ic_paw2)
+        bannerList.add(R.drawable.bannerdog2)
+        bannerList.add(R.drawable.bannerseoulcenter)
+        bannerList.add(R.drawable.bannerkaps)
 
         val bannerAdapter = BannerAdapter(requireActivity(), bannerList)
         val recyclerView: RecyclerView = binding.BannerRecyclerView
@@ -68,6 +68,12 @@ class HomeFragment : Fragment() {
         indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
 
         rollingBanner()
+
+        homeViewFragment = HomeViewFragment()
+
+            childFragmentManager.beginTransaction().replace(R.id.homeFrameLayout, homeViewFragment)
+            .commit()
+
         return binding.root
     }
 
