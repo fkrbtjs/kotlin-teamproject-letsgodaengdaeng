@@ -1,5 +1,6 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.TextKeyListener
+import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -24,6 +27,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.core.RepoManager.clear
 import com.google.firebase.ktx.Firebase
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
@@ -68,6 +72,7 @@ class SignupUserActivity : AppCompatActivity() {
         }
     }
 
+
     /** 툴바 백버튼 누르면 로그인 액티비티로 돌아감 */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -80,7 +85,7 @@ class SignupUserActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /** 핸드폰 인증을 위한 펑션 */
+    /** 핸드폰 인증 확인 */
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -121,6 +126,8 @@ class SignupUserActivity : AppCompatActivity() {
             return@setOnLongClickListener true
         }
 
+
+
         /** 인증받기 버튼 누르면 입력한 전화번호로 인증번호 발송 */
         binding.btnPhone.setOnClickListener {
             val userDAO = UserDAO()
@@ -128,7 +135,7 @@ class SignupUserActivity : AppCompatActivity() {
             /** 데이터를 한번만 받고 끝내기 위해서 Single 쓴다 */
             userDAO.selectUserType("phone", phone)
                 ?.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
+                    override fun onDataChange(snapshot: DataSnapshot) =
                         if (snapshot.value != null) {
                             binding.btnPhoneCheck.isEnabled = false
                             binding.edtPhoneCheck.text.clear()
@@ -142,13 +149,11 @@ class SignupUserActivity : AppCompatActivity() {
                                     override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
                                     override fun onVerificationFailed(e: FirebaseException) {
                                     }
-
                                     override fun onCodeSent(
                                         verificationId: String,
                                         token: PhoneAuthProvider.ForceResendingToken
                                     ) {
                                         this@SignupUserActivity.verificationId = verificationId
-                                        Log.e(TAG, "$token")
                                     }
                                 }
                             phone = "+8210${binding.edtPhone2.text}${binding.edtPhone3.text}"
@@ -161,7 +166,6 @@ class SignupUserActivity : AppCompatActivity() {
                             PhoneAuthProvider.verifyPhoneNumber(options)
                             binding.btnPhoneCheck.isEnabled = true
                         }
-                    }
 
                     override fun onCancelled(error: DatabaseError) {
                         Log.e(TAG, "btnPhone $error")
@@ -189,7 +193,6 @@ class SignupUserActivity : AppCompatActivity() {
                     binding.btnPhone.isEnabled = false
                 }
             }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -207,17 +210,6 @@ class SignupUserActivity : AppCompatActivity() {
                     binding.btnPhone.isEnabled = false
                 }
             }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-        })
-
-        /** 핸드폰 인증번호 입력시 에러메시지 삭제 */
-        binding.edtPhoneCheck.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.tilPhoneCheck.isErrorEnabled = false
-            }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -233,7 +225,6 @@ class SignupUserActivity : AppCompatActivity() {
                     passwordCheckFlag = false
                 }
             }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(text: Editable?) {}
         })
@@ -249,7 +240,6 @@ class SignupUserActivity : AppCompatActivity() {
                     passwordFlag = false
                 }
             }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -266,7 +256,6 @@ class SignupUserActivity : AppCompatActivity() {
                 }
                 nicknameFlag = false
             }
-
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -304,8 +293,7 @@ class SignupUserActivity : AppCompatActivity() {
                 softkeyboardHide(binding.edtIntroduce)
 
                 val userCode = auth.uid
-                val phone =
-                    "${binding.edtPhone1.text}${binding.edtPhone2.text}${binding.edtPhone3.text}"
+                val phone = "${binding.edtPhone1.text}${binding.edtPhone2.text}${binding.edtPhone3.text}"
 
                 val password = binding.edtPassword.text.toString()
                 val nickname = binding.edtNickname.text.toString()
