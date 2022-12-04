@@ -161,13 +161,13 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="70dp"
                     android:layout_marginTop="40dp"
-                    android:text="반려견 생일"
+                    android:text="성격 및 특징"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/tv_tendency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

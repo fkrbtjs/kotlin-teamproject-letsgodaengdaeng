@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
@@ -29,7 +28,7 @@ class SignupPuppyActivity : AppCompatActivity() {
     var breedFlag = false
     var tendencyFlag = false
     var puppy: Puppy? = null
-    var puppyImageUri: Uri? = null
+    var puppyImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.ic_dog}")
     var requestLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,18 +158,13 @@ class SignupPuppyActivity : AppCompatActivity() {
             /** 유저 이미지 = puppyImageUri */
 
             /** 파이어베이스 리얼타임 & 스토리지 저장 */
-            if (userImageUri != null) {
-                userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)?.addOnSuccessListener {
-                }?.addOnFailureListener {
-                    Log.e(TAG, "putFile(userImageUri) $it")
-                }
+            userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)?.addOnSuccessListener {
+            }?.addOnFailureListener {
+                Log.e(TAG, "putFile(userImageUri) $it")
             }
-
-            if (puppyImageUri != null) {
-                puppyDAO.storage?.reference?.child("puppyImage/$userCode.jpg")?.putFile(puppyImageUri!!)?.addOnSuccessListener {
-                }?.addOnFailureListener {
-                    Log.e(TAG, "putFile(userImageUri) $it")
-                }
+            puppyDAO.storage?.reference?.child("puppyImage/$userCode.jpg")?.putFile(puppyImageUri!!)?.addOnSuccessListener {
+            }?.addOnFailureListener {
+                Log.e(TAG, "putFile(userImageUri) $it")
             }
 
             userDAO.signUpUser(userCode!!, user)

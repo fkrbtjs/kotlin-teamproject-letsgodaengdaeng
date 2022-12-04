@@ -1,13 +1,40 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment
 
+
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
+import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentHomeBinding
+import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
+import kr.or.mrhi.letsgodaengdaeng.view.adapter.BannerAdapter
+import me.relex.circleindicator.CircleIndicator
+import me.relex.circleindicator.CircleIndicator2
+
 
 class HomeFragment : Fragment() {
+    val TAG = this.javaClass.simpleName
+    lateinit var binding: FragmentHomeBinding
+
+    val bannerList = mutableListOf<Int>()
+    var bannerJob: Job? = null
+    var bannerJobFlag = false
+
+    var mainActivity: MainActivity? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,7 +44,86 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        bannerJobFlag = true
+        binding.BannerRecyclerView.isSaveEnabled = false
+
+        binding.toolbar.bringToFront()
+
+        bannerList.clear()
+
+        bannerList.add(R.drawable.bannerdog1)
+        bannerList.add(R.drawable.ic_dog)
+        bannerList.add(R.drawable.ic_paw2)
+
+        val bannerAdapter = BannerAdapter(requireActivity(), bannerList)
+        val recyclerView: RecyclerView = binding.BannerRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(container?.context,LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = bannerAdapter
+
+        val pagerSnapHelper = PagerSnapHelper()
+        pagerSnapHelper.attachToRecyclerView(recyclerView)
+
+        val indicator: CircleIndicator2 = binding.indicator
+        indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
+
+        rollingBanner()
+        return binding.root
+    }
+
+
+    /** 프래그먼트가 onDestroy() 될때 bannerJob 취소 */
+    override fun onDestroy() {
+        super.onDestroy()
+        bannerJobFlag = false
+        bannerJob?.cancel()
+    }
+
+    /** 자동 슬라이드 배너 기능 */
+    fun rollingBanner() {
+        var recyclerNumber = 0
+        val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
+        bannerJob = backgroundScope.launch {
+                Log.e("Dsadsadas","$recyclerNumber")
+                while (bannerJobFlag == true) {
+                    requireActivity().runOnUiThread {
+                        if (recyclerNumber == 3) {
+                            recyclerNumber = 0
+                        }
+                        binding.BannerRecyclerView.smoothScrollToPosition(recyclerNumber)
+                        recyclerNumber += 1
+                    }
+                    try {
+                        delay(3000)
+                    } catch (e: Exception) {
+                        Log.d(TAG, "${e.stackTrace}")
+                    }
+                }
+            }
     }
 }
+
+
+
+// binding.toolbar.setOnClickListener {
+//            val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
+//            messengerJob = backgroundScope.launch {
+//                Log.e("Dsadsadas","$no")
+//                while (true) {
+//                    runOnUiThread {
+//                        if (no == 3) {
+//                            no = 0
+//                        }
+//                        binding.viewpager.currentItem = no
+//                        no += 1
+//                        Log.e("Dsadsadas","$no")
+//                    }
+//                    try {
+//                        delay(1000)
+//                    } catch (e: Exception) {
+//                        Log.d("yongmusicplayer", "${e.stackTrace}")
+//                    }
+//
+//                }
+//            }
+//        }

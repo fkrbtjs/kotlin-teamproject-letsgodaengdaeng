@@ -47,6 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tool_set">
 
         <TextView
+            android:id="@+id/tv_userNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"

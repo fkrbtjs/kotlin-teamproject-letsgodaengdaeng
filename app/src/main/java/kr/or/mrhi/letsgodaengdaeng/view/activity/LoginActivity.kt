@@ -70,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQ_READ && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "권한을 승인을 완료하였습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "권한 승인을 완료하였습니다.", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(this, "권한을 승인해야 어플 사용이 가능합니다.", Toast.LENGTH_SHORT).show()
             finish()
@@ -79,7 +79,6 @@ class LoginActivity : AppCompatActivity() {
 
     /** 외부 저장소 읽을 권한 체크 */
     fun isPermitted(): Boolean {
-        return ContextCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED}
+        return ContextCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED
+    }
 }
-
-

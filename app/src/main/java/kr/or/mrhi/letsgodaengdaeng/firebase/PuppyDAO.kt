@@ -28,4 +28,8 @@ class PuppyDAO {
         return databaseReference!!.child(userCode)
     }
 
+    fun updatePuppy(key: String, hashMap: HashMap<String, Any>): Task<Void> {
+        return databaseReference!!.child(key).updateChildren(hashMap)
+    }
+
 }
