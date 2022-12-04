@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,9 +43,9 @@ class ProfileFragment : Fragment() {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         val puppy = Puppy()
 
-        //firebase storage 에서 사진 가져오기.
+        /**firebase storage 에서 사진 가져오기.**/
         val userDAO = UserDAO()
-        //firebase storage 이미지 경로를 알려준다
+        /**firebase storage 이미지 경로를 알려준다*/
         val img = userDAO.storage!!.reference.child("images/.png")
 
         img.downloadUrl.addOnCompleteListener{
@@ -66,6 +67,15 @@ class ProfileFragment : Fragment() {
         }
 
         val puppyDAO = PuppyDAO()
+        val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg")
+        puppyImg.downloadUrl.addOnCompleteListener{
+            if(it.isSuccessful){
+                Glide.with(container!!.context)
+                    .load(it.result)
+                    .into(binding.ivPicture)
+            }
+        }
+
         puppyDAO.selectPuppy(MainActivity.userCode!!)?.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){
@@ -73,11 +83,18 @@ class ProfileFragment : Fragment() {
                     binding.tvName.text = puppy?.name
                     binding.tvGender.text = puppy?.gender
                     binding.tvBreed.text = puppy?.breed
+                    binding.tvTendency.text = puppy?.tendency
+
                 }
             }
             override fun onCancelled(error: DatabaseError) {
             }
         })
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("dasdsa","onresume")
     }
 }

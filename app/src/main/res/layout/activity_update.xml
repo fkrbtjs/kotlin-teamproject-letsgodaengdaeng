@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:background="#EAEAEA"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/puppy" />
+                        android:src="@drawable/ic_dog" />
 
 
                 </androidx.cardview.widget.CardView>
@@ -179,6 +179,7 @@
                     android:layout_marginLeft="30dp"/>
 
                 <RadioGroup
+                    android:id="@+id/group_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:orientation="horizontal"
@@ -186,7 +187,7 @@
                     android:layout_marginTop="5dp">
 
                     <RadioButton
-                        android:id="@+id/rbtnGenderMale"
+                        android:id="@+id/btn_man"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/radio_button"
@@ -196,7 +197,7 @@
                         android:textColor="@drawable/radio_button_text" />
 
                     <RadioButton
-                        android:id="@+id/rbtnGenderFemale"
+                        android:id="@+id/btn_woman"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/radio_button"
@@ -276,7 +277,7 @@
                 android:textColor="@color/black" />
 
             <EditText
-                android:id="@+id/edtReview"
+                android:id="@+id/edt_tendency"
                 android:layout_width="380dp"
                 android:layout_height="100dp"
                 android:hint="Text"

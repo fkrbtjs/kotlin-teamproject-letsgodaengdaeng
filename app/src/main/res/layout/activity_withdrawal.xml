@@ -9,7 +9,7 @@
     tools:context=".view.fragment.profile.WithdrawalActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar4"
+        android:id="@+id/toolWithdrawal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
