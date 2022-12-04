@@ -15,7 +15,6 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -24,10 +23,6 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentBottomSheetDialogBinding.inflate(layoutInflater, container, false)
 
-
-
-
         return binding.root
     }
-
 }

@@ -1,6 +1,8 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -39,29 +41,38 @@ class WriteActivity : AppCompatActivity() {
         binding = ActivityWriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /** 스피너 설정 */
         val itemList = listOf("카테고리 선택", "친구해요", "공유해요", "궁금해요")
         val adapter = ArrayAdapter(this, R.layout.item_spinner, itemList)
         binding.spinner.adapter = adapter
-
         binding.spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if(position != 0) Toast.makeText(this@WriteActivity, itemList[position], Toast.LENGTH_SHORT).show()
                 category = itemList[position]
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
 
+        /** 뒤로가기 버튼 */
         binding.btnBack.setOnClickListener {
-//            val intent = Intent(this,MainActivity::class.java)
-//            startActivity(intent)
-//            intent.putExtra("community","commmunity")
-//            overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_left_exit)
-            finish()
+            if(binding.edtContent.text.toString().equals("") && category.equals("카테고리 선택") && imageUri == null){
+                finish()
+                overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
+            }else{
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("작성하신 내용이 사라집니다. 작성화면에서 나가시겠습니까")
+                    .setPositiveButton("네",DialogInterface.OnClickListener{ dialog,id->
+                        finish()
+                        overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
+                    })
+                    .setNegativeButton("아니오",DialogInterface.OnClickListener{dialog , id ->
+
+                    })
+                builder.show()
+            }
         }
 
-
+        /** 앨범에서 이미지 받아오기 */
         val requestLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
@@ -71,7 +82,6 @@ class WriteActivity : AppCompatActivity() {
                     .centerCrop()
                     .into(binding.ivPicture)
             }
-
             imageUri = it.data?.data
             var cursor = contentResolver.query(
                 it.data?.data as Uri,
@@ -85,16 +95,14 @@ class WriteActivity : AppCompatActivity() {
             }
         }
 
-
-
-        //사진 가져오기 버튼눌렀을때 갤러리에서 사진가져오기
+        /** 사진 가져오기 버튼 */
         binding.btnGetPicture.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             requestLauncher.launch(intent)
         }
 
-        //등록버튼눌렀을때 파이어베이스에 정보 저장
+        /** 등록 버튼 */
         binding.tvComplete.setOnClickListener {
             val communityDAO = CommunityDAO()
             val content = binding.edtContent.text.toString()
@@ -102,28 +110,41 @@ class WriteActivity : AppCompatActivity() {
             val nickname = MainActivity.userInfo.nickname!!
             //firebase realtime database diary 테이블에 입력할때 가져오는 key
             val key = communityDAO.databaseReference?.push()?.key
-            val community = CommunityVO(key,nickname,"성동구",date,category,content,"0","0")
 
-            //firebase storage 이미지를 업로드 경로명 셋팅한다.
-            val imageReference = communityDAO.storage?.reference?.child("images/${community.docID}.jpg")
-            Log.d("pictureurl","${imageReference}")
-            val file = Uri.fromFile(File(filePath))
-            imageReference?.putFile(imageUri!!)?.addOnSuccessListener {
-                Log.d("community", "imageReference?.putFile Success")
-                Toast.makeText(this,"스토리지저장성공!",Toast.LENGTH_SHORT).show()
-                //firebase realtime database diary 테이블에 입력
-                communityDAO.databaseReference?.child(key!!)?.setValue(community)?.addOnSuccessListener {
-                    Log.d("community", "community 테이블 입력 성공")
-                }?.addOnFailureListener {
-                    Log.e("community", "community 테이블 입력 실패 $it")
+            // 내용이 없을 때 예외처리
+            if (content.equals("")){
+                Toast.makeText(this,"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
+            }else{
+                // 카테고리 선택을 안했을 때 예외처리
+                if(category.equals("카테고리 선택")){
+                    Toast.makeText(this,"카테고리를 선택해주세요",Toast.LENGTH_SHORT).show()
+                }else{
+                    val community = CommunityVO(key,MainActivity.userCode,nickname,"성동구",date,category,content,0,0)
+                    //firebase storage 이미지를 업로드 경로명 셋팅한다.
+                    val imageReference = communityDAO.storage?.reference?.child("images/${community.docID}.jpg")
+                    Log.d("pictureurl","${imageReference}")
+
+                    // 사진을 등록하지 않았을때 예외처리
+                    if(imageUri != null){
+                        imageReference?.putFile(imageUri!!)?.addOnSuccessListener {
+                            Log.d("community", "imageReference?.putFile Success")
+                            Toast.makeText(this,"스토리지저장성공!",Toast.LENGTH_SHORT).show()
+                            //firebase realtime database diary 테이블에 입력
+                            communityDAO.databaseReference?.child(key!!)?.setValue(community)?.addOnSuccessListener {
+                                Log.d("community", "community 테이블 입력 성공")
+                            }?.addOnFailureListener {
+                                Log.e("community", "community 테이블 입력 실패 $it")
+                            }
+                        }?.addOnFailureListener {
+                            Log.e("community", "imageReference?.putFile Fail $it")
+                            Toast.makeText(this,"스토리지저장실패!",Toast.LENGTH_SHORT).show()
+                        }
+                        finish()
+                    }else{
+                        Toast.makeText(this,"사진을 선택해주세요",Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }?.addOnFailureListener {
-                Log.e("community", "imageReference?.putFile Fail $it")
-                Toast.makeText(this,"스토리지저장실패!",Toast.LENGTH_SHORT).show()
             }
-            finish()
         }
-
     }
-
 }

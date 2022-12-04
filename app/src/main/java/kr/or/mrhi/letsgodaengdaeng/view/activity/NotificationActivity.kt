@@ -17,11 +17,8 @@ class NotificationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnBack.setOnClickListener {
-//            val intent = Intent(this,MainActivity::class.java)
-//            intent.putExtra("community","commmunity")
-//            startActivity(intent)
-//            overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_left_exit)
             finish()
+            overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
         }
     }
 

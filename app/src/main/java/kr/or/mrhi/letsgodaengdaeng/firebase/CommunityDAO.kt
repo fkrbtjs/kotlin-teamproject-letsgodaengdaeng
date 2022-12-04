@@ -12,6 +12,7 @@ import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 
 class CommunityDAO {
     var databaseReference: DatabaseReference? = null
+
     //firebase Storage
     var storage: FirebaseStorage? = null
 
@@ -36,39 +37,46 @@ class CommunityDAO {
         return databaseReference!!.child(docID)
     }
 
-//    fun updateLikeCount(docID:String,userCode:String): Query{
-//        Log.d("key1","${databaseReference!!.child(docID).child("like").key!!}")
-//        if(!databaseReference!!.child(docID).child("like")){
-//            Log.d("key2","${databaseReference!!.child(docID).child("like").child(userCode)}")
-//            val likeHashMap: HashMap<String, Any> = HashMap()
-//            likeHashMap[userCode] = userCode
-//            databaseReference!!.child(docID).child("like").updateChildren(likeHashMap)
-//        }else{
-//            Log.d("key3","${databaseReference!!.child(docID).child("like").child(userCode)}")
-//            databaseReference!!.child(docID).child("like").child(userCode).removeValue()
-//        }
-//        return databaseReference!!.child(docID).child("like").child(userCode)
-//    }
+    fun updateCommentCount(docID:String,hashMap: HashMap<String, Any>):Task<Void>{
+        return databaseReference!!.child("${docID}").updateChildren(hashMap)
+    }
 
+    fun selectComment(communityID:String): Query? {
+        return databaseReference?.child(communityID)?.child("comment")?.orderByChild("communityID")?.equalTo(communityID)
+    }
 
+    fun plusLikeCount(docID: String, userCode: String){
+        val likeHashMap: HashMap<String, Any> = HashMap()
+        likeHashMap[userCode] = true
+        databaseReference!!.child(docID).child("like").updateChildren(likeHashMap)
 
-    fun selectFriendCommunity(): Query?{
+    }
+
+    fun minusLikeCount(docID:String, userCode: String) {
+        Log.d("key3", "${databaseReference!!.child(docID).child("like").child(userCode)}")
+        databaseReference!!.child(docID).child("like").child(userCode).removeValue()
+
+    }
+
+    fun selectFriendCommunity(): Query? {
         return databaseReference?.orderByChild("category")?.equalTo("친구해요")
     }
-    fun selectShareCommunity(): Query?{
+
+    fun selectShareCommunity(): Query? {
         return databaseReference?.orderByChild("category")?.equalTo("공유해요")
     }
-    fun selectQuestionCommunity(): Query?{
+
+    fun selectQuestionCommunity(): Query? {
         return databaseReference?.orderByChild("category")?.equalTo("궁금해요")
     }
 
     //realtime database user update
-    fun updateCommunity(key: String, hashMap: HashMap<String, Any>): Task<Void> {
-        return databaseReference!!.child(key).updateChildren(hashMap)
+    fun updateCommunity(docID: String, hashMap: HashMap<String, Any>): Task<Void> {
+        return databaseReference!!.child(docID).updateChildren(hashMap)
     }
 
     // realtime database user delete
-    fun deleteCommunity(key:String) : Task<Void> {
+    fun deleteCommunity(key: String): Task<Void> {
         return databaseReference!!.child(key).removeValue()
     }
 }

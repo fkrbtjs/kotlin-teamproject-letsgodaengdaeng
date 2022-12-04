@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tv_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -26,7 +26,7 @@
         android:orientation="horizontal"></LinearLayout>
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/tv_delete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -41,7 +41,7 @@
         android:orientation="horizontal"></LinearLayout>
 
     <TextView
-        android:id="@+id/textView20"
+        android:id="@+id/tv_cancle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

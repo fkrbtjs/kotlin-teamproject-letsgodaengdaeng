@@ -179,7 +179,7 @@ class SignupPuppyActivity : AppCompatActivity() {
             val intent = Intent(this@SignupPuppyActivity, MainActivity::class.java)
             intent.putExtra("userCode", userCode)
             startActivity(intent)
-            overridePendingTransition(R.anim.activity_right_enter, R.anim.activity_right_exit)
+            overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
             finish()
 
         }

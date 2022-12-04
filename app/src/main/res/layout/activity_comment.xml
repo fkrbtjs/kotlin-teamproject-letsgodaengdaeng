@@ -43,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#FFFFFF"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,8 +71,8 @@
 
             <ImageView
                 android:id="@+id/iv_profilePicture"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +124,7 @@
                 android:id="@+id/iv_picture"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_category"
                 app:layout_constraintStart_toStartOf="@+id/iv_profilePicture"
                 app:layout_constraintTop_toBottomOf="@+id/iv_profilePicture"

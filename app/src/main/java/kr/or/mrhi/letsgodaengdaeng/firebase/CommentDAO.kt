@@ -35,7 +35,6 @@ class CommentDAO {
         return databaseReference!!.child(docID)
     }
 
-
     fun selectFriendCommunity(): Query?{
         return databaseReference?.orderByChild("category")?.equalTo("친구해요")
     }
@@ -52,7 +51,7 @@ class CommentDAO {
     }
 
     // realtime database user delete
-    fun deleteCommunity(key:String) : Task<Void> {
+    fun deleteComment(key:String) : Task<Void> {
         return databaseReference!!.child(key).removeValue()
     }
 }

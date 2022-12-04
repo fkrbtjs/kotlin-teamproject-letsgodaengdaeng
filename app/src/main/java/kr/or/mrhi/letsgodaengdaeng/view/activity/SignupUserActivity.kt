@@ -327,7 +327,7 @@ class SignupUserActivity : AppCompatActivity() {
                     intent.putExtra("userImageUri", userImageUri)
                 }
                 startActivity(intent)
-                overridePendingTransition(R.anim.activity_right_enter, R.anim.activity_right_exit)
+                overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
                 finish()
             } else {
                 Toast.makeText(this@SignupUserActivity, "입력 정보를 확인해주세요", Toast.LENGTH_SHORT).show()

@@ -1,16 +1,13 @@
 package kr.or.mrhi.letsgodaengdaeng.view.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ItemMainBinding
@@ -27,7 +24,7 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        var likeFlag = -1
+        var likeFlag = 0
         val community = communityList[position]
         val binding = holder.binding
         binding.tvNickname.text = community.nickname
@@ -35,13 +32,22 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
         binding.tvCategory.text = community.category
         binding.tvLocal.text = community.local
         binding.tvContent.text = community.content
-        binding.tvLikesCount.text = community.likeCount
-
-
+        binding.tvLikesCount.text = community.likeCount.toString()
+        binding.tvCommentCount.text = community.commentCount.toString()
         //사진을 firebase storage에서 가져와야된다.(경로를 지정해서 : data.docID)
         val communityDAO = CommunityDAO()
         //firebase storage에서 저장되어있는 이미지 경로 나타냄
         val imgRef = communityDAO.storage!!.reference.child("images/${community.docID}.jpg")
+        val userImgRef = communityDAO.storage!!.reference.child("userImage/${community.userID}.jpg")
+            userImgRef.downloadUrl.addOnCompleteListener {
+                if (it.isSuccessful){
+                    Glide.with(context)
+                        .load(it.result)
+                        .circleCrop()
+                        .into(binding.ivProfilePicture)
+                }
+            }
+
 
         imgRef.downloadUrl.addOnCompleteListener {
             if (it.isSuccessful){
@@ -51,13 +57,24 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
             }
         }
         binding.linearLikes.setOnClickListener {
-
+            if (likeFlag==0){
+                binding.ivLike.setImageResource(R.drawable.ic_fill_favorite)
+                community.likeCount += 1
+                likeFlag = 1
+            }else{
+                communityDAO.minusLikeCount(community.docID!!, MainActivity.userCode!!)
+                binding.ivLike.setImageResource(R.drawable.ic_border_favorite)
+                community.likeCount += -1
+                likeFlag = 0
+            }
         }
 
         binding.linearComment.setOnClickListener {
             val intent = Intent(context,CommentActivity::class.java)
             intent.putExtra("communityCode","${community.docID}")
             ContextCompat.startActivity(binding.linearComment.context,intent,null)
+            (holder.itemView.context as Activity).overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
+
         }
 
     }

@@ -49,6 +49,7 @@ class CommunityFragment : Fragment() {
     ): View? {
         binding = FragmentCommunityBinding.inflate(inflater, container, false)
 
+        /** 탭 생성 */
         val tab1 : TabLayout.Tab = binding.cmTabLayout.newTab()
         tab1.text = "전체보기"
         val tab2 : TabLayout.Tab = binding.cmTabLayout.newTab()
@@ -63,6 +64,7 @@ class CommunityFragment : Fragment() {
         binding.cmTabLayout.addTab(tab3)
         binding.cmTabLayout.addTab(tab4)
 
+        /** 탭,뷰페이저 연결 */
         val pagerAdapter = PagerAdapter(this)
         val title = mutableListOf<String>("전체보기","친구해요","공유해요","궁금해요")
         allFragment = AllFragment()
@@ -82,23 +84,26 @@ class CommunityFragment : Fragment() {
             tab.setCustomView(createTabView(title[position]))
         }.attach()
 
+        /** 지역범위 설정 버튼 */
         binding.cmBtnSettings.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog()
             bottomSheetDialog.show(parentFragmentManager,bottomSheetDialog.tag)
         }
-
+        /** 알림창 버튼 */
         binding.btnNotification.setOnClickListener {
             val intent = Intent(requireContext(), NotificationActivity::class.java)
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
         }
 
+        /** 게시글작성창 플로팅버튼 */
         binding.fltWrite.setOnClickListener {
             val intent = Intent(requireContext(), WriteActivity::class.java)
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
         }
 
+        /** 검색창 버튼 */
         binding.btnSearch.setOnClickListener {
             val intent = Intent(requireContext(), SearchActivity::class.java)
             startActivity(intent)

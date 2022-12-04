@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySearchBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
@@ -28,6 +29,8 @@ class SearchActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener {
             finish()
+            finish()
+            overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
         }
 
         communityList = mutableListOf()
