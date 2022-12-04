@@ -1,17 +1,15 @@
-package kr.or.mrhi.letsgodaengdaeng.view.activity
+package kr.or.mrhi.letsgodaengdaeng.view.fragment.home
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBottomSheetDialogBinding
+import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBannerBinding
 
 
-class BottomSheetDialog : BottomSheetDialogFragment() {
-
-    lateinit var binding : FragmentBottomSheetDialogBinding
+class BannerFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +20,9 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBottomSheetDialogBinding.inflate(layoutInflater, container, false)
-
-
+        val binding = FragmentBannerBinding.inflate(inflater, container, false)
 
 
         return binding.root
     }
-
 }

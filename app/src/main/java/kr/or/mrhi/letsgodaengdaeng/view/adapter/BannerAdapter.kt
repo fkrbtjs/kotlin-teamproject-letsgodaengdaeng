@@ -1,0 +1,31 @@
+package kr.or.mrhi.letsgodaengdaeng.view.adapter
+
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
+import kr.or.mrhi.letsgodaengdaeng.databinding.ItemBannerBinding
+
+class BannerAdapter (val context: Context, val bannerList: MutableList<Int>): RecyclerView.Adapter<BannerAdapter.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val binding = holder.binding
+        val banner = bannerList[position]
+
+        binding.imageView.setImageResource(banner)
+    }
+
+    override fun getItemCount(): Int {
+        return bannerList.size
+    }
+
+    class ViewHolder(val binding: ItemBannerBinding): RecyclerView.ViewHolder(binding.root)
+}
