@@ -21,6 +21,13 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".view.activity.UpdateCommentActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".view.fragment.profile.InfoActivity"
             android:exported="false" />
         <activity
@@ -37,6 +44,9 @@
             android:exported="false" />
         <activity
             android:name=".view.activity.WriteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activity.CommentActivity"
             android:exported="false" />
         <activity
             android:name=".view.activity.SignupUserActivity"
