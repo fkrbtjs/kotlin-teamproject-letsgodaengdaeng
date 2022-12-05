@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 20
+        const val VERSION = 25
     }
 
     val TAG = this.javaClass.simpleName
@@ -110,8 +110,6 @@ class SeouldataActivity : AppCompatActivity() {
                         }
                         val animalPhoto = AnimalPhoto(num.toString(), photoNum, photo)
                         dbHelper.insertAnimalPhoto(animalPhoto)
-                        Log.e(TAG, "${dbHelper.insertAnimalPhoto(animalPhoto)}")
-                        Log.e(TAG, "$num $photoNum $photo")
                     } // end of for
                     val intent = Intent(this@SeouldataActivity, LoginActivity::class.java)
                     startActivity(intent)

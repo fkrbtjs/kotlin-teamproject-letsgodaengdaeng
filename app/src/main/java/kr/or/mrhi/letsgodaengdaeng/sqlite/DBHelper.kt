@@ -63,7 +63,6 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         try{
             db.execSQL(query)
             flag = true
-//            Log.e(TAG, "$animal")
         }catch (e: SQLException){
             Log.e(TAG, "insertAnimal 실패")
             flag = false
