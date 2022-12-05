@@ -24,6 +24,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+//        val intent = Intent(this@LoginActivity, SeouldataActivity::class.java)
+//        startActivity(intent)
+//        finish()
 
         /** 퍼미션 승인 여부 점검 */
         if (!isPermitted()) {

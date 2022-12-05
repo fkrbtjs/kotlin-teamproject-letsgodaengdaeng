@@ -46,17 +46,13 @@ class MainActivity : AppCompatActivity() {
         userDAO.selectUser(userCode!!)?.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
-
                 userInfo = User("${user?.phone}", "${user?.password}", "${user?.nickname}","${user?.introduce}")
             }
-
             override fun onCancelled(error: DatabaseError) {
             }
-
         })
 
         addTab()
-
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -71,6 +67,8 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+        
+        changeFragment("홈")
     }
 
     fun changeFragment(title: String){
