@@ -6,16 +6,17 @@ import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimal
-import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi
+import kr.or.mrhi.letsgodaengdaeng.api.*
+import kr.or.mrhi.letsgodaengdaeng.api.SeoulGilWalkCourseApi.Companion.SeoulGil_API_KEY
+import kr.or.mrhi.letsgodaengdaeng.api.SeoulGilWalkCourseApi.Companion.SeoulGil_LIMIT
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.ANIMAL_API_KEY
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.ANIMAL_LIMIT
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.PHOTO_API_KEY
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.PHOTO_LIMIT
-import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalPhoto
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Animal
 import kr.or.mrhi.letsgodaengdaeng.dataClass.AnimalPhoto
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySeouldataBinding
+import kr.or.mrhi.letsgodaengdaeng.retrofitData.SeoulGilWalkCourse.SeoulGil
 import kr.or.mrhi.letsgodaengdaeng.retrofitData.tbAdpWaitAnimal.AnimalLibrary
 import kr.or.mrhi.letsgodaengdaeng.retrofitData.tbAdpWaitAnimalPhoto.AnimalPhotoLibrary
 import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
@@ -29,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 25
+        const val VERSION = 31
     }
 
     val TAG = this.javaClass.simpleName
@@ -44,10 +45,50 @@ class SeouldataActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        val retrofit2 = Retrofit.Builder()
+            .baseUrl(SeoulGilWalkCourseApi.DOMAIN)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
         val animalservice = retrofit.create(TbAdpWaitAnimal::class.java)
         val animalPhotoservice = retrofit.create(TbAdpWaitAnimalPhoto::class.java)
+        val seoulGilservice = retrofit2.create(SeoulGilWalk::class.java)
 
         val dbHelper = DBHelper(this, DB_NAME, VERSION)
+
+        seoulGilservice.getSeoulGil(SeoulGil_API_KEY, SeoulGil_LIMIT)
+            .enqueue(object : Callback<SeoulGil> {
+                override fun onResponse(
+                    call: Call<SeoulGil>,
+                    response: Response<SeoulGil>
+                ) {
+                    val data = response.body()
+                    data?.let {
+                        for (loadData in it.SeoulGilWalkCourse.row) {
+                            val name = loadData.COURSE_NAME
+                            val local = loadData.AREA_GU
+                            val distance = loadData.DISTANCE
+                            val time = loadData.LEAD_TIME
+                            val detailCourse = loadData.DETAIL_COURSE
+                            val courseLevel = loadData.COURSE_LEVEL
+                            val content = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Html.fromHtml(loadData.CONTENT, Html.FROM_HTML_MODE_LEGACY)
+                                    .toString().replace("\n\n", "\n").replace("'", "")
+                            } else {
+                                Html.fromHtml(loadData.CONTENT).toString().replace("\n\n", "\n").replace("'", "")
+                            }
+                            val seoulGil= kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil(name,local,distance,time,detailCourse,courseLevel,content)
+                            dbHelper.insertSeoulGil(seoulGil)
+                        } // end of for
+                    } ?: let {
+                        Log.e(TAG, "SeoulGilWalkCourse 정보 누락")
+                    }
+                } // end of onResponse
+
+                override fun onFailure(call: Call<SeoulGil>, t: Throwable) {
+                    Log.e(TAG, "seoulGilservice.getSeoulGil ${t.stackTraceToString()}")
+                }
+            }) // end of seoulGilservice.getSeoulGil
 
         animalservice.getLibrarys(ANIMAL_API_KEY, ANIMAL_LIMIT)
             .enqueue(object : Callback<AnimalLibrary> {

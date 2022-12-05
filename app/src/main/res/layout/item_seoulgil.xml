@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="150dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="30dp"
+    app:cardElevation="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_antique"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="15"
+            android:text="이름"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvLocalTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="지역"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <TextView
+            android:id="@+id/tvLocal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="지역"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLocalTitle"
+            app:layout_constraintStart_toEndOf="@+id/tvLocalTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvLocalTitle" />
+
+        <TextView
+            android:id="@+id/tvDistanceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="거리"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/tvLocalTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocalTitle" />
+
+        <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="거리"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDistanceTitle"
+            app:layout_constraintStart_toEndOf="@+id/tvDistanceTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvDistanceTitle" />
+
+        <TextView
+            android:id="@+id/tvLevelTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="레벨"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="@+id/tvDistanceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvDistanceTitle" />
+
+        <TextView
+            android:id="@+id/tvLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="레벨"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/tvLevelTitle"
+            app:layout_constraintStart_toEndOf="@+id/tvLevelTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvLevelTitle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

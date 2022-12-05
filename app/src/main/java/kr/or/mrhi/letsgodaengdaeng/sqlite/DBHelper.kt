@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Animal
 import kr.or.mrhi.letsgodaengdaeng.dataClass.AnimalPhoto
+import kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil
 import java.sql.SQLException
 
 class DBHelper(val context: Context?, val name: String?, val version: Int) : SQLiteOpenHelper(context, name, null, version) {
@@ -33,9 +34,21 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
                 photo text
             )
         """.trimIndent()
+        val query3 = """
+            create table IF NOT EXISTS seoulGil(
+                name text,
+                local text,
+                distance text,
+                time text,
+                detailCourse text,
+                courseLevel text,
+                content text
+            )
+        """.trimIndent()
         db?.apply {
             execSQL(query)
             execSQL(query2)
+            execSQL(query3)
         }
     }
 
@@ -46,9 +59,13 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         val query2 = """
             drop table if exists animalPhoto
         """.trimIndent()
+        val query3 = """
+            drop table if exists seoulGil
+        """.trimIndent()
         db?.apply {
             execSQL(query)
             execSQL(query2)
+            execSQL(query3)
         }
         this.onCreate(db)
     }
@@ -176,6 +193,61 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             db.close()
         }
         return photo!!
+    }
+
+    fun insertSeoulGil(seoulGil: SeoulGil): Boolean {
+        var flag = false
+        val query = """
+            insert into seoulGil values('${seoulGil.name}','${seoulGil.local}','${seoulGil.distance}',
+            '${seoulGil.time}','${seoulGil.detailCourse}','${seoulGil.courseLevel}','${seoulGil.content}')
+        """.trimIndent()
+        val db: SQLiteDatabase = writableDatabase
+        try{
+            db.execSQL(query)
+            flag = true
+        }catch (e: SQLException){
+            Log.e(TAG, "insertAnimal 실패")
+            flag = false
+        } finally {
+            db.close()
+        }
+
+        return flag
+    }
+
+    fun selectSeoulGil(): MutableList<SeoulGil>? {
+        var seoulGilList: MutableList<SeoulGil>? = mutableListOf<SeoulGil>()
+        var cursor: Cursor? = null
+        val query = """
+            select * from seoulGil
+        """.trimIndent()
+        val db = this.readableDatabase
+
+        try {
+            cursor = db.rawQuery(query, null)
+            if (cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val name = cursor.getString(0)
+                    val local = cursor.getString(1)
+                    val distance = cursor.getString(2)
+                    val time = cursor.getString(3)
+                    val detailCourse = cursor.getString(4)
+                    val courseLevel = cursor.getString(5)
+                    val content = cursor.getString(6)
+                    val seoulGil = SeoulGil(name, local, distance, time, detailCourse, courseLevel,content)
+                    seoulGilList?.add(seoulGil)
+                }
+            } else {
+                seoulGilList = null
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "selectSeoulGil $e")
+            seoulGilList = null
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+        return seoulGilList
     }
 
 }

@@ -1,12 +1,14 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +27,7 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CommentAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogTwo
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -117,6 +120,11 @@ class CommentActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
 
+        }
+        binding.ivProfilePicture.setOnClickListener {
+            val intent = Intent(this, InfoActivity::class.java)
+            intent.putExtra("userID",community.userID)
+            ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
         }
 
         binding.btnMore.setOnClickListener {

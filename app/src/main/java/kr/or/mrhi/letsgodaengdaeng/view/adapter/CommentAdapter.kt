@@ -23,6 +23,7 @@ import kr.or.mrhi.letsgodaengdaeng.view.activity.CommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogComment
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogTwo
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 
 class CommentAdapter (val context: Context, val commentList: MutableList<CommentVO>, val docID : String): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
@@ -53,6 +54,12 @@ class CommentAdapter (val context: Context, val commentList: MutableList<Comment
         }
         if (comment.userID.equals(MainActivity.userCode)){
             binding.btnMore.visibility = View.VISIBLE
+        }
+
+        binding.ivProfilePicture.setOnClickListener {
+            val intent = Intent(context, InfoActivity::class.java)
+            intent.putExtra("userID",comment.userID)
+            ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
         }
 
         binding.btnMore.setOnClickListener {
