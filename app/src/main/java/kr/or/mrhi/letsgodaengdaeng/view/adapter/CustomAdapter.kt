@@ -69,13 +69,14 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
             }
         }
 
-        binding.linearComment.setOnClickListener {
+        binding.root.setOnClickListener {
             val intent = Intent(context,CommentActivity::class.java)
             intent.putExtra("communityCode","${community.docID}")
             ContextCompat.startActivity(binding.linearComment.context,intent,null)
             (holder.itemView.context as Activity).overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
 
         }
+
 
     }
 
