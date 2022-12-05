@@ -24,9 +24,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        val intent = Intent(this@LoginActivity, SeouldataActivity::class.java)
-//        startActivity(intent)
-//        finish()
 
         /** 퍼미션 승인 여부 점검 */
         if (!isPermitted()) {
@@ -37,9 +34,8 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             var loginFlag = false
             val userDAO = UserDAO()
-            userDAO.selectUserType("phone","${binding.edtPhone.text}")?.addValueEventListener(object: ValueEventListener{
+            userDAO.selectUserType("phone","${binding.edtPhone.text}")?.addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.e(TAG, "${snapshot.value}")
                     for (userData in snapshot.children) {
                         val user = userData.getValue(User::class.java)
                         if (user?.password == "${binding.edtPassword.text}") {
