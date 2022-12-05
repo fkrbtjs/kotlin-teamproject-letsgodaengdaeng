@@ -1,6 +1,7 @@
 package kr.or.mrhi.letsgodaengdaeng.firebase
 
 import android.util.Log
+import com.bumptech.glide.repackaged.com.google.common.base.Predicates.equalTo
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -37,12 +38,28 @@ class CommunityDAO {
         return databaseReference!!.child(docID)
     }
 
+    fun selectCommunity3(userID:String) : Query?{
+        return databaseReference!!.orderByChild("userID").equalTo(userID)
+    }
+
+    fun selectCommunity4(userID:String) : Query?{
+        return databaseReference!!.orderByValue()
+    }
+
     fun updateCommentCount(docID:String,hashMap: HashMap<String, Any>):Task<Void>{
         return databaseReference!!.child("${docID}").updateChildren(hashMap)
     }
 
     fun selectComment(communityID:String):Query?{
         return databaseReference?.child(communityID)?.child("comment")?.orderByChild("communityID")?.equalTo(communityID)
+    }
+
+    fun selectComment2(communityID: String, userID: String):Query?{
+        return databaseReference?.child(communityID)?.child("comment")?.orderByChild("userID")?.equalTo(userID)
+    }
+
+    fun selectMyComment(userID:String):Query?{
+        return databaseReference?.child("comment")?.orderByChild("userID")?.equalTo(userID)
     }
 
     fun deleteComment(communityID:String,commentID:String){

@@ -84,6 +84,7 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
             intent.putExtra("userID",community.userID)
             ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
         }
+
     }
 
     override fun getItemCount(): Int {

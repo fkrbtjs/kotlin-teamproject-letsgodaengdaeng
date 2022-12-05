@@ -1,42 +1,36 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment.profile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
-import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMyreviewBinding
-import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentAllBinding
+import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
+import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMyCommentBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
-import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
-import kr.or.mrhi.letsgodaengdaeng.view.adapter.MyactivitiesAdapter
-import java.time.format.TextStyle
+import kr.or.mrhi.letsgodaengdaeng.view.adapter.MyCommentAdapter
 
-class MyreviewActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMyreviewBinding
-    lateinit var communityList: MutableList<CommunityVO>
-    lateinit var adapter: MyactivitiesAdapter
+class MyCommentActivity : AppCompatActivity() {
+
+    lateinit var binding : ActivityMyCommentBinding
+    lateinit var commentList: MutableList<CommentVO>
+    lateinit var adapter: MyCommentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMyreviewBinding.inflate(layoutInflater)
+        binding = ActivityMyCommentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         //Actionbar -> Toolbar 변경
         setSupportActionBar(binding.MyToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        communityList = mutableListOf()
-        adapter = MyactivitiesAdapter(this,communityList)
+        commentList = mutableListOf()
+        adapter = MyCommentAdapter(this,commentList,MainActivity.userCode!!)
         val linearLayout = LinearLayoutManager(this)
         linearLayout.reverseLayout = true
         linearLayout.stackFromEnd = true
@@ -49,23 +43,24 @@ class MyreviewActivity : AppCompatActivity() {
 
     private fun selectUser() {
         val communityDAO = CommunityDAO()
-        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+        communityDAO.selectCommunity4(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                communityList.clear()
+                commentList.clear()
+
+                val userinfo = HashMap<String,String>()
                 for (userdata in snapshot.children) {
                     //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
-                    val community = userdata.getValue(CommunityVO::class.java)
-                    //비어있던 userKey 부분에 key 값을 넣어준다
-                    community?.docID = userdata.key.toString()
-                    if (community != null) {
-                        communityList.add(community)
+                    val comment = userdata.getValue(CommentVO::class.java)
+
+                    if (comment != null) {
+                        commentList.add(comment)
                     }
                 }// end of for
                 adapter.notifyDataSetChanged()
             }// end of onDataChange
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MyreviewActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MyCommentActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
                 Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
             }
         })
