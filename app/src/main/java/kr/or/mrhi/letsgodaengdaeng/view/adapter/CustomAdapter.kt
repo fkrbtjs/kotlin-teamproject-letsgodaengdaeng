@@ -78,16 +78,12 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
 
         }
 
-<<<<<<< HEAD
+
         binding.ivProfilePicture.setOnClickListener {
             val intent = Intent(context,InfoActivity::class.java)
             intent.putExtra("userID",community.userID)
             ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
-
         }
-=======
->>>>>>> 979bad2d995ec11e179fb81571567496491ec756
-
     }
 
     override fun getItemCount(): Int {
