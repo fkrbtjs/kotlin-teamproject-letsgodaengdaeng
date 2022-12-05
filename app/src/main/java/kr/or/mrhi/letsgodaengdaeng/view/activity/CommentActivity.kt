@@ -42,14 +42,16 @@ class CommentActivity : AppCompatActivity() {
         binding = ActivityCommentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val communityCode = intent.getStringExtra("communityCode")
+        val communityDAO = CommunityDAO()
+
         commentList = mutableListOf()
-        commentAdapter = CommentAdapter(this,commentList)
+        commentAdapter = CommentAdapter(this,commentList,communityCode!!)
         val linearLayout = LinearLayoutManager(this)
         binding.recyclerview.layoutManager = linearLayout
         binding.recyclerview.adapter = commentAdapter
 
-        val communityCode = intent.getStringExtra("communityCode")
-        val communityDAO = CommunityDAO()
+
 
         /** 게시글 정보 가져오기 */
         communityDAO.selectCommunity2(communityCode!!)?.addValueEventListener(object :ValueEventListener{
@@ -66,6 +68,7 @@ class CommentActivity : AppCompatActivity() {
                         Log.d("community.userID","${community.userID} , ${MainActivity.userCode}")
                         binding.btnMore.visibility = View.VISIBLE
                     }
+
                     val userImgRef = communityDAO.storage!!.reference.child("userImage/${community.userID}.jpg")
                     userImgRef.downloadUrl.addOnCompleteListener {
                         if (it.isSuccessful){
@@ -88,6 +91,7 @@ class CommentActivity : AppCompatActivity() {
             }
             override fun onCancelled(error: DatabaseError) {}
         })
+
 
         /** 게시글의 댓글 가져오기 */
         communityDAO.selectComment(communityCode)?.addValueEventListener(object: ValueEventListener {

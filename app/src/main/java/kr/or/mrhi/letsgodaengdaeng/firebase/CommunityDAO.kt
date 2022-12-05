@@ -41,8 +41,12 @@ class CommunityDAO {
         return databaseReference!!.child("${docID}").updateChildren(hashMap)
     }
 
-    fun selectComment(communityID:String): Query? {
+    fun selectComment(communityID:String):Query?{
         return databaseReference?.child(communityID)?.child("comment")?.orderByChild("communityID")?.equalTo(communityID)
+    }
+
+    fun deleteComment(communityID:String,commentID:String){
+        databaseReference?.child(communityID)?.child("comment")?.child(commentID)?.removeValue()
     }
 
     fun plusLikeCount(docID: String, userCode: String){
