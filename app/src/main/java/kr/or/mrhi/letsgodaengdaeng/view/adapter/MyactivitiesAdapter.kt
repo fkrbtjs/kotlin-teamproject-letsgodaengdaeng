@@ -27,7 +27,6 @@ class MyactivitiesAdapter(val context: Context, val activitiesList: MutableList<
         val binding = holder.binding
         val activities = activitiesList.get(position)
 
-        val userDAO = UserDAO()
         val communityDAO = CommunityDAO()
         communityDAO.selectCommunity2("NIMbmC76PYt624gfeKe")?.addValueEventListener(object :
             ValueEventListener {
