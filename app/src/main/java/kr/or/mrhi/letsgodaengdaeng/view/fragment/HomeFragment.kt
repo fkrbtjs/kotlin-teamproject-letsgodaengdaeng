@@ -70,9 +70,7 @@ class HomeFragment : Fragment() {
         rollingBanner()
 
         homeViewFragment = HomeViewFragment()
-
-            childFragmentManager.beginTransaction().replace(R.id.homeFrameLayout, homeViewFragment)
-            .commit()
+        childFragmentManager.beginTransaction().replace(R.id.homeFrameLayout, homeViewFragment).commit()
 
         return binding.root
     }

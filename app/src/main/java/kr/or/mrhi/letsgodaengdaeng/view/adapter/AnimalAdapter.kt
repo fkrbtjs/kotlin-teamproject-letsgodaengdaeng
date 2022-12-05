@@ -1,6 +1,7 @@
 package kr.or.mrhi.letsgodaengdaeng.view.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,7 @@ import com.bumptech.glide.Glide
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Animal
 import kr.or.mrhi.letsgodaengdaeng.databinding.ItemAnimalBinding
 import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.home.AnimalInfoActivity
 
 class AnimalAdapter (val context: Context, val animalList: MutableList<Animal>, val dbHelper: DBHelper): RecyclerView.Adapter<AnimalAdapter.ViewHolder>() {
 
@@ -29,6 +31,12 @@ class AnimalAdapter (val context: Context, val animalList: MutableList<Animal>, 
             .load("https://${dbHelper.selectOnePhoto(animal.num!!)}")
             .circleCrop()
             .into(binding.ivAnimalImage)
+
+        binding.root.setOnClickListener {
+            val intent = Intent(context, AnimalInfoActivity::class.java)
+            intent.putExtra("animal", animal)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

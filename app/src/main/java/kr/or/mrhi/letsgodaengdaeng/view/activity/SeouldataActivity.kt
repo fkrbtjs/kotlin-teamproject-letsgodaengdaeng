@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimal
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.ANIMAL_API_KEY
@@ -20,7 +19,6 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySeouldataBinding
 import kr.or.mrhi.letsgodaengdaeng.retrofitData.tbAdpWaitAnimal.AnimalLibrary
 import kr.or.mrhi.letsgodaengdaeng.retrofitData.tbAdpWaitAnimalPhoto.AnimalPhotoLibrary
 import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
-import kr.or.mrhi.letsgodaengdaeng.view.activity.SeouldataActivity.Companion.DB_NAME
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 22
+        const val VERSION = 20
     }
 
     val TAG = this.javaClass.simpleName

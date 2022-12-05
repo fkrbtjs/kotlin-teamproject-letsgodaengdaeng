@@ -83,7 +83,6 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         try{
             db.execSQL(guery)
             flag = true
-//            Log.e(TAG, "$animalPhoto")
         }catch (e: SQLException){
             Log.d(TAG, "insertAnimalPhoto 실패")
             flag = false
@@ -128,11 +127,11 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         return animalList
     }
 
-    fun selectAllPhoto(no: String): MutableList<AnimalPhoto>? {
+    fun selectAllPhoto(num: String): MutableList<AnimalPhoto>? {
         var animalPhotoList: MutableList<AnimalPhoto>? = mutableListOf<AnimalPhoto>()
         var cursor: Cursor? = null
         val query = """
-            select * from animalPhoto where no = '$no'
+            select * from animalPhoto where num = '$num' and photoNum != '0'
         """.trimIndent()
         val db = this.readableDatabase
 
