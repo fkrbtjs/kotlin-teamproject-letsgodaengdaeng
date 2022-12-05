@@ -30,7 +30,11 @@ class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
         const val VERSION = 21
+<<<<<<< HEAD
     } //version 20
+=======
+    }// 커밋전에 버전 20으로 만들기
+>>>>>>> 979bad2d995ec11e179fb81571567496491ec756
 
     val TAG = this.javaClass.simpleName
 
