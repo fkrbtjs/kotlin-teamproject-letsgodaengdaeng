@@ -88,7 +88,6 @@ class HomeFragment : Fragment() {
         var recyclerNumber = 0
         val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
         bannerJob = backgroundScope.launch {
-                Log.e("Dsadsadas","$recyclerNumber")
                 while (bannerJobFlag == true) {
                     requireActivity().runOnUiThread {
                         if (recyclerNumber == 3) {

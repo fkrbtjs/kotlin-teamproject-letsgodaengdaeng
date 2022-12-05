@@ -27,8 +27,12 @@ import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyreviewActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.SettingActivity
 
 class ProfileFragment : Fragment() {
+    companion object {
+        var communityList: MutableList<CommunityVO> = mutableListOf()
+        var commentList: MutableList<CommentVO> = mutableListOf()
+    }
 
-    var communityCountList: MutableList<CommunityVO> = mutableListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,22 +46,40 @@ class ProfileFragment : Fragment() {
         val puppy = Puppy()
         val communityDAO = CommunityDAO()
 
-        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                communityCountList.clear()
-                for (userdata in snapshot.children) {
-                    //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
-                    val communityData = userdata.getValue(CommunityVO::class.java)
-                    if (communityData != null) {
-                        communityCountList.add(communityData)
-                    }
-                } // end of for
-                binding.tvMyreviewCount.setText(communityCountList.size.toString())
-            }// end of onDataChange
+        communityList.clear()
+        commentList.clear()
 
+        /** 모든 커뮤니티 docID를 받은 후 docID를 참조해 모든 글에서 내 유저코드로 내가 쓴 댓글을 찾는다 */
+        communityDAO.selectCommunity()?.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (userdata in snapshot.children) {
+                    val community = userdata.getValue(CommunityVO::class.java)
+
+                    if (community?.userID == MainActivity.userCode) {
+                        if (community != null) {
+                            communityList.add(community)
+                            Log.d("dasdas","${community}")
+                        }
+                    }
+                    communityDAO.selectMyComment("${userdata.key}", MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (userdata in snapshot.children) {
+                                val comment = userdata.getValue(CommentVO::class.java)
+                                if (comment != null) {
+                                    commentList.add(comment)
+                                }
+                            }
+                            binding.tvMycommentCount.setText(commentList.size.toString())
+                        }// end of onDataChange
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
+                        }
+                    })
+                }// end of for
+                binding.tvMyreviewCount.setText(communityList.size.toString())
+            }// end of onDataChange
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
+                Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
             }
         })
 

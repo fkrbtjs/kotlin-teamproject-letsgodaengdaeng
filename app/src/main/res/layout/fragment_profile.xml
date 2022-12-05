@@ -232,7 +232,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/tv_mycomment_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="23dp"
@@ -251,9 +251,9 @@
                         android:layout_marginBottom="16dp"
                         android:text="나의 댓글"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/textView10"
-                        app:layout_constraintStart_toStartOf="@+id/textView10"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                        app:layout_constraintEnd_toEndOf="@+id/tv_mycomment_count"
+                        app:layout_constraintStart_toStartOf="@+id/tv_mycomment_count"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_mycomment_count" />
                 </LinearLayout>
 
                 <LinearLayout
