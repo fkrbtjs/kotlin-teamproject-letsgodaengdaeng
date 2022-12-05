@@ -61,8 +61,6 @@ class ProfileFragment : Fragment() {
             }
         })
 
-
-
         /**firebase storage 에서 사진 가져오기.**/
         val userDAO = UserDAO()
         /**firebase storage 이미지 경로를 알려준다*/
@@ -90,8 +88,7 @@ class ProfileFragment : Fragment() {
             val intent = Intent(context, MyCommentActivity::class.java)
             startActivity(intent)
         }
-
-        Log.e("dsadsa" , "${MainActivity.userCode}")
+        
         binding.cdIdCard.setOnClickListener{
             val intent = Intent(context, InfoActivity::class.java)
             intent.putExtra("userID",MainActivity.userCode)
@@ -116,17 +113,11 @@ class ProfileFragment : Fragment() {
                     binding.tvGender.text = puppy?.gender
                     binding.tvBreed.text = puppy?.breed
                     binding.tvTendency.text = puppy?.tendency
-
                 }
             }
             override fun onCancelled(error: DatabaseError) {
             }
         })
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e("dasdsa","onresume")
     }
 }

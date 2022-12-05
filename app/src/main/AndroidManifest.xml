@@ -19,6 +19,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".view.fragment.profile.MyreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.fragment.profile.MyCommentActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.fragment.home.AnimalInfoActivity"
             android:exported="false" />
         <activity

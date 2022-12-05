@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
+import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMyCommentBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
@@ -25,7 +26,7 @@ class MyCommentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMyCommentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //Actionbar -> Toolbar 변경
+
         setSupportActionBar(binding.MyToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -37,31 +38,37 @@ class MyCommentActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = linearLayout
         binding.recyclerview.adapter = adapter
 
-        selectUser()
-
+        selectMyComment()
     }
 
-    private fun selectUser() {
+    /** 모든 커뮤니티 docID를 받은 후 docID를 참조해 모든 글에서 내 유저코드로 내가 쓴 댓글을 찾는다 */
+    fun selectMyComment() {
         val communityDAO = CommunityDAO()
-        communityDAO.selectCommunity4(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+        communityDAO.selectCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                commentList.clear()
-
-                val userinfo = HashMap<String,String>()
                 for (userdata in snapshot.children) {
-                    //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
-                    val comment = userdata.getValue(CommentVO::class.java)
+                    val community = userdata.getValue(CommunityVO::class.java)
+                    community?.docID = userdata.key.toString()
 
-                    if (comment != null) {
-                        commentList.add(comment)
-                    }
+                    communityDAO.selectMyComment(community?.docID!!,
+                        MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            for (userdata in snapshot.children) {
+                                val comment = userdata.getValue(CommentVO::class.java)
+                                if (comment != null) {
+                                    commentList.add(comment)
+                                }
+                            }
+                            adapter.notifyDataSetChanged()
+                        }// end of onDataChange
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
+                        }
+                    })
                 }// end of for
-                adapter.notifyDataSetChanged()
             }// end of onDataChange
-
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MyCommentActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
+                Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
             }
         })
     }

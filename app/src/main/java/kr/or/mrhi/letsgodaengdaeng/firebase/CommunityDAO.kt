@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
+import java.security.Key
 
 class CommunityDAO {
     var databaseReference: DatabaseReference? = null
@@ -42,8 +43,8 @@ class CommunityDAO {
         return databaseReference!!.orderByChild("userID").equalTo(userID)
     }
 
-    fun selectCommunity4(userID:String) : Query?{
-        return databaseReference!!.orderByValue()
+    fun selectMyComment(communityID:String, userID:String) : Query?{
+        return databaseReference?.child(communityID)?.child("comment")?.orderByChild("userID")?.equalTo(userID)
     }
 
     fun updateCommentCount(docID:String,hashMap: HashMap<String, Any>):Task<Void>{
@@ -54,14 +55,6 @@ class CommunityDAO {
         return databaseReference?.child(communityID)?.child("comment")?.orderByChild("communityID")?.equalTo(communityID)
     }
 
-    fun selectComment2(communityID: String, userID: String):Query?{
-        return databaseReference?.child(communityID)?.child("comment")?.orderByChild("userID")?.equalTo(userID)
-    }
-
-    fun selectMyComment(userID:String):Query?{
-        return databaseReference?.child("comment")?.orderByChild("userID")?.equalTo(userID)
-    }
-
     fun deleteComment(communityID:String,commentID:String){
         databaseReference?.child(communityID)?.child("comment")?.child(commentID)?.removeValue()
     }
@@ -70,13 +63,11 @@ class CommunityDAO {
         val likeHashMap: HashMap<String, Any> = HashMap()
         likeHashMap[userCode] = true
         databaseReference!!.child(docID).child("like").updateChildren(likeHashMap)
-
     }
 
     fun minusLikeCount(docID:String, userCode: String) {
         Log.d("key3", "${databaseReference!!.child(docID).child("like").child(userCode)}")
         databaseReference!!.child(docID).child("like").child(userCode).removeValue()
-
     }
 
     fun selectFriendCommunity(): Query? {
