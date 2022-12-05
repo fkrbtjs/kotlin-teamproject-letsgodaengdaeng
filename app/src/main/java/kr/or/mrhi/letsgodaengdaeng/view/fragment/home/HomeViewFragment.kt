@@ -10,6 +10,7 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentHomeViewBinding
 import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
 import kr.or.mrhi.letsgodaengdaeng.view.activity.SeouldataActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.AnimalAdapter
+import kr.or.mrhi.letsgodaengdaeng.view.adapter.SeoulGilAdapter
 
 class HomeViewFragment : Fragment() {
 
@@ -29,6 +30,11 @@ class HomeViewFragment : Fragment() {
         val animalAdapter = AnimalAdapter(requireContext(), animalList!!, dbHelper)
         binding.rvAnimal.adapter = animalAdapter
         binding.rvAnimal.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        val seoulgilList =  dbHelper.selectSeoulGil()
+        val seoulgilAdapter = SeoulGilAdapter(requireContext(),seoulgilList!!,dbHelper)
+        binding.rvSeoulgil.adapter = seoulgilAdapter
+        binding.rvSeoulgil.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
         return binding.root
     }
