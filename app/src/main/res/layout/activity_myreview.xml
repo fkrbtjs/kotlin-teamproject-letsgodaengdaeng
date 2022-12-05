@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragment.profile.MyreviewActivity"
+    android:orientation="vertical"
+    android:background="#FFFAF0">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/MyToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DEB887"
+        app:title="나의 활동"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabMyReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="#DEB887"
+        app:tabIndicatorColor="#DEB887">
+
+
+
+    </com.google.android.material.tabs.TabLayout>
+
+
+</LinearLayout>

@@ -1,14 +1,13 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment.profile
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityInfoBinding
@@ -16,7 +15,7 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 
-class InfoActivity : AppCompatActivity() {
+class InfoActivity(val docID:String) : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityInfoBinding.inflate(layoutInflater)
@@ -32,7 +31,7 @@ class InfoActivity : AppCompatActivity() {
         }
 
         val puppyDAO = PuppyDAO()
-        puppyDAO.selectPuppy(MainActivity.userCode!!)?.addValueEventListener(object :
+        puppyDAO.selectPuppy(docID)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){
@@ -57,7 +56,7 @@ class InfoActivity : AppCompatActivity() {
                     .into(binding.ivPicture)
             }
         }
-        userDAO.selectUser(MainActivity.userCode!!)?.addValueEventListener(object :
+        userDAO.selectUser(docID)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){

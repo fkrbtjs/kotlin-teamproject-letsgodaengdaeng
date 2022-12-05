@@ -1,27 +1,24 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.ktx.storageMetadata
-import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
-import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentProfileBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyreviewActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.SettingActivity
 
 class ProfileFragment : Fragment() {
@@ -56,13 +53,18 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        binding.writing.setOnClickListener{
+            val intent = Intent(context, MyreviewActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.ivSetting.setOnClickListener{
             val intent = Intent(context, SettingActivity::class.java)
             startActivity(intent)
         }
 
         binding.cdIdCard.setOnClickListener{
-            val intent = Intent(context, InfoActivity::class.java)
+            val intent = Intent(context, InfoActivity(MainActivity.userCode!!)::class.java)
             startActivity(intent)
         }
 
