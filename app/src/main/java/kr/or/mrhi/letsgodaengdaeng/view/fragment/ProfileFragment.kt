@@ -22,12 +22,6 @@ import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyreviewActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.SettingActivity
 
 class ProfileFragment : Fragment() {
-    var mainActivity: MainActivity? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +57,10 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        Log.e("dsadsa" , "${MainActivity.userCode}")
         binding.cdIdCard.setOnClickListener{
-            val intent = Intent(context, InfoActivity(MainActivity.userCode!!)::class.java)
+            val intent = Intent(context, InfoActivity::class.java)
+            intent.putExtra("userID",MainActivity.userCode)
             startActivity(intent)
         }
 

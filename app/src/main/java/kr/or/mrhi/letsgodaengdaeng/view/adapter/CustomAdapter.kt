@@ -14,6 +14,7 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.ItemMainBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.CommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 
 class CustomAdapter(val context: Context, val communityList: MutableList<CommunityVO>): RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
 
@@ -74,6 +75,13 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
             intent.putExtra("communityCode","${community.docID}")
             ContextCompat.startActivity(binding.linearComment.context,intent,null)
             (holder.itemView.context as Activity).overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
+
+        }
+
+        binding.ivProfilePicture.setOnClickListener {
+            val intent = Intent(context,InfoActivity::class.java)
+            intent.putExtra("userID",community.userID)
+            ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
 
         }
 

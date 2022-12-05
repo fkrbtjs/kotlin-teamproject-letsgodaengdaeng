@@ -29,8 +29,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 20
-    }
+        const val VERSION = 21
+    } //version 20
 
     val TAG = this.javaClass.simpleName
 

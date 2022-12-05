@@ -3,6 +3,7 @@ package kr.or.mrhi.letsgodaengdaeng.view.fragment.profile
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -15,11 +16,17 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 
-class InfoActivity(val docID:String) : AppCompatActivity() {
+class InfoActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val userID = intent.getStringExtra("userID")
+
+        if (userID.equals(MainActivity.userCode)){
+            binding.ivUpdate.visibility = View.VISIBLE
+        }
 
         //Actionbar -> Toolbar 변경
         setSupportActionBar(binding.toolInfo)
@@ -31,7 +38,7 @@ class InfoActivity(val docID:String) : AppCompatActivity() {
         }
 
         val puppyDAO = PuppyDAO()
-        puppyDAO.selectPuppy(docID)?.addValueEventListener(object :
+        puppyDAO.selectPuppy(userID!!)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){
@@ -48,7 +55,7 @@ class InfoActivity(val docID:String) : AppCompatActivity() {
         })
 
         val userDAO = UserDAO()
-        val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg")
+        val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${userID}.jpg")
         puppyImg.downloadUrl.addOnCompleteListener{
             if(it.isSuccessful){
                 Glide.with(applicationContext)
@@ -56,7 +63,7 @@ class InfoActivity(val docID:String) : AppCompatActivity() {
                     .into(binding.ivPicture)
             }
         }
-        userDAO.selectUser(docID)?.addValueEventListener(object :
+        userDAO.selectUser(userID)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){
