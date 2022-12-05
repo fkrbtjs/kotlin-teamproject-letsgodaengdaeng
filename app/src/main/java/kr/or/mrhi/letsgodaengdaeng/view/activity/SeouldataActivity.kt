@@ -1,5 +1,6 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -24,10 +25,11 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 7
+        const val VERSION = 17
     }
 
     val TAG = this.javaClass.simpleName
@@ -49,7 +51,7 @@ class SeouldataActivity : AppCompatActivity() {
 
         val animalList = dbHelper.selectAnimal()
 
-        if (animalList == null) {
+//        if (animalList == null) {
             animalservice.getLibrarys(ANIMAL_API_KEY, ANIMAL_LIMIT)
                 .enqueue(object : Callback<AnimalLibrary> {
                     override fun onResponse(
@@ -88,40 +90,43 @@ class SeouldataActivity : AppCompatActivity() {
                     }
                 }) // end of animalservice.getLibrarys
 
-            animalPhotoservice.getLibrarys(PHOTO_API_KEY, PHOTO_LIMIT).enqueue(object: Callback<AnimalPhotoLibrary> {
-                override fun onResponse(call: Call<AnimalPhotoLibrary>, response: Response<AnimalPhotoLibrary>) {
-                    val data = response.body()
-                    data?.let {
-                        var number = 0
-                        var num: String? = null
-                        var photoNum: String? = null
-                        var photo: String? = null
-                        for (loadData in it.TbAdpWaitAnimalPhotoView.row) {
-                            /** 공공데이터 사진이 동물당 9장이고 사진번호가 각기 달라 0~8 으로 저장하기 위함 */
-                            if (num != loadData.ANIMAL_NO) {
-                                number = 0
-                                num = loadData.ANIMAL_NO
-                                photoNum = number.toString()
-                                photo = loadData.PHOTO_URL
-                            } else {
-                                number += 1
-                                num = loadData.ANIMAL_NO
-                                photoNum = number.toString()
-                                photo = loadData.PHOTO_URL
-                            }
-                            val animalPhoto = AnimalPhoto(num, photoNum, photo)
-                            dbHelper.insertAnimalPhoto(animalPhoto)
-                            Log.e(TAG, "${dbHelper.insertAnimalPhoto(animalPhoto)}")
-                            Log.e(TAG, "$num $photoNum $photo")
-                        } // end of for
-                    } ?: let {
-                        Log.e(TAG, "TbAdpWaitAnimalPhotoView 정보 누락")
-                    }
-                } // end of onResponse
-                override fun onFailure(call: Call<AnimalPhotoLibrary>, t: Throwable) {
-                    Log.e(TAG, "animalPhotoservice.getLibrarys ${t.stackTraceToString()}")
+
+//        } // end of if (animalList == null)
+        animalPhotoservice.getLibrarys(PHOTO_API_KEY, PHOTO_LIMIT).enqueue(object: Callback<AnimalPhotoLibrary> {
+            override fun onResponse(call: Call<AnimalPhotoLibrary>, response: Response<AnimalPhotoLibrary>) {
+                val data = response.body()
+                data?.let {
+                    var number = 0
+                    var num: String? = null
+                    var photoNum: String? = null
+                    var photo: String? = null
+                    for (loadData in it.TbAdpWaitAnimalPhotoView.row) {
+                        /** 공공데이터 사진이 동물당 9장이고 사진번호가 각기 달라 0~8 으로 저장하기 위함 */
+                        if (num != loadData.ANIMAL_NO) {
+                            number = 0
+                            num = loadData.ANIMAL_NO
+                            photoNum = number.toString()
+                            photo = loadData.PHOTO_URL
+                        } else {
+                            number++
+                            num = loadData.ANIMAL_NO
+                            photoNum = number.toString()
+                            photo = loadData.PHOTO_URL
+                        }
+                        val animalPhoto = AnimalPhoto(num.toString(), photoNum, photo)
+                        dbHelper.insertAnimalPhoto(animalPhoto)
+                        Log.e(TAG, "${dbHelper.insertAnimalPhoto(animalPhoto)}")
+                        Log.e(TAG, "$num $photoNum $photo")
+                    } // end of for
+                    val intent = Intent(this@SeouldataActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                } ?: let {
+                    Log.e(TAG, "TbAdpWaitAnimalPhotoView 정보 누락")
                 }
-            }) // end of animalPhotoservice.getLibrarys
-        } // end of if (animalList == null)
+            } // end of onResponse
+            override fun onFailure(call: Call<AnimalPhotoLibrary>, t: Throwable) {
+                Log.e(TAG, "animalPhotoservice.getLibrarys ${t.stackTraceToString()}")
+            }
+        }) // end of animalPhotoservice.getLibrarys
     } // end of onCreate
 }
