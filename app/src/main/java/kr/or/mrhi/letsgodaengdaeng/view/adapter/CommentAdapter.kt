@@ -1,5 +1,6 @@
 package kr.or.mrhi.letsgodaengdaeng.view.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,7 +24,7 @@ import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogComment
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogTwo
 
-class CommentAdapter (val context: Context, val commentList: MutableList<CommentVO>): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter (val context: Context, val commentList: MutableList<CommentVO>, val docID : String): RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -52,10 +54,11 @@ class CommentAdapter (val context: Context, val commentList: MutableList<Comment
         if (comment.userID.equals(MainActivity.userCode)){
             binding.btnMore.visibility = View.VISIBLE
         }
-//        binding.btnMore.setOnClickListener {
-//            val bottomSheetDialogComment = BottomSheetDialogComment()
-//            bottomSheetDialogComment.show(,bottomSheetDialogComment.tag)
-//        }
+
+        binding.btnMore.setOnClickListener {
+            val bottomSheetDialogComment = BottomSheetDialogComment(docID,comment.commentID!!,commentList)
+            bottomSheetDialogComment.show((context as CommentActivity).supportFragmentManager,bottomSheetDialogComment.tag)
+        }
 
     }
 
