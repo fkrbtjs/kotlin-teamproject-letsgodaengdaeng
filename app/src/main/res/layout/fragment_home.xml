@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="242dp"
             android:background="@color/white"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar"
-            android:visibility="visible">
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" >
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/CollapsingToolbarLayout"
@@ -37,7 +36,6 @@
                     android:background="@color/white_floral"
                     app:layout_collapseMode="pin"
                     />
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/BannerRecyclerView"

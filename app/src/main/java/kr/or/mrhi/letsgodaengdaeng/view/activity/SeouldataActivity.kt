@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 17
+        const val VERSION = 20
     }
 
     val TAG = this.javaClass.simpleName
@@ -49,49 +49,44 @@ class SeouldataActivity : AppCompatActivity() {
 
         val dbHelper = DBHelper(this, DB_NAME, VERSION)
 
-        val animalList = dbHelper.selectAnimal()
-
-//        if (animalList == null) {
-            animalservice.getLibrarys(ANIMAL_API_KEY, ANIMAL_LIMIT)
-                .enqueue(object : Callback<AnimalLibrary> {
-                    override fun onResponse(
-                        call: Call<AnimalLibrary>,
-                        response: Response<AnimalLibrary>
-                    ) {
-                        val data = response.body()
-                        data?.let {
-                            for (loadData in it.TbAdpWaitAnimalView.row) {
-                                val num = loadData.ANIMAL_NO
-                                val name = loadData.NM
-                                val breeds = loadData.BREEDS
-                                val gender = if (loadData.SEXDSTN == "W") {
-                                    "여아"
-                                } else {
-                                    "남아"
-                                }
-                                val age = loadData.AGE
-                                val weight = loadData.BDWGH
-                                val intro = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    Html.fromHtml(loadData.INTRCN_CN, Html.FROM_HTML_MODE_LEGACY)
-                                        .toString().replace("\n\n", "\n").replace("'", "")
-                                } else {
-                                    Html.fromHtml(loadData.INTRCN_CN).toString()
-                                }
-                                val animal = Animal(num, name, breeds, gender, age, weight, intro)
-                                dbHelper.insertAnimal(animal)
-                            } // end of for
-                        } ?: let {
-                            Log.e(TAG, "TbAdpWaitAnimalView 정보 누락")
-                        }
-                    } // end of onResponse
-
-                    override fun onFailure(call: Call<AnimalLibrary>, t: Throwable) {
-                        Log.e(TAG, "animalservice.getLibrarys ${t.stackTraceToString()}")
+        animalservice.getLibrarys(ANIMAL_API_KEY, ANIMAL_LIMIT)
+            .enqueue(object : Callback<AnimalLibrary> {
+                override fun onResponse(
+                    call: Call<AnimalLibrary>,
+                    response: Response<AnimalLibrary>
+                ) {
+                    val data = response.body()
+                    data?.let {
+                        for (loadData in it.TbAdpWaitAnimalView.row) {
+                            val num = loadData.ANIMAL_NO
+                            val name = loadData.NM
+                            val breeds = loadData.BREEDS
+                            val gender = if (loadData.SEXDSTN == "W") {
+                                "여아"
+                            } else {
+                                "남아"
+                            }
+                            val age = loadData.AGE
+                            val weight = loadData.BDWGH
+                            val intro = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                Html.fromHtml(loadData.INTRCN_CN, Html.FROM_HTML_MODE_LEGACY)
+                                    .toString().replace("\n\n", "\n").replace("'", "")
+                            } else {
+                                Html.fromHtml(loadData.INTRCN_CN).toString().replace("\n\n", "\n").replace("'", "")
+                            }
+                            val animal = Animal(num, name, breeds, gender, age, weight, intro)
+                            dbHelper.insertAnimal(animal)
+                        } // end of for
+                    } ?: let {
+                        Log.e(TAG, "TbAdpWaitAnimalView 정보 누락")
                     }
-                }) // end of animalservice.getLibrarys
+                } // end of onResponse
 
+                override fun onFailure(call: Call<AnimalLibrary>, t: Throwable) {
+                    Log.e(TAG, "animalservice.getLibrarys ${t.stackTraceToString()}")
+                }
+            }) // end of animalservice.getLibrarys
 
-//        } // end of if (animalList == null)
         animalPhotoservice.getLibrarys(PHOTO_API_KEY, PHOTO_LIMIT).enqueue(object: Callback<AnimalPhotoLibrary> {
             override fun onResponse(call: Call<AnimalPhotoLibrary>, response: Response<AnimalPhotoLibrary>) {
                 val data = response.body()

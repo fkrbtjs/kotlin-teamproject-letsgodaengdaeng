@@ -27,8 +27,6 @@ class AnimalAdapter (val context: Context, val animalList: MutableList<Animal>, 
 
         Glide.with(context)
             .load("https://${dbHelper.selectOnePhoto(animal.num!!)}")
-            .override(300,300)
-            .centerCrop()
             .circleCrop()
             .into(binding.ivAnimalImage)
     }
