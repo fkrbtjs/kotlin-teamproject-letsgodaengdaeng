@@ -19,9 +19,22 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.SeouldataActivity"
+            android:name=".view.fragment.profile.MyCommentActivity"
             android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
+        <activity
+            android:name=".view.fragment.profile.MyreviewActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".view.activity.SeouldataActivity"
+            android:exported="false"></activity>
         <activity
             android:name=".view.activity.UpdateCommentActivity"
             android:exported="false">

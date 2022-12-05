@@ -1,53 +1,96 @@
 package kr.or.mrhi.letsgodaengdaeng.view.adapter
 
+import android.app.Activity
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.bumptech.glide.Glide
+import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
-import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
-import kr.or.mrhi.letsgodaengdaeng.dataClass.User
-import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitiesItemBinding
+import kr.or.mrhi.letsgodaengdaeng.databinding.ItemMainBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
-import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
+import kr.or.mrhi.letsgodaengdaeng.view.activity.CommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 
-class MyactivitiesAdapter(val context: Context, val activitiesList: MutableList<CommunityVO>): RecyclerView.Adapter<MyactivitiesAdapter.ActivitiesViewHolder>() {
+class MyactivitiesAdapter(val context: Context, val communityList: MutableList<CommunityVO>): RecyclerView.Adapter<MyactivitiesAdapter.MyActivityViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActivitiesViewHolder {
-        val binding = ActivitiesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ActivitiesViewHolder(binding)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyactivitiesAdapter.MyActivityViewHolder {
+        val binding = ItemMainBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MyactivitiesAdapter.MyActivityViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ActivitiesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyactivitiesAdapter.MyActivityViewHolder, position: Int) {
+        var likeFlag = 0
+        val community = communityList[position]
         val binding = holder.binding
-        val activities = activitiesList.get(position)
-
+        binding.tvNickname.text = community.nickname
+        binding.tvDate.text = community.date
+        binding.tvCategory.text = community.category
+        binding.tvLocal.text = community.local
+        binding.tvContent.text = community.content
+        binding.tvLikesCount.text = community.likeCount.toString()
+        binding.tvCommentCount.text = community.commentCount.toString()
+        //사진을 firebase storage에서 가져와야된다.(경로를 지정해서 : data.docID)
         val communityDAO = CommunityDAO()
-        communityDAO.selectCommunity2("NIMbmC76PYt624gfeKe")?.addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(userData in snapshot.children){
-                    val community: CommunityVO? = snapshot.getValue(CommunityVO::class.java)
-                    binding.tvMyCategory.text = community?.category
-                    binding.tvWriting.text = community?.content
-                    binding.tvReviewCount.text = community?.commentCount.toString()
-                    Log.d("letsgodaengdaeng", "select success")
-                }
+        //firebase storage에서 저장되어있는 이미지 경로 나타냄
+        val imgRef = communityDAO.storage!!.reference.child("images/${community.docID}.jpg")
+        val userImgRef = communityDAO.storage!!.reference.child("userImage/${community.userID}.jpg")
+        userImgRef.downloadUrl.addOnCompleteListener {
+            if (it.isSuccessful){
+                Glide.with(context)
+                    .load(it.result)
+                    .circleCrop()
+                    .into(binding.ivProfilePicture)
             }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        }
 
+
+        imgRef.downloadUrl.addOnCompleteListener {
+            if (it.isSuccessful){
+                Glide.with(context)
+                    .load(it.result)
+                    .into(binding.ivPicture)
+            }
+        }
+        binding.linearLikes.setOnClickListener {
+            if (likeFlag==0){
+                binding.ivLike.setImageResource(R.drawable.ic_fill_favorite)
+                community.likeCount += 1
+                likeFlag = 1
+            }else{
+                communityDAO.minusLikeCount(community.docID!!, MainActivity.userCode!!)
+                binding.ivLike.setImageResource(R.drawable.ic_border_favorite)
+                community.likeCount += -1
+                likeFlag = 0
+            }
+        }
+
+        binding.root.setOnClickListener {
+            val intent = Intent(context, CommentActivity::class.java)
+            intent.putExtra("communityCode","${community.docID}")
+            ContextCompat.startActivity(binding.linearComment.context,intent,null)
+            (holder.itemView.context as Activity).overridePendingTransition(
+                R.anim.slide_right_enter,
+                R.anim.slide_right_exit)
+
+        }
+
+
+        binding.ivProfilePicture.setOnClickListener {
+            val intent = Intent(context, InfoActivity::class.java)
+            intent.putExtra("userID",community.userID)
+            ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
+        }
     }
 
     override fun getItemCount(): Int {
-        return activitiesList.size
+        return communityList.size
     }
 
-    class ActivitiesViewHolder(val binding: ActivitiesItemBinding): RecyclerView.ViewHolder(binding.root)
+    class MyActivityViewHolder(val binding: ItemMainBinding): RecyclerView.ViewHolder(binding.root)
 }

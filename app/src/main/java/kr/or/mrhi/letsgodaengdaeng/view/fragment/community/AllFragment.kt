@@ -70,6 +70,8 @@ class AllFragment : Fragment() {
                 Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
             }
         })
+
+
     }
 
 }
