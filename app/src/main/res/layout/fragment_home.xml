@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/papaya_whip"
     tools:context=".view.fragment.HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="242dp"
             android:background="@color/white"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" >
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/CollapsingToolbarLayout"
@@ -33,9 +34,20 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white_floral"
-                    app:layout_collapseMode="pin"
-                    />
+                    android:background="@color/burly_wood"
+                    app:layout_collapseMode="pin" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="홈"
+                        android:textColor="@color/white_antique"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </androidx.appcompat.widget.Toolbar>
+
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/BannerRecyclerView"
@@ -48,9 +60,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="15dp"
                     android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
                     app:ci_drawable="@drawable/background_button_outline"
-                    app:layout_collapseMode="parallax"
-                    android:layout_marginBottom="10dp"/>
+                    app:layout_collapseMode="parallax" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 

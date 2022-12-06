@@ -18,6 +18,8 @@
         android:theme="@style/Theme.Letsgodaengdaeng"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity android:name=".view.fragment.home.SeoulGilInfoActivity"
+            android:exported="false" />
         <activity
             android:name=".view.fragment.profile.MyreviewActivity"
             android:exported="false" />
