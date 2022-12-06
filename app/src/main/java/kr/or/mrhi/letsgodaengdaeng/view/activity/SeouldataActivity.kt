@@ -11,6 +11,7 @@ import kr.or.mrhi.letsgodaengdaeng.api.SeoulGilWalkCourseApi.Companion.SeoulGil_
 import kr.or.mrhi.letsgodaengdaeng.api.SeoulGilWalkCourseApi.Companion.SeoulGil_LIMIT
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.ANIMAL_API_KEY
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.ANIMAL_LIMIT
+import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.DOMAIN
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.PHOTO_API_KEY
 import kr.or.mrhi.letsgodaengdaeng.api.TbAdpWaitAnimalApi.Companion.PHOTO_LIMIT
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Animal
@@ -27,12 +28,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+import kr.hyosang.coordinate.*
 
 class SeouldataActivity : AppCompatActivity() {
     companion object {
         const val DB_NAME = "testDB"
-        const val VERSION = 35
+        const val VERSION = 40
     }
 
     val TAG = this.javaClass.simpleName
@@ -44,27 +45,15 @@ class SeouldataActivity : AppCompatActivity() {
 
         /** retrofit 객체 생성*/
         val retrofit = Retrofit.Builder()
-            .baseUrl(TbAdpWaitAnimalApi.DOMAIN)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val retrofit2 = Retrofit.Builder()
-            .baseUrl(SeoulGilWalkCourseApi.DOMAIN)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-
-        val retrofit3 = Retrofit.Builder()
-            .baseUrl(VeterinaryApi.DOMAIN)
+            .baseUrl(DOMAIN)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         /** retrofit 객체 인터페이스 전달*/
         val animalservice = retrofit.create(TbAdpWaitAnimal::class.java)
         val animalPhotoservice = retrofit.create(TbAdpWaitAnimalPhoto::class.java)
-        val seoulGilservice = retrofit2.create(SeoulGilWalk::class.java)
+        val seoulGilservice = retrofit.create(SeoulGilWalk::class.java)
         val veterinaryService = retrofit.create(VeterinaryClinic::class.java)
-
 
         val dbHelper = DBHelper(this, DB_NAME, VERSION)
 
@@ -116,7 +105,14 @@ class SeouldataActivity : AppCompatActivity() {
                             } else {
                                 Html.fromHtml(loadData.CONTENT).toString().replace("\n\n", "\n").replace("'", "")
                             }
-                            val seoulGil= kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil(name,local,distance,time,detailCourse,courseLevel,content)
+
+                            val tmPt = CoordPoint(loadData.X.toDouble(),loadData.Y.toDouble())
+                            val wgsPt = TransCoord.getTransCoord(tmPt, TransCoord.COORD_TYPE_TM,TransCoord.COORD_TYPE_WGS84)
+                            val longitude = wgsPt.x
+                            val latitude = wgsPt.y
+                            val seoulGil= kr.or.mrhi.letsgodaengdaeng.dataClass.
+                            SeoulGil(name, local, distance, time, detailCourse,
+                                courseLevel, content, longitude, latitude)
                             dbHelper.insertSeoulGil(seoulGil)
                         } // end of for
                     } ?: let {

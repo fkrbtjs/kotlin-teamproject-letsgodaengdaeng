@@ -5,7 +5,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
-
 @Parcelize
 data class SeoulGil(
     var name: String? = null,
@@ -14,7 +13,9 @@ data class SeoulGil(
     var time: String? = null,
     var detailCourse: String? = null,
     var courseLevel: String? = null,
-    var content: String? = null
+    var content: String? = null,
+    var longitude: Double? = null,
+    var latitude: Double? = null
 ) : Parcelable {
 
     companion object : Parceler<SeoulGil> {
@@ -30,6 +31,8 @@ data class SeoulGil(
             parcel.writeString(detailCourse)
             parcel.writeString(courseLevel)
             parcel.writeString(content)
+            parcel.writeDouble(longitude!!)
+            parcel.writeDouble(latitude!!)
         }
     }
 
@@ -40,6 +43,8 @@ data class SeoulGil(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readDouble(),
+        parcel.readDouble()
     )
 }

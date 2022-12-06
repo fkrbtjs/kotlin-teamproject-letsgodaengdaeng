@@ -5,7 +5,8 @@ plugins {
     id 'kotlin-kapt'
     id ("kotlin-parcelize")
 }
-
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
 android {
     namespace 'kr.or.mrhi.letsgodaengdaeng'
     compileSdk 32
@@ -20,6 +21,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
+
+        buildConfigField "String","MAP_KEY", properties["api.key"]
     }
 
     buildTypes {
@@ -49,6 +52,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
+    implementation files('libs\\TransCoord.jar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
@@ -72,4 +76,7 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 }

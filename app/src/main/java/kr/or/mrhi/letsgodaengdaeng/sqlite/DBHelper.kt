@@ -45,7 +45,9 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
                 time text,
                 detailCourse text,
                 courseLevel text,
-                content text
+                content text,
+                longitude double,
+                latitude double
             )
         """.trimIndent()
         val query4 = """
@@ -215,7 +217,8 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         var flag = false
         val query = """
             insert into seoulGil values('${seoulGil.name}','${seoulGil.local}','${seoulGil.distance}',
-            '${seoulGil.time}','${seoulGil.detailCourse}','${seoulGil.courseLevel}','${seoulGil.content}')
+            '${seoulGil.time}','${seoulGil.detailCourse}','${seoulGil.courseLevel}',
+            '${seoulGil.content}','${seoulGil.longitude}','${seoulGil.latitude}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
         try {
@@ -254,8 +257,10 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
                     val detailCourse = cursor.getString(4)
                     val courseLevel = cursor.getString(5)
                     val content = cursor.getString(6)
+                    val longitude = cursor.getDouble(7)
+                    val latitude = cursor.getDouble(8)
                     val seoulGil =
-                        SeoulGil(name, local, distance, time, detailCourse, courseLevel, content)
+                        SeoulGil(name, local, distance, time, detailCourse, courseLevel, content, longitude, latitude)
                     seoulGilList?.add(seoulGil)
                 }
             } else {
