@@ -30,8 +30,11 @@ class MyCommentActivity : AppCompatActivity() {
         setSupportActionBar(binding.MyToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        val communityDAO = CommunityDAO()
+
+
         var commentList = ProfileFragment.commentList
-        adapter = MyCommentAdapter(this,commentList,MainActivity.userCode!!)
+        adapter = MyCommentAdapter(this,commentList)
         val linearLayout = LinearLayoutManager(this)
         linearLayout.reverseLayout = true
         linearLayout.stackFromEnd = true

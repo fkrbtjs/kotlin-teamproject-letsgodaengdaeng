@@ -36,6 +36,7 @@ class BottomSheetDialogComment(val docID : String, val commentID : String, val c
 
         binding.tvDelete.setOnClickListener {
             Log.d("commentList.size","${commentList.size}")
+            Log.d("commentList.size","${docID}")
             communityDAO.deleteComment(docID,commentID)
             val hashMap: HashMap<String, Any> = HashMap()
             hashMap["commentCount"] = commentList.size -1
