@@ -235,6 +235,26 @@
                     android:text="중복확인" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edt_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edt_text"
+                    android:ems="10"
+                    android:hint="주소를 입력해 주세요"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="20dp"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"

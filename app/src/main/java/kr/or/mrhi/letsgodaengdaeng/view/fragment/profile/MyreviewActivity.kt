@@ -1,27 +1,12 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment.profile
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.tabs.TabLayout
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMyreviewBinding
-import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentAllBinding
-import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
-import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
-import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.MyactivitiesAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.ProfileFragment
-import kr.or.mrhi.letsgodaengdaeng.view.fragment.ProfileFragment.Companion.communityList
-import java.time.format.TextStyle
 
 class MyreviewActivity : AppCompatActivity() {
     lateinit var binding: ActivityMyreviewBinding
@@ -44,55 +29,6 @@ class MyreviewActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = linearLayout
         binding.recyclerview.adapter = adapter
 
-
-    }
-
-//    private fun selectUser() {
-//        val communityDAO = CommunityDAO()
-//        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                communityList.clear()
-//                for (userdata in snapshot.children) {
-//                    //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
-//                    val community = userdata.getValue(CommunityVO::class.java)
-//                    //비어있던 userKey 부분에 key 값을 넣어준다
-//                    community?.docID = userdata.key.toString()
-//                    if (community != null) {
-//                        communityList.add(community)
-//                    }
-//                }// end of for
-//                adapter.notifyDataSetChanged()
-//            }// end of onDataChange
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                Toast.makeText(this@MyreviewActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-//                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
-//            }
-//        })
-//    }
-
-    private fun selectUser() {
-        val communityDAO = CommunityDAO()
-        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                communityList.clear()
-                for (userdata in snapshot.children) {
-                    //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
-                    val community = userdata.getValue(CommunityVO::class.java)
-                    //비어있던 userKey 부분에 key 값을 넣어준다
-                    community?.docID = userdata.key.toString()
-                    if (community != null) {
-                        communityList.add(community)
-                    }
-                }// end of for
-                adapter.notifyDataSetChanged()
-            }// end of onDataChange
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@MyreviewActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
-            }
-        })
     }
     
     /**백버튼을 눌렀을떄 이동할 경로 지정*/
