@@ -11,10 +11,12 @@ import kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Veterinary
 import java.sql.SQLException
 
-class DBHelper(val context: Context?, val name: String?, val version: Int) : SQLiteOpenHelper(context, name, null, version) {
+class DBHelper(val context: Context?, val name: String?, val version: Int) :
+    SQLiteOpenHelper(context, name, null, version) {
     companion object {
         val PHOTO_NUM = 0
     }
+
     val TAG = this.javaClass.simpleName
     override fun onCreate(db: SQLiteDatabase?) {
         val query = """
@@ -91,10 +93,10 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             '${animal.gender}','${animal.age}','${animal.weight}kg','${animal.intro}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
-        try{
+        try {
             db.execSQL(query)
             flag = true
-        }catch (e: SQLException){
+        } catch (e: SQLException) {
             Log.e(TAG, "insertAnimal 실패")
             flag = false
         } finally {
@@ -110,10 +112,10 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             insert into animalPhoto values('${animalPhoto.num}','${animalPhoto.photoNum}','${animalPhoto.photo}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
-        try{
+        try {
             db.execSQL(guery)
             flag = true
-        }catch (e: SQLException){
+        } catch (e: SQLException) {
             Log.d(TAG, "insertAnimalPhoto 실패")
             flag = false
         } finally {
@@ -216,10 +218,10 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             '${seoulGil.time}','${seoulGil.detailCourse}','${seoulGil.courseLevel}','${seoulGil.content}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
-        try{
+        try {
             db.execSQL(query)
             flag = true
-        }catch (e: SQLException){
+        } catch (e: SQLException) {
             Log.e(TAG, "insertAnimal 실패")
             flag = false
         } finally {
@@ -229,12 +231,16 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         return flag
     }
 
-    fun selectSeoulGil(): MutableList<SeoulGil>? {
+    fun selectSeoulGil(gu: String): MutableList<SeoulGil>? {
         var seoulGilList: MutableList<SeoulGil>? = mutableListOf<SeoulGil>()
         var cursor: Cursor? = null
-        val query = """
-            select * from seoulGil
-        """.trimIndent()
+        var query = ""
+        if (gu.equals("all")) {
+            query = """select * from seoulGil""".trimIndent()
+        } else {
+            query = """select * from seoulGil where local like '%${gu}%'""".trimIndent()
+        }
+
         val db = this.readableDatabase
 
         try {
@@ -248,7 +254,8 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
                     val detailCourse = cursor.getString(4)
                     val courseLevel = cursor.getString(5)
                     val content = cursor.getString(6)
-                    val seoulGil = SeoulGil(name, local, distance, time, detailCourse, courseLevel,content)
+                    val seoulGil =
+                        SeoulGil(name, local, distance, time, detailCourse, courseLevel, content)
                     seoulGilList?.add(seoulGil)
                 }
             } else {
@@ -271,10 +278,10 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             '${veterinary.phone}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
-        try{
+        try {
             db.execSQL(query)
             flag = true
-        }catch (e: SQLException){
+        } catch (e: SQLException) {
             Log.e(TAG, "insertVeterinary 실패")
             flag = false
         } finally {
