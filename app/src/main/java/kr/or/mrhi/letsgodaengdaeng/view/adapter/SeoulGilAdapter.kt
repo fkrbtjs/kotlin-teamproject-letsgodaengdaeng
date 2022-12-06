@@ -11,7 +11,7 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.ItemSeoulgilBinding
 import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.home.SeoulGilInfoActivity
 
-class SeoulGilAdapter  (val context: Context, val seoulGilList: MutableList<SeoulGil>, val dbHelper: DBHelper): RecyclerView.Adapter<SeoulGilAdapter.ViewHolder>() {
+class SeoulGilAdapter  (val context: Context, val seoulGilList: MutableList<SeoulGil>): RecyclerView.Adapter<SeoulGilAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemSeoulgilBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,7 +25,15 @@ class SeoulGilAdapter  (val context: Context, val seoulGilList: MutableList<Seou
         binding.tvName.text = seoulGil.name
         binding.tvLocal.text = seoulGil.local
         binding.tvDistance.text = seoulGil.distance
-        binding.tvLevel.text = seoulGil.courseLevel
+        var level = seoulGil.courseLevel
+        if (level.equals("1")){
+            level = "초급"
+        }else if (level.equals("2")){
+            level = "중급"
+        }else{
+            level = "고급"
+        }
+        binding.tvLevel.text = level
 
 
         binding.root.setOnClickListener {
