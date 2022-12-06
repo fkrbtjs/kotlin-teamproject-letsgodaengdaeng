@@ -8,6 +8,7 @@ import android.util.Log
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Animal
 import kr.or.mrhi.letsgodaengdaeng.dataClass.AnimalPhoto
 import kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil
+import kr.or.mrhi.letsgodaengdaeng.dataClass.Veterinary
 import java.sql.SQLException
 
 class DBHelper(val context: Context?, val name: String?, val version: Int) : SQLiteOpenHelper(context, name, null, version) {
@@ -45,10 +46,19 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
                 content text
             )
         """.trimIndent()
+        val query4 = """
+            create table IF NOT EXISTS veterinaryTBL(
+                code text,
+                name text,
+                address text,
+                phone text
+            )
+        """.trimIndent()
         db?.apply {
             execSQL(query)
             execSQL(query2)
             execSQL(query3)
+            execSQL(query4)
         }
     }
 
@@ -62,10 +72,14 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
         val query3 = """
             drop table if exists seoulGil
         """.trimIndent()
+        val query4 = """
+            drop table if exists veterinaryTBL
+        """.trimIndent()
         db?.apply {
             execSQL(query)
             execSQL(query2)
             execSQL(query3)
+            execSQL(query4)
         }
         this.onCreate(db)
     }
@@ -248,6 +262,57 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) : SQL
             db.close()
         }
         return seoulGilList
+    }
+
+    fun insertVeterinary(veterinary: Veterinary): Boolean {
+        var flag = false
+        val query = """
+            insert into veterinaryTBL values('${veterinary.code}','${veterinary.name}','${veterinary.address}',
+            '${veterinary.phone}')
+        """.trimIndent()
+        val db: SQLiteDatabase = writableDatabase
+        try{
+            db.execSQL(query)
+            flag = true
+        }catch (e: SQLException){
+            Log.e(TAG, "insertVeterinary 실패")
+            flag = false
+        } finally {
+            db.close()
+        }
+        return flag
+    }
+
+    fun selectVeterinary(): MutableList<Veterinary>? {
+        var veterinaryList: MutableList<Veterinary>? = mutableListOf<Veterinary>()
+        var cursor: Cursor? = null
+        val query = """
+            select * from veterinaryTBL
+        """.trimIndent()
+        val db = this.readableDatabase
+
+        try {
+            cursor = db.rawQuery(query, null)
+            if (cursor.count > 0) {
+                while (cursor.moveToNext()) {
+                    val code = cursor.getString(0)
+                    val name = cursor.getString(1)
+                    val address = cursor.getString(2)
+                    val phone = cursor.getString(3)
+                    val veterinary = Veterinary(code, name, address, phone)
+                    veterinaryList?.add(veterinary)
+                }
+            } else {
+                veterinaryList = null
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "selectVeterinary $e")
+            veterinaryList = null
+        } finally {
+            cursor?.close()
+            db.close()
+        }
+        return veterinaryList
     }
 
 }
