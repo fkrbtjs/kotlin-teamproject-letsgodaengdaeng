@@ -66,7 +66,7 @@ class MyreviewActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@MyreviewActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
+                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
             }
         })
     }

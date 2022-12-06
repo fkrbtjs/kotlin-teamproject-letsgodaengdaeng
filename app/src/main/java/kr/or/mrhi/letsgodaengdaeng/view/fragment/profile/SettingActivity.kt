@@ -62,6 +62,11 @@ class SettingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.btnInfoChange.setOnClickListener {
+            val intent = Intent(this, InfochangeActivity::class.java)
+            startActivity(intent)
+        }
+
     }
     /**백버튼을 눌렀을떄 이동할 경로 지정*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

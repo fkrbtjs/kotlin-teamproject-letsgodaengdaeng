@@ -101,10 +101,10 @@ class WithdrawalActivity : AppCompatActivity() {
         val userDAO = UserDAO()
         userDAO.deleteUser(MainActivity.userCode!!).addOnSuccessListener {
             Toast.makeText(applicationContext, "User delete success", Toast.LENGTH_SHORT).show()
-            Log.d("firebasecrud", "User delete success")
+            Log.d("letsgodaengdaeng", "User delete success")
         }.addOnFailureListener {
             Toast.makeText(applicationContext, "User delete no", Toast.LENGTH_SHORT).show()
-            Log.d("firebasecrud", "User delete no")
+            Log.d("letsgodaengdaeng", "User delete no")
         }
     }
 

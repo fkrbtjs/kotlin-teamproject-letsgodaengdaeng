@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
+                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
             }
         })
 
