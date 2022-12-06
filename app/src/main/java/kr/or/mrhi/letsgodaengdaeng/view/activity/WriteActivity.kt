@@ -16,19 +16,17 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWriteBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
-import kr.or.mrhi.letsgodaengdaeng.view.adapter.GalleryAdapter
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class WriteActivity : AppCompatActivity() {
+    val TAG = this.javaClass.simpleName
 
     lateinit var binding : ActivityWriteBinding
     lateinit var category : String
@@ -66,7 +64,6 @@ class WriteActivity : AppCompatActivity() {
                         overridePendingTransition(R.anim.slide_left_enter, R.anim.slide_left_exit)
                     })
                     .setNegativeButton("아니오",DialogInterface.OnClickListener{dialog , id ->
-
                     })
                 builder.show()
             }
@@ -127,19 +124,15 @@ class WriteActivity : AppCompatActivity() {
                     // 사진을 등록하지 않았을때 예외처리
                     if(imageUri != null){
                         imageReference?.putFile(imageUri!!)?.addOnSuccessListener {
-                            Log.d("community", "imageReference?.putFile Success")
-                            Toast.makeText(this,"스토리지저장성공!",Toast.LENGTH_SHORT).show()
                             //firebase realtime database diary 테이블에 입력
                             communityDAO.databaseReference?.child(key!!)?.setValue(community)?.addOnSuccessListener {
-                                Log.d("community", "community 테이블 입력 성공")
+                                finish()
                             }?.addOnFailureListener {
-                                Log.e("community", "community 테이블 입력 실패 $it")
+                                Log.e(TAG, "community 테이블 입력 실패 $it")
                             }
                         }?.addOnFailureListener {
-                            Log.e("community", "imageReference?.putFile Fail $it")
-                            Toast.makeText(this,"스토리지저장실패!",Toast.LENGTH_SHORT).show()
+                            Log.e(TAG, "imageReference?.putFile Fail $it")
                         }
-                        finish()
                     }else{
                         Toast.makeText(this,"사진을 선택해주세요",Toast.LENGTH_SHORT).show()
                     }

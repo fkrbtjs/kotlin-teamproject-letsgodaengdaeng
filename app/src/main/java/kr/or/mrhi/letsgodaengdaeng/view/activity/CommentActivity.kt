@@ -2,43 +2,37 @@ package kr.or.mrhi.letsgodaengdaeng.view.activity
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
-import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityCommentBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommentDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CommentAdapter
-import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogTwo
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class CommentActivity : AppCompatActivity() {
+    val TAG = this.javaClass.simpleName
 
     lateinit var binding : ActivityCommentBinding
     lateinit var community: CommunityVO
     lateinit var commentList: MutableList<CommentVO>
     lateinit var commentAdapter: CommentAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +48,8 @@ class CommentActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = linearLayout
         binding.recyclerview.adapter = commentAdapter
 
-
-
         /** 게시글 정보 가져오기 */
-        communityDAO.selectCommunity2(communityCode!!)?.addValueEventListener(object :ValueEventListener{
+        communityDAO.selectCommunityID(communityCode!!)?.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if(snapshot.getValue(CommunityVO::class.java) != null){
                     community = snapshot.getValue(CommunityVO::class.java)!!
@@ -68,10 +60,8 @@ class CommentActivity : AppCompatActivity() {
                     binding.tvContent.setText(community.content)
                     binding.tvCommentCount.setText(community.commentCount.toString())
                     if(community.userID.toString().equals(MainActivity.userCode.toString())){
-                        Log.d("community.userID","${community.userID} , ${MainActivity.userCode}")
                         binding.btnMore.visibility = View.VISIBLE
                     }
-
                     val userImgRef = communityDAO.storage!!.reference.child("userImage/${community.userID}.jpg")
                     userImgRef.downloadUrl.addOnCompleteListener {
                         if (it.isSuccessful){
@@ -95,7 +85,6 @@ class CommentActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
 
-
         /** 게시글의 댓글 가져오기 */
         communityDAO.selectComment(communityCode)?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -109,10 +98,8 @@ class CommentActivity : AppCompatActivity() {
                 } // end of for
                 commentAdapter.notifyDataSetChanged()
             }// end of onDataChange
-
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(applicationContext, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
+                Log.e(TAG, "selectUser() ValueEventListener cancel $error")
             }
         })
 
@@ -146,19 +133,24 @@ class CommentActivity : AppCompatActivity() {
             val comment = CommentVO(commentID,userID,communityCode,nickname,local,date,content)
 
             communityDAO.databaseReference?.child(communityCode)?.child("comment")?.child(commentID!!)?.setValue(comment)?.addOnSuccessListener {
-                Log.d("comment", "comment 테이블 입력 성공")
                 val hashMap: HashMap<String, Any> = HashMap()
                 hashMap["commentCount"] = commentList.size
-                Log.d("commentList.size","${commentList.size}")
                 communityDAO.updateCommentCount(community.docID!!,hashMap)
             }?.addOnFailureListener {
-                Log.e("comment", "comment 테이블 입력 실패 $it")
+                Log.e(TAG, "comment 테이블 입력 실패 $it")
             }
             binding.edtComment.text.clear()
             inputMethodManager.hideSoftInputFromWindow(binding.edtComment.windowToken, 0)
 
         }
-
+        if(intent.hasExtra("content")) {
+            for (i in 0 until commentList.size) {
+                if (commentList[i].content == intent.getStringExtra("content")!!) {
+                    binding.recyclerview.smoothScrollToPosition(i)
+                }
+            }
+        }
 
     }
+
 }
