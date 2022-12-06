@@ -14,6 +14,7 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBottomSheetDialogCommentB
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBottomSheetDialogTwoBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.BottomSheetDialog
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyCommentActivity
 import java.util.HashMap
 
 
@@ -35,12 +36,9 @@ class BottomSheetDialogComment(val docID : String, val commentID : String, val c
         val communityDAO = CommunityDAO()
 
         binding.tvDelete.setOnClickListener {
-            Log.d("commentList.size","${commentList.size}")
-            Log.d("commentList.size","${docID}")
             communityDAO.deleteComment(docID,commentID)
             val hashMap: HashMap<String, Any> = HashMap()
             hashMap["commentCount"] = commentList.size -1
-            Log.d("commentList.size","${commentList.size}")
             communityDAO.updateCommentCount(docID,hashMap)
             dismiss()
         }

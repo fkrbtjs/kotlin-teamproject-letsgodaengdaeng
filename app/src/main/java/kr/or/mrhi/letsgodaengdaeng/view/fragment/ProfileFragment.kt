@@ -29,6 +29,8 @@ class ProfileFragment : Fragment() {
         var communityList: MutableList<CommunityVO> = mutableListOf()
         var commentList: MutableList<CommentVO> = mutableListOf()
     }
+
+    val TAG = this.javaClass.simpleName
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +41,13 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val puppy = Puppy()
         val communityDAO = CommunityDAO()
 
         communityList.clear()
         commentList.clear()
 
         /** 모든 커뮤니티 docID를 받은 후 docID를 참조해 모든 글에서 내 유저코드로 내가 쓴 댓글을 찾는다 */
-        communityDAO.selectCommunity()?.addValueEventListener(object: ValueEventListener {
+        communityDAO.selectCommunity()?.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (userdata in snapshot.children) {
                     val community = userdata.getValue(CommunityVO::class.java)
@@ -54,10 +55,9 @@ class ProfileFragment : Fragment() {
                     if (community?.userID == MainActivity.userCode) {
                         if (community != null) {
                             communityList.add(community)
-                            Log.d("dasdas","${community}")
                         }
                     }
-                    communityDAO.selectMyComment("${userdata.key}", MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+                    communityDAO.selectMyComment("${userdata.key}", MainActivity.userCode!!)?.addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             for (userdata in snapshot.children) {
                                 val comment = userdata.getValue(CommentVO::class.java)
@@ -68,14 +68,14 @@ class ProfileFragment : Fragment() {
                             binding.tvMycommentCount.setText(commentList.size.toString())
                         }// end of onDataChange
                         override fun onCancelled(error: DatabaseError) {
-                            Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
+                            Log.e(TAG, "selectMyComment ValueEventListener cancel $error")
                         }
                     })
                 }// end of for
                 binding.tvMyreviewCount.setText(communityList.size.toString())
             }// end of onDataChange
             override fun onCancelled(error: DatabaseError) {
-                Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
+                Log.e(TAG, "selectMyComment ValueEventListener cancel $error")
             }
         })
 

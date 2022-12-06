@@ -5,22 +5,49 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.WalkFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="산책하기"
+                android:textColor="@color/white_antique"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="산책하기"
-            android:textColor="@color/white_antique"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:text="함께 산책한 시간"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_margin="1dp"/>
 
-    </androidx.appcompat.widget.Toolbar>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnWalk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="산책하기"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="20dp" />
 
 </FrameLayout>

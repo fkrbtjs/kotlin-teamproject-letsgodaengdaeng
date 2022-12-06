@@ -77,9 +77,7 @@ class MyactivitiesAdapter(val context: Context, val communityList: MutableList<C
             (holder.itemView.context as Activity).overridePendingTransition(
                 R.anim.slide_right_enter,
                 R.anim.slide_right_exit)
-
         }
-
 
         binding.ivProfilePicture.setOnClickListener {
             val intent = Intent(context, InfoActivity::class.java)
