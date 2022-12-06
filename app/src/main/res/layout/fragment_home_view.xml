@@ -58,6 +58,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVeterinary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/papaya_whip" />

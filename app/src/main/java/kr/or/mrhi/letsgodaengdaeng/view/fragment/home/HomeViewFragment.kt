@@ -11,6 +11,7 @@ import kr.or.mrhi.letsgodaengdaeng.sqlite.DBHelper
 import kr.or.mrhi.letsgodaengdaeng.view.activity.SeouldataActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.AnimalAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.SeoulGilAdapter
+import kr.or.mrhi.letsgodaengdaeng.view.adapter.VeterinaryAdapter
 
 class HomeViewFragment : Fragment() {
 
@@ -25,6 +26,11 @@ class HomeViewFragment : Fragment() {
         val binding = FragmentHomeViewBinding.inflate(inflater, container, false)
 
         val dbHelper = DBHelper(requireContext(), SeouldataActivity.DB_NAME, SeouldataActivity.VERSION)
+
+        val veterinaryList = dbHelper.selectVeterinary()
+        val veterinaryAdapter = VeterinaryAdapter(requireContext(), veterinaryList!!, dbHelper)
+        binding.rvVeterinary.adapter = veterinaryAdapter
+        binding.rvVeterinary.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         val animalList = dbHelper.selectAnimal()
         val animalAdapter = AnimalAdapter(requireContext(), animalList!!, dbHelper)
