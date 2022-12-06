@@ -20,6 +20,7 @@ import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.MyactivitiesAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.ProfileFragment
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.ProfileFragment.Companion.communityList
 import java.time.format.TextStyle
 
 class MyreviewActivity : AppCompatActivity() {
@@ -46,7 +47,6 @@ class MyreviewActivity : AppCompatActivity() {
 
     }
 
-<<<<<<< HEAD
 //    private fun selectUser() {
 //        val communityDAO = CommunityDAO()
 //        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
@@ -70,7 +70,7 @@ class MyreviewActivity : AppCompatActivity() {
 //            }
 //        })
 //    }
-=======
+
     private fun selectUser() {
         val communityDAO = CommunityDAO()
         communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
@@ -94,8 +94,7 @@ class MyreviewActivity : AppCompatActivity() {
             }
         })
     }
->>>>>>> woong
-
+    
     /**백버튼을 눌렀을떄 이동할 경로 지정*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
