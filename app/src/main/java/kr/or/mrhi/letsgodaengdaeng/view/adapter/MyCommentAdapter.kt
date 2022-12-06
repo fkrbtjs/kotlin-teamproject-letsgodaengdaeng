@@ -10,11 +10,13 @@ import com.bumptech.glide.Glide
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ItemCommentBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommentDAO
+import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.CommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.dialog.BottomSheetDialogComment
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyCommentActivity
 
-class MyCommentAdapter(val context: Context, val commentList: MutableList<CommentVO>, val docID : String): RecyclerView.Adapter<MyCommentAdapter.MyCommentViewHolder>() {
+class MyCommentAdapter(val context: Context, val commentList: MutableList<CommentVO>): RecyclerView.Adapter<MyCommentAdapter.MyCommentViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyCommentAdapter.MyCommentViewHolder {
@@ -44,10 +46,9 @@ class MyCommentAdapter(val context: Context, val commentList: MutableList<Commen
         if (comment.userID.equals(MainActivity.userCode)){
             binding.btnMore.visibility = View.VISIBLE
         }
-
         binding.btnMore.setOnClickListener {
-            val bottomSheetDialogComment = BottomSheetDialogComment(docID,comment.commentID!!,commentList)
-            bottomSheetDialogComment.show((context as CommentActivity).supportFragmentManager,bottomSheetDialogComment.tag)
+            val bottomSheetDialogComment = BottomSheetDialogComment(comment.communityID!!,comment.commentID!!,commentList)
+            bottomSheetDialogComment.show((context as MyCommentActivity).supportFragmentManager,bottomSheetDialogComment.tag)
         }
 
     }
