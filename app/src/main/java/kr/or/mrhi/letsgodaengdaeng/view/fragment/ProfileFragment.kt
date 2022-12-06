@@ -79,7 +79,12 @@ class ProfileFragment : Fragment() {
                 binding.tvMyreviewCount.setText(communityList.size.toString())
             }// end of onDataChange
             override fun onCancelled(error: DatabaseError) {
+<<<<<<< HEAD
                 Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
+=======
+                Toast.makeText(context, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
+                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
+>>>>>>> woong
             }
         })
 

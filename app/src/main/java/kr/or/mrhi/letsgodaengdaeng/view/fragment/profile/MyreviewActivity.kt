@@ -46,6 +46,7 @@ class MyreviewActivity : AppCompatActivity() {
 
     }
 
+<<<<<<< HEAD
 //    private fun selectUser() {
 //        val communityDAO = CommunityDAO()
 //        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
@@ -69,6 +70,31 @@ class MyreviewActivity : AppCompatActivity() {
 //            }
 //        })
 //    }
+=======
+    private fun selectUser() {
+        val communityDAO = CommunityDAO()
+        communityDAO.selectCommunity3(MainActivity.userCode!!)?.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                communityList.clear()
+                for (userdata in snapshot.children) {
+                    //json 방식으로 넘어오기 때문에 클래스 방식으로 변환해야함
+                    val community = userdata.getValue(CommunityVO::class.java)
+                    //비어있던 userKey 부분에 key 값을 넣어준다
+                    community?.docID = userdata.key.toString()
+                    if (community != null) {
+                        communityList.add(community)
+                    }
+                }// end of for
+                adapter.notifyDataSetChanged()
+            }// end of onDataChange
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MyreviewActivity, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
+                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
+            }
+        })
+    }
+>>>>>>> woong
 
     /**백버튼을 눌렀을떄 이동할 경로 지정*/
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

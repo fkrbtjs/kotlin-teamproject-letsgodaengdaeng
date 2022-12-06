@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityUpdateBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
@@ -22,7 +23,6 @@ import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 class UpdateActivity : AppCompatActivity() {
     lateinit var binding: ActivityUpdateBinding
     var imageUri: Uri? = null
-    lateinit var filePath: String
     val puppyDAO = PuppyDAO()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +33,7 @@ class UpdateActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolUpdate)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        /**강아지 이미지 등록*/
         val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg")
         puppyImg.downloadUrl.addOnCompleteListener{
             if(it.isSuccessful){
@@ -41,6 +42,8 @@ class UpdateActivity : AppCompatActivity() {
                     .into(binding.ivPicture)
             }
         }
+
+        /** 저장된 강아지 정보 불러온다*/
         puppyDAO.selectPuppy(MainActivity.userCode!!)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -66,16 +69,6 @@ class UpdateActivity : AppCompatActivity() {
                     .centerCrop() //사진을 자르지 않음
                     .into(binding.ivPicture)
                 imageUri = it.data?.data
-                var cursor = contentResolver.query(
-                    it.data?.data as Uri,
-                    arrayOf<String>(MediaStore.Images.Media.DATA),
-                    null,
-                    null,
-                    null
-                )
-                cursor?.moveToFirst().let {
-                    filePath = cursor!!.getString(0)
-                }
             }
         }// end of requestLauncher
 
@@ -119,11 +112,14 @@ class UpdateActivity : AppCompatActivity() {
             }.addOnFailureListener{
                 Log.d("letsgodaengdaeng", "puppy update fail")
             }
-            val updatePuppyImg = puppyDAO.storage?.reference?.child("puppyImage/${MainActivity.userCode}.jpg")
-            updatePuppyImg?.putFile(imageUri!!)?.addOnSuccessListener {
-                Log.d("letsgodaengdaeng", "Success")
-            }?.addOnFailureListener{
-                Log.d("letsgodaengdaeng", "Fail")
+            if (imageUri != null) {
+                val updatePuppyImg =
+                    puppyDAO.storage?.reference?.child("puppyImage/${MainActivity.userCode}.jpg")
+                updatePuppyImg?.putFile(imageUri!!)?.addOnSuccessListener {
+                    Log.d("letsgodaengdaeng", "Success")
+                }?.addOnFailureListener {
+                    Log.d("letsgodaengdaeng", "Fail")
+                }
             }
         }
         binding.btnUpdate.isEnabled = true

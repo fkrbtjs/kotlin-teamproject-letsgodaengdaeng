@@ -122,7 +122,7 @@ class SignupUserActivity : AppCompatActivity() {
             Glide.with(this@SignupUserActivity)
                 .load(R.drawable.default_person)
                 .into(binding.ivUserImage)
-            userImageUri = null
+            userImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.default_person}")
             return@setOnLongClickListener true
         }
 
