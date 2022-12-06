@@ -1,13 +1,11 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
@@ -31,9 +29,7 @@ class ProfileFragment : Fragment() {
         var communityList: MutableList<CommunityVO> = mutableListOf()
         var commentList: MutableList<CommentVO> = mutableListOf()
     }
-
-
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -79,12 +75,7 @@ class ProfileFragment : Fragment() {
                 binding.tvMyreviewCount.setText(communityList.size.toString())
             }// end of onDataChange
             override fun onCancelled(error: DatabaseError) {
-<<<<<<< HEAD
                 Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
-=======
-                Toast.makeText(context, "가져오기 실패 $error", Toast.LENGTH_SHORT).show()
-                Log.e("letsgodaengdaeng", "selectUser() ValueEventListener cancel $error")
->>>>>>> woong
             }
         })
 
