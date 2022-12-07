@@ -271,29 +271,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
                     android:gravity="center"
                     android:text="성격 및 특징"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    app:cardCornerRadius="30dp"
-                    android:layout_margin="10dp">
                 <TextView
                     android:id="@+id/tv_puppyTendency"
                     android:layout_width="250dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="100dp"
                     android:text="겁이 많아요"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="23dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:layout_marginTop="10dp"/>
-
-                </androidx.cardview.widget.CardView>
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/borderline_background"/>
 
             </LinearLayout>
 

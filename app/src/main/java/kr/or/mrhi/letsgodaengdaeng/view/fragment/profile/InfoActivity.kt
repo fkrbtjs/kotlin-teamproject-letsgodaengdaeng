@@ -22,22 +22,31 @@ class InfoActivity: AppCompatActivity() {
         val binding = ActivityInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val userDAO = UserDAO()
+        val puppyDAO = PuppyDAO()
+
+
         val userID = intent.getStringExtra("userID")
 
         if (userID.equals(MainActivity.userCode)){
             binding.ivUpdate.visibility = View.VISIBLE
         }
 
-        //Actionbar -> Toolbar 변경
+        /** Actionbar -> Toolbar 변경*/
         setSupportActionBar(binding.toolInfo)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.cdUserIdCard.setOnClickListener{
+            val dialog = UserInfoDialog(binding.root.context)
+            dialog.showDialog()
+        }
 
         binding.ivUpdate.setOnClickListener{
             val intent = Intent(this, UpdateActivity::class.java)
             startActivity(intent)
         }
+
         /** firebase storage 의 현재 로그인된 유저가 저장한 이미지를 불러온다*/
-        val puppyDAO = PuppyDAO()
         val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${userID}.jpg")
         puppyImg.downloadUrl.addOnCompleteListener{
             if(it.isSuccessful){
@@ -47,7 +56,6 @@ class InfoActivity: AppCompatActivity() {
             }
         }
 
-        val userDAO = UserDAO()
         val userImg = userDAO.storage!!.reference.child("userImage/${userID}.jpg")
         userImg.downloadUrl.addOnCompleteListener {
             if(it.isSuccessful){
