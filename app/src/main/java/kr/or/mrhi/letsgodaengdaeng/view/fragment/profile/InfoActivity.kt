@@ -28,7 +28,7 @@ class InfoActivity: AppCompatActivity() {
             binding.ivUpdate.visibility = View.VISIBLE
         }
 
-        //Actionbar -> Toolbar 변경
+        /**Actionbar -> Toolbar 변경*/
         setSupportActionBar(binding.toolInfo)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -36,6 +36,12 @@ class InfoActivity: AppCompatActivity() {
             val intent = Intent(this, UpdateActivity::class.java)
             startActivity(intent)
         }
+
+        binding.cdUserIdCard.setOnClickListener{
+            val dialog = UserInfoDialog(binding.root.context)
+            dialog.showDialog()
+        }
+
         /** firebase storage 의 현재 로그인된 유저가 저장한 이미지를 불러온다*/
         val puppyDAO = PuppyDAO()
         val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${userID}.jpg")

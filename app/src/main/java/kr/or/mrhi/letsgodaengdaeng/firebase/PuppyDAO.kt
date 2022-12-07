@@ -32,4 +32,8 @@ class PuppyDAO {
         return databaseReference!!.child(key).updateChildren(hashMap)
     }
 
+    fun deletePuppy(key: String): Task<Void> {
+        return databaseReference!!.child(key).removeValue()
+    }
+
 }
