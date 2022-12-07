@@ -1,40 +1,30 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment.home
 
-import android.Manifest.permission.*
+import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.OnSuccessListener
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySeoulGilInfoBinding
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 
-class SeoulGilInfoActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+class SeoulGilInfoActivity : AppCompatActivity() {
 
     lateinit var binding : ActivitySeoulGilInfoBinding
     var seoulGil: SeoulGil? = null
+    val ACCESS_FINE_LOCATION = 1000
     var longitude: Double? = null
     var latitude: Double? = null
-    lateinit var providerClient: FusedLocationProviderClient
-    lateinit var apiClient: GoogleApiClient
-    var googleMap: GoogleMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,71 +53,62 @@ class SeoulGilInfoActivity : AppCompatActivity(), GoogleApiClient.ConnectionCall
         longitude = seoulGil?.longitude!!.toDouble()
         latitude = seoulGil?.latitude!!.toDouble()
 
-        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
-            if(it.all{ permission -> permission.value == true}){
-                apiClient.connect()
-            }else{
-                Toast.makeText(this, "권한 승인 바랍니다.", Toast.LENGTH_SHORT).show()
+        permissionCheck()
+    }
+
+    /** 위치 권한 확인 */
+    fun permissionCheck() {
+        val preference = getPreferences(MODE_PRIVATE)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // 권한이 없는 상태
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // 권한 거절 (다시 한 번 물어보기)
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요.")
+                builder.setPositiveButton("그래요") { dialog, which ->
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), ACCESS_FINE_LOCATION)
+                }
+                builder.setNegativeButton("싫어요") { dialog, which ->
+                    finish()
+                }
+                builder.show()
+            }
+        } else {
+            // 권한이 있는 상태
+            startMap()
+        }
+    }
+
+    /** 권한 요청 후 행동 */
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == ACCESS_FINE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 권한 요청 후 승인됨 (추적 시작)
+                Toast.makeText(this, "위치 권한이 승인되었습니다", Toast.LENGTH_SHORT).show()
+                startMap()
+            } else {
+                // 권한 요청 후 거절됨 (다시 요청 or 토스트)
+                Toast.makeText(this, "위치 권한이 거절되었습니다", Toast.LENGTH_SHORT).show()
+                permissionCheck()
             }
         }
-        (supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(this)
-        providerClient = LocationServices.getFusedLocationProviderClient(this)
-        apiClient = GoogleApiClient.Builder(this)
-            .addApi(LocationServices.API)
-            .addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .build()
-
-        if(ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) !== PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) !== PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, ACCESS_NETWORK_STATE) !== PackageManager.PERMISSION_GRANTED){
-            requestPermissionLauncher.launch(
-                arrayOf(
-                    ACCESS_FINE_LOCATION,
-                    WRITE_EXTERNAL_STORAGE,
-                    ACCESS_NETWORK_STATE
-                )
-            )
-        }else{
-            apiClient.connect()
-        }
     }
 
-    private fun moveMap(latitude: Double, longitude: Double){
-        val latlng = LatLng(latitude, longitude)
-        val position: CameraPosition = CameraPosition.Builder()
-            .target(latlng)
-            .zoom(16f)
-            .build()
-        googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(position))
-        val markerOptions = MarkerOptions()
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-        markerOptions.position(latlng)
-        markerOptions.title("${seoulGil?.name}")
+    /** 위치로 이동하여 커스텀 마커 찍기 */
+    fun startMap() {
+        binding.mapView.visibility = View.VISIBLE
+        binding.mapView.zoomIn(true)
+        binding.mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude!!,longitude!!), 1,true)
 
-        googleMap?.addMarker(markerOptions)
+        val customMarker = MapPOIItem()
+        customMarker.itemName = seoulGil?.name
+        customMarker.tag = 0
+        customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude!!,longitude!!)
+        customMarker.markerType = MapPOIItem.MarkerType.CustomImage
+        customMarker.customImageResourceId = R.drawable.marker_forest
+
+        binding.mapView.addPOIItem(customMarker)
     }
 
-    override fun onConnected(p0: Bundle?) {
-        if(ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED){
-            providerClient.lastLocation.addOnSuccessListener(
-                this@SeoulGilInfoActivity,
-                object: OnSuccessListener<Location> {
-                    override fun onSuccess(p0: Location?) {
-                        p0?.let{
-                            moveMap(latitude!!,longitude!!)
-                        }
-                    }
-                }
-            )
-            apiClient.disconnect()
-        }
-    }
-
-    override fun onConnectionSuspended(p0: Int) {  }
-    override fun onConnectionFailed(p0: ConnectionResult) { }
-    override fun onMapReady(p0: GoogleMap) {
-        googleMap = p0
-    }
 }

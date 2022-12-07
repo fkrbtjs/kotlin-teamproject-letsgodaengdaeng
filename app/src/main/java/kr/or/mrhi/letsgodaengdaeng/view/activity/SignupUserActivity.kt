@@ -1,22 +1,16 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +30,6 @@ import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySignupUserBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import java.util.concurrent.TimeUnit
-
 
 class SignupUserActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignupUserBinding
@@ -134,8 +127,6 @@ class SignupUserActivity : AppCompatActivity() {
             userImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.default_person}")
             return@setOnLongClickListener true
         }
-
-
 
         /** 인증받기 버튼 누르면 입력한 전화번호로 인증번호 발송 */
         binding.btnPhone.setOnClickListener {
@@ -252,6 +243,12 @@ class SignupUserActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
+
+        /** 주소 액티비티 이동 후 주소 받기 */
+        binding.edtAddress.setOnClickListener {
+            val intent = Intent(this@SignupUserActivity, AddressActivity::class.java)
+            startActivity(intent)
+        }
 
         /** 닉네임 패턴 체크 */
         binding.edtNickname.addTextChangedListener(object : TextWatcher {
