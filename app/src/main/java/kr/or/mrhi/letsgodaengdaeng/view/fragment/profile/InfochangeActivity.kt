@@ -55,7 +55,7 @@ class InfochangeActivity : AppCompatActivity() {
                     .into(binding.ivUserImage)
             }
         }
-        /** 버튼이 눌렸을때 유저의 비밀번호가 일치하면 회원정보 변경 화면을 보여준다.*/
+
         binding.btnSuccess.setOnClickListener {
             userDAO.selectUser(MainActivity.userCode!!)
                 ?.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -138,8 +138,6 @@ class InfochangeActivity : AppCompatActivity() {
 
             val hashMap: HashMap<String, Any> = HashMap()
             hashMap["nickname"] = nickName
-
-            /** 패스워드를 변경하지 않을경우 기존 패스워드로 저장한다.*/
             if(binding.edtCheckUpdate.text.isEmpty()){
                 hashMap["password"] = userPassword!!
             }else{

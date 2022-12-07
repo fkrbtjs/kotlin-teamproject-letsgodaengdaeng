@@ -63,27 +63,21 @@ class SeoulGilInfoActivity : AppCompatActivity(), GoogleApiClient.ConnectionCall
         longitude = seoulGil?.longitude!!.toDouble()
         latitude = seoulGil?.latitude!!.toDouble()
 
-        //퍼미션을 여러개 요청
         val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
-            //요청했던 퍼미션이 모두 true 이면 실행함.
             if(it.all{ permission -> permission.value == true}){
                 apiClient.connect()
             }else{
                 Toast.makeText(this, "권한 승인 바랍니다.", Toast.LENGTH_SHORT).show()
             }
         }
-        //프래그먼트에 지도동기화를 위해서 콜백함수는 현재 클래스에 있다.
         (supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(this)
-        //위치정보를 획득
         providerClient = LocationServices.getFusedLocationProviderClient(this)
-        //위치정보를 획득하기 위한 접속
         apiClient = GoogleApiClient.Builder(this)
-            .addApi(LocationServices.API)  //API를 LoactionServices.API 를 사용하겠다.
-            .addConnectionCallbacks(this)   //Location Provider가 이용가능한 상태에서 콜백함수는 현재 클래스에 있다.
-            .addOnConnectionFailedListener(this)  //Location Provider가 이용 불가능한상태에서 콜백함수는 현재 클래스에 있다
+            .addApi(LocationServices.API)
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
             .build()
 
-        //퍼미션이 승인이 되지 않으면 퍼미션을 요청하는 launch 기능
         if(ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) !== PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) !== PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, ACCESS_NETWORK_STATE) !== PackageManager.PERMISSION_GRANTED){
@@ -95,7 +89,7 @@ class SeoulGilInfoActivity : AppCompatActivity(), GoogleApiClient.ConnectionCall
                 )
             )
         }else{
-            apiClient.connect() //apiClient에게 Location Provider 를 준비해볼것을 요청
+            apiClient.connect()
         }
     }
 
@@ -130,11 +124,9 @@ class SeoulGilInfoActivity : AppCompatActivity(), GoogleApiClient.ConnectionCall
             apiClient.disconnect()
         }
     }
-    //사용하고 있던 어떤 Location Provider가 더 이상 이용불가능한 상태가 되었을때
+
     override fun onConnectionSuspended(p0: Int) {  }
-    //위치 정보 제공자(Location Provider)를 얻지 못했을때
     override fun onConnectionFailed(p0: ConnectionResult) { }
-    //지도 객체가 이용가능한 상태가 되었을때
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
     }

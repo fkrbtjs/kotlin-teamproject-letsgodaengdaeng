@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.method.TextKeyListener
-import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,13 +30,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.RepoManager.clear
 import com.google.firebase.ktx.Firebase
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySignupUserBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import java.util.concurrent.TimeUnit
+
 
 class SignupUserActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignupUserBinding
@@ -57,8 +60,6 @@ class SignupUserActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = null
 
-        auth.signOut()
-
         Listener()
 
         requestLauncher = registerForActivityResult(
@@ -70,8 +71,15 @@ class SignupUserActivity : AppCompatActivity() {
             }
             userImageUri = it.data?.data
         }
+
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (intent.hasExtra("data")){
+            binding.edtAddress.setText("${intent.getStringExtra("data")}")
+        }
+    }
 
     /** 툴바 백버튼 누르면 로그인 액티비티로 돌아감 */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -109,6 +117,7 @@ class SignupUserActivity : AppCompatActivity() {
 
     /** 리스너 모음 */
     fun Listener() {
+        auth.signOut()
 
         /** 유저 프로필 이미지 등록 */
         binding.ivUserImage.setOnClickListener {

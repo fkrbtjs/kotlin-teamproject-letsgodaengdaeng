@@ -6,7 +6,14 @@ import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Veterinary (var code: String?, var name: String?, var address: String?, var phone: String?) :
+data class Veterinary(
+    var code: String?,
+    var name: String?,
+    var address: String?,
+    var phone: String?,
+    var longitude: Double?,
+    var latitude: Double?
+) :
     Parcelable {
 
     companion object : Parceler<Veterinary> {
@@ -19,6 +26,8 @@ data class Veterinary (var code: String?, var name: String?, var address: String
             parcel.writeString(name)
             parcel.writeString(address)
             parcel.writeString(phone)
+            parcel.writeDouble(longitude!!)
+            parcel.writeDouble(latitude!!)
         }
     }
 
@@ -27,6 +36,8 @@ data class Veterinary (var code: String?, var name: String?, var address: String
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readDouble(),
+        parcel.readDouble()
     )
 
 }

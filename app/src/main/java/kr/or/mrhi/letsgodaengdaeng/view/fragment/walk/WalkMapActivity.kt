@@ -1,14 +1,13 @@
-package kr.or.mrhi.letsgodaengdaeng.view.fragment.home
+package kr.or.mrhi.letsgodaengdaeng.view.fragment.walk
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -24,49 +23,27 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
 import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.Veterinary
-import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityVeterinaryBinding
+import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
 
-class VeterinaryActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
+class WalkMapActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
-    lateinit var binding: ActivityVeterinaryBinding
-    var veterinary: Veterinary? = null
-    var longitude: Double? = null
-    var latitude: Double? = null
     lateinit var providerClient: FusedLocationProviderClient
     lateinit var apiClient: GoogleApiClient
     var googleMap: GoogleMap? = null
 
-    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityVeterinaryBinding.inflate(layoutInflater)
+        val binding = ActivityWalkMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Actionbar -> Toolbar 변경
-        setSupportActionBar(binding.toolVeterinary)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        veterinary = intent.getParcelableExtra("veterinary")
-
-        binding.tvHosName.text = veterinary?.name
-        binding.tvAddress.text = veterinary?.address
-        binding.tvPhone.text = veterinary?.phone
-        binding.tvPhone.setLinkTextColor(R.color.rosy_brown)
-        longitude = veterinary?.longitude!!.toDouble()
-        latitude = veterinary?.latitude!!.toDouble()
-
-        val requestPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-                if (it.all { permission -> permission.value == true }) {
-                    apiClient.connect()
-                } else {
-                    Toast.makeText(this, "권한 승인 바랍니다.", Toast.LENGTH_SHORT).show()
-                }
+        val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+            if(it.all{ permission -> permission.value == true}){
+                apiClient.connect()
+            }else{
+                Toast.makeText(this, "권한 승인 바랍니다.", Toast.LENGTH_SHORT).show()
             }
-        (supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(
-            this
-        )
+        }
+        (this@WalkMapActivity.supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment)!!.getMapAsync(this)
         providerClient = LocationServices.getFusedLocationProviderClient(this)
         apiClient = GoogleApiClient.Builder(this)
             .addApi(LocationServices.API)
@@ -74,19 +51,15 @@ class VeterinaryActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallba
             .addOnConnectionFailedListener(this)
             .build()
 
-        if (ContextCompat.checkSelfPermission(
-                this,
+        if(ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) !== PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
-                this,
+            ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) !== PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
-                this,
+            ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_NETWORK_STATE
-            ) !== PackageManager.PERMISSION_GRANTED
-        ) {
+            ) !== PackageManager.PERMISSION_GRANTED){
             requestPermissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -94,12 +67,12 @@ class VeterinaryActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallba
                     Manifest.permission.ACCESS_NETWORK_STATE
                 )
             )
-        } else {
+        }else{
             apiClient.connect()
         }
     }
 
-    private fun moveMap(latitude: Double, longitude: Double) {
+    private fun moveMap(latitude: Double, longitude: Double){
         val latlng = LatLng(latitude, longitude)
         val position: CameraPosition = CameraPosition.Builder()
             .target(latlng)
@@ -107,23 +80,25 @@ class VeterinaryActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallba
             .build()
         googleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(position))
         val markerOptions = MarkerOptions()
+
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         markerOptions.position(latlng)
-        markerOptions.title("${veterinary?.name}")
+        markerOptions.title("dd")
 
         googleMap?.addMarker(markerOptions)
     }
 
     override fun onConnected(p0: Bundle?) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-            PackageManager.PERMISSION_GRANTED
-        ) {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED){
             providerClient.lastLocation.addOnSuccessListener(
-                this@VeterinaryActivity,
-                object : OnSuccessListener<Location> {
+                this@WalkMapActivity,
+                object: OnSuccessListener<Location> {
                     override fun onSuccess(p0: Location?) {
-                        p0?.let {
-                            moveMap(latitude!!, longitude!!)
+                        p0?.let{
+                            val latitude = p0.latitude
+                            val longitude = p0.longitude
+                            moveMap(latitude,longitude)
                         }
                     }
                 }
@@ -131,15 +106,14 @@ class VeterinaryActivity : AppCompatActivity(), GoogleApiClient.ConnectionCallba
             apiClient.disconnect()
         }
     }
-
-    override fun onConnectionSuspended(p0: Int) {}
-    override fun onConnectionFailed(p0: ConnectionResult) {}
+    override fun onConnectionSuspended(p0: Int) {  }
+    override fun onConnectionFailed(p0: ConnectionResult) { }
     override fun onMapReady(p0: GoogleMap) {
         googleMap = p0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        when(item.itemId){
             android.R.id.home -> {
                 finish()
                 return true

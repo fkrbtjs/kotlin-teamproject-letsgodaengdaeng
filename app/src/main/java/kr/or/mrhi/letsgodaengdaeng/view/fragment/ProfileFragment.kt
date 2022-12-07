@@ -42,8 +42,6 @@ class ProfileFragment : Fragment() {
     ): View? {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         val communityDAO = CommunityDAO()
-        val puppyDAO = PuppyDAO()
-        val userDAO = UserDAO()
 
         communityList.clear()
         commentList.clear()
@@ -81,6 +79,19 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        /**firebase storage 에서 사진 가져오기.**/
+        val userDAO = UserDAO()
+        /**firebase storage 이미지 경로를 알려준다*/
+        val img = userDAO.storage!!.reference.child("images/.png")
+
+        img.downloadUrl.addOnCompleteListener{
+            if(it.isSuccessful){
+                Glide.with(container!!.context)
+                    .load(it.result)
+                    .into(binding.ivPicture)
+            }
+        }
+
         binding.writing.setOnClickListener{
             val intent = Intent(context, MyreviewActivity::class.java)
             startActivity(intent)
@@ -102,7 +113,7 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
-        /** 저장된 반려견 사진 불러오기*/
+        val puppyDAO = PuppyDAO()
         val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg")
         puppyImg.downloadUrl.addOnCompleteListener{
             if(it.isSuccessful){
@@ -112,7 +123,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        /** 저장된 반려견 정보를 불러오기.*/
         puppyDAO.selectPuppy(MainActivity.userCode!!)?.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(userData in snapshot.children){

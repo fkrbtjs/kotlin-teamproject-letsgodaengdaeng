@@ -14,13 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWithdrawalBinding
 import kr.or.mrhi.letsgodaengdaeng.databinding.DialogLayoutBinding
-import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
-import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.LoginActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
@@ -58,9 +54,6 @@ class WithdrawalActivity : AppCompatActivity() {
             val userDAO = UserDAO()
             dialog?.setTitle("회원탈퇴")
             dialog?.setMessage("패스워드를 입력해주세요")
-
-            /** AlertDialog 는 하나의 자식만 포함할수있다? 그렇기 때문에 아니오를 눌렀을때
-                setView 한 레이아웃을 삭제시키는 조건을 만든다.*/
             if (bindingDialog.root.parent != null) {
                 (bindingDialog.root.parent as ViewGroup).removeView(bindingDialog.root)
             }
@@ -84,8 +77,10 @@ class WithdrawalActivity : AppCompatActivity() {
                                     "패스워드가 일치하지 않습니다.",
                                     Toast.LENGTH_SHORT
                                 ).show()
+
                             }
                         }
+
                         override fun onCancelled(error: DatabaseError) {
                             Log.d("letsgodaengdaeng", "${error.toString()}")
                         }
@@ -95,6 +90,8 @@ class WithdrawalActivity : AppCompatActivity() {
             dialog?.setNegativeButton("아니오", DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
             })
+//            dialog?.setCancelable(true)
+//            dialog?.create()
             dialog?.show()
         }
     }
@@ -102,61 +99,13 @@ class WithdrawalActivity : AppCompatActivity() {
     /**유저 삭제를 위한 함수*/
     private fun deleteData() {
         val userDAO = UserDAO()
-        val puppyDAO = PuppyDAO()
-        val communityDAO = CommunityDAO()
-
-        /** 로그인된 유저가 저장한 이미지 삭제*/
-        userDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg").delete()
-        puppyDAO.storage!!.reference.child("userImage/${MainActivity.userCode}.jpg").delete()
-
-        /** 유저 정보 삭제*/
         userDAO.deleteUser(MainActivity.userCode!!).addOnSuccessListener {
+            Toast.makeText(applicationContext, "User delete success", Toast.LENGTH_SHORT).show()
             Log.d("letsgodaengdaeng", "User delete success")
         }.addOnFailureListener {
-            Log.e("letsgodaengdaeng", "User delete fail")
+            Toast.makeText(applicationContext, "User delete no", Toast.LENGTH_SHORT).show()
+            Log.d("letsgodaengdaeng", "User delete no")
         }
-
-        /** 반려견 정보 삭제*/
-        puppyDAO.deletePuppy(MainActivity.userCode!!).addOnSuccessListener {
-            Log.d("letsgodaengdaeng", "Puppy delete success")
-        }.addOnFailureListener{
-            Log.e("letsgodaengdaeng", "Puppy delete fail")
-        }
-
-        /** 유저 커뮤니티 삭제*/
-        communityDAO.selectCommunity()?.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (userdata in snapshot.children) {
-                    val community = userdata.getValue(CommunityVO::class.java)
-
-                    if (community?.userID.equals(MainActivity.userCode)) {
-                        if (community != null) {
-                            communityDAO.deleteCommunity(community.docID!!)
-                            communityDAO.storage!!.reference.child("images/${community.docID}.jpg").delete()
-                            Log.e("letsgodaengdaeng", "community delete")
-                        }
-                    }
-                    communityDAO.selectMyComment("${userdata.key}", MainActivity.userCode!!)?.addListenerForSingleValueEvent(object: ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (userdata in snapshot.children) {
-                                val comment = userdata.getValue(CommentVO::class.java)
-                                if(comment?.userID.equals(MainActivity.userCode) )
-                                if (comment != null) {
-                                    communityDAO.deleteComment(community?.docID!!,comment.commentID!!)
-                                    Log.e("letsgodaengdaeng", "comment delete")
-                                }
-                            }
-                        }// end of onDataChange
-                        override fun onCancelled(error: DatabaseError) {
-                            Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
-                        }
-                    })
-                }// end of for
-            }// end of onDataChange
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("letsgodaengdaeng", "selectMyComment ValueEventListener cancel $error")
-            }
-        })
     }
 
     //뒤로가기버튼

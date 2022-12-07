@@ -55,7 +55,9 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
                 code text,
                 name text,
                 address text,
-                phone text
+                phone text,
+                longitude double,
+                latitude double
             )
         """.trimIndent()
         db?.apply {
@@ -280,7 +282,7 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         var flag = false
         val query = """
             insert into veterinaryTBL values('${veterinary.code}','${veterinary.name}','${veterinary.address}',
-            '${veterinary.phone}')
+            '${veterinary.phone}','${veterinary.longitude}','${veterinary.latitude}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
         try {
@@ -311,7 +313,9 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
                     val name = cursor.getString(1)
                     val address = cursor.getString(2)
                     val phone = cursor.getString(3)
-                    val veterinary = Veterinary(code, name, address, phone)
+                    val longitude = cursor.getDouble(4)
+                    val latitude = cursor.getDouble(5)
+                    val veterinary = Veterinary(code, name, address, phone, longitude, latitude)
                     veterinaryList?.add(veterinary)
                 }
             } else {
