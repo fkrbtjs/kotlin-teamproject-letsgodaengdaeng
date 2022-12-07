@@ -25,8 +25,6 @@ class AnimalPhotoAdapter (val context: Context, val animalPhotoList: MutableList
         val binding = holder.binding
         val animal = animalPhotoList[position]
 
-        Log.e("https://${animal.photo}","https://${animal.photo}")
-
         Glide.with(context)
             .load("https://${animal.photo}")
             .into(binding.ivAnimalImage)

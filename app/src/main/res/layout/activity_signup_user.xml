@@ -8,6 +8,8 @@
     android:orientation="vertical"
     tools:context=".view.activity.SignupUserActivity">
 
+
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -249,9 +251,11 @@
                     android:layout_weight="1"
                     android:background="@drawable/edt_text"
                     android:ems="10"
+                    android:layout_marginBottom="15dp"
                     android:hint="주소를 입력해 주세요"
                     android:inputType="textPersonName"
                     android:paddingLeft="20dp"
+                    android:editable="false"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -294,5 +298,10 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

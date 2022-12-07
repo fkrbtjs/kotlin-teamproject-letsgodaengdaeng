@@ -45,7 +45,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -217,9 +218,8 @@
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/mapView"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="400dp"
-                android:layout_height="500dp"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="400dp" />
 
         </LinearLayout>
 

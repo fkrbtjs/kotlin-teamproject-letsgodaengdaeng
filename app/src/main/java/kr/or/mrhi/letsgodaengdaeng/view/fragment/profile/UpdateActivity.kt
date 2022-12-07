@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityUpdateBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
