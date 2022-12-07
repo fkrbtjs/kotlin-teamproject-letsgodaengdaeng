@@ -7,18 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
+import kr.or.mrhi.letsgodaengdaeng.dataClass.ProfileAlbum
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentProfileBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
+import kr.or.mrhi.letsgodaengdaeng.view.adapter.AlbumAdapter
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyCommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.MyreviewActivity
@@ -28,6 +31,7 @@ class ProfileFragment : Fragment() {
     companion object {
         var communityList: MutableList<CommunityVO> = mutableListOf()
         var commentList: MutableList<CommentVO> = mutableListOf()
+        var imageList: MutableList<String> = mutableListOf()
     }
 
     val TAG = this.javaClass.simpleName
@@ -45,8 +49,17 @@ class ProfileFragment : Fragment() {
         val puppyDAO = PuppyDAO()
         val userDAO = UserDAO()
 
+
+
+//        var albumList: MutableList<ProfileAlbum> = mutableListOf()
+        val albumAdapter = AlbumAdapter(requireContext(), imageList)
+        binding.reAlbum.adapter = albumAdapter
+        binding.reAlbum.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
         communityList.clear()
         commentList.clear()
+        imageList.clear()
 
         /** 모든 커뮤니티 docID를 받은 후 docID를 참조해 모든 글에서 내 유저코드로 내가 쓴 댓글을 찾는다 */
         communityDAO.selectCommunity()?.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -57,8 +70,10 @@ class ProfileFragment : Fragment() {
                     if (community?.userID == MainActivity.userCode) {
                         if (community != null) {
                             communityList.add(community)
+                            imageList.add(community.docID!!)
                         }
                     }
+                    albumAdapter.notifyDataSetChanged()
                     communityDAO.selectMyComment("${userdata.key}", MainActivity.userCode!!)?.addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             for (userdata in snapshot.children) {
