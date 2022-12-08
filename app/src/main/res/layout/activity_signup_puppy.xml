@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/papaya_whip"
     android:orientation="vertical"
-    tools:context=".view.activity.SignupUserActivity">
-
+    tools:context=".view.activity.SignupPuppyActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -41,12 +40,13 @@
             android:padding="15dp">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@color/burly_wood"
                 android:gravity="center"
-                android:text="유저 정보"
+                android:text="우리 아이 정보"
                 android:textColor="@color/white_antique"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -55,244 +55,163 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="80dp"
                 app:cardElevation="10dp">
 
                 <ImageView
-                    android:id="@+id/ivUserImage"
+                    android:id="@+id/ivPuppyPicture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/default_person" />
+                    app:srcCompat="@drawable/ic_dog" />
 
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/edtPhone1"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edt_text"
-                    android:focusableInTouchMode="false"
-                    android:gravity="center"
-                    android:hint="핸드폰"
-                    android:text="010"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edtPhone2"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edt_text"
-                    android:gravity="center"
-                    android:hint="0000"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edtPhone3"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edt_text"
-                    android:gravity="center"
-                    android:hint="0000"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/btnPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="인증받기" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilPhoneCheck"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/edtPhoneCheck"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/edt_text"
-                        android:hint="인증 번호를 입력하세요"
-                        android:textSize="14sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btnPhoneCheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:enabled="false"
-                    android:text="번호확인" />
-
-
-            </LinearLayout>
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="10"
-                app:passwordToggleEnabled="true">
-
-                <EditText
-                    android:id="@+id/edtPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/edt_text"
-                    android:hint="비밀번호"
-                    android:inputType="textPassword"
-                    android:maxLength="10"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilPasswordCheck"
+                android:id="@+id/tilName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 app:counterEnabled="true"
-                app:counterMaxLength="10"
-                app:passwordToggleEnabled="true">
+                app:counterMaxLength="10">
 
                 <EditText
-                    android:id="@+id/edtPasswordCheck"
+                    android:id="@+id/edtName"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/edt_text"
-                    android:hint="비밀번호 확인"
-                    android:inputType="textPassword"
-                    android:maxLength="10"
+                    android:hint="이름"
                     android:textSize="14sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <LinearLayout
+            <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilNickname"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <RadioButton
+                    android:id="@+id/rbtnGenderMale"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="10">
+                    android:background="@drawable/radio_button"
+                    android:button="@drawable/edt_text"
+                    android:gravity="center"
+                    android:text="남아"
+                    android:textColor="@drawable/radio_button_text" />
 
-                    <EditText
-                        android:id="@+id/edtNickname"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/edt_text"
-                        android:hint="닉네임"
-                        android:inputType="text"
-                        android:maxLength="10"
-                        android:textSize="14sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/btnNicknameCheck"
-                    android:layout_width="wrap_content"
+                <RadioButton
+                    android:id="@+id/rbtnGenderFemale"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="중복확인" />
-            </LinearLayout>
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="여아"
+                    android:textColor="@drawable/radio_button_text" />
+
+            </RadioGroup>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilBreed"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
+
+                <EditText
+                    android:id="@+id/edtBreed"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edt_text"
+                    android:hint="견종"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbtnSizeLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
+                    android:button="@drawable/edt_text"
+                    android:gravity="center"
+                    android:text="대형견"
+                    android:textColor="@drawable/radio_button_text" />
+
+                <RadioButton
+                    android:id="@+id/rbtnSizeMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="중형견"
+                    android:textColor="@drawable/radio_button_text" />
+
+                <RadioButton
+                    android:id="@+id/rbtnSizeSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_button"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="소형견"
+                    android:textColor="@drawable/radio_button_text" />
+
+            </RadioGroup>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTendency"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:layout_weight="1">
+                app:counterEnabled="true"
+                app:counterMaxLength="10">
 
                 <EditText
-                    android:id="@+id/edtAddress"
+                    android:id="@+id/edtTendency"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/edt_text"
-                    android:ems="10"
-                    android:focusableInTouchMode="false"
-                    android:hint="주소"
-                    android:inputType="textPersonName"
-                    android:paddingLeft="20dp"
+                    android:hint="성격"
+                    android:paddingLeft="10dp"
                     android:textSize="14sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:counterEnabled="true"
-
-                app:counterMaxLength="50">
-
-                <EditText
-                    android:id="@+id/edtIntroduce"
-                    android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:background="@drawable/edt_text"
-                    android:gravity="left"
-                    android:hint="소개글"
-                    android:maxLength="50"
-                    android:paddingTop="15dp"
-                    android:textSize="14sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="40dp"
-                android:orientation="horizontal" />
 
             <Button
-                android:id="@+id/btnNext"
+                android:id="@+id/btnSignup"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_gravity="center|center_horizontal"
                 android:layout_weight="1"
-                android:enabled="false"
-                android:text="다음"
-                android:textColor="@color/white_antique" />
+                android:backgroundTint="@color/burly_wood"
+                android:password="false"
+                android:text="가입하기" />
 
         </LinearLayout>
 
