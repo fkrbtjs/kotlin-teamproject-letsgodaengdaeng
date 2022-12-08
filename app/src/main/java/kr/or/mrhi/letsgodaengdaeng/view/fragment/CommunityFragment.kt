@@ -88,12 +88,6 @@ class CommunityFragment : Fragment() {
             val bottomSheetDialog = BottomSheetDialog()
             bottomSheetDialog.show(parentFragmentManager,bottomSheetDialog.tag)
         }
-        /** 알림창 버튼 */
-        binding.btnNotification.setOnClickListener {
-            val intent = Intent(requireContext(), NotificationActivity::class.java)
-            startActivity(intent)
-            activity?.overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
-        }
 
         /** 게시글작성창 플로팅버튼 */
         binding.fltWrite.setOnClickListener {

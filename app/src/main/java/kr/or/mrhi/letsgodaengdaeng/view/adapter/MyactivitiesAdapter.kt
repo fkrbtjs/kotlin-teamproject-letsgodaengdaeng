@@ -33,7 +33,6 @@ class MyactivitiesAdapter(val context: Context, val communityList: MutableList<C
         binding.tvCategory.text = community.category
         binding.tvLocal.text = community.local
         binding.tvContent.text = community.content
-        binding.tvLikesCount.text = community.likeCount.toString()
         binding.tvCommentCount.text = community.commentCount.toString()
         //사진을 firebase storage에서 가져와야된다.(경로를 지정해서 : data.docID)
         val communityDAO = CommunityDAO()
@@ -55,18 +54,6 @@ class MyactivitiesAdapter(val context: Context, val communityList: MutableList<C
                 Glide.with(context)
                     .load(it.result)
                     .into(binding.ivPicture)
-            }
-        }
-        binding.linearLikes.setOnClickListener {
-            if (likeFlag==0){
-                binding.ivLike.setImageResource(R.drawable.ic_fill_favorite)
-                community.likeCount += 1
-                likeFlag = 1
-            }else{
-                communityDAO.minusLikeCount(community.docID!!, MainActivity.userCode!!)
-                binding.ivLike.setImageResource(R.drawable.ic_border_favorite)
-                community.likeCount += -1
-                likeFlag = 0
             }
         }
 

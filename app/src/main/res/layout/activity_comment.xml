@@ -152,7 +152,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linear_likes"
+                android:id="@+id/linear_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginTop="30dp"
@@ -160,44 +160,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="@+id/tv_content"
                 app:layout_constraintTop_toBottomOf="@+id/tv_content">
-
-                <ImageView
-                    android:id="@+id/iv_like"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_border_favorite" />
-
-                <TextView
-                    android:id="@+id/textView21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:text="좋아요"
-                    android:textColor="#000000" />
-
-                <TextView
-                    android:id="@+id/tv_likes_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="0"
-                    android:textColor="#000000"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="30dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/linear_likes"
-                app:layout_constraintStart_toEndOf="@+id/linear_likes"
-                app:layout_constraintTop_toTopOf="@+id/linear_likes">
 
                 <ImageView
                     android:id="@+id/iv_comment"
@@ -230,19 +192,19 @@
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="20dp"
                 android:background="@color/light_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_likes" />
+                tools:layout_editor_absoluteY="375dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line" />
+                app:layout_constraintTop_toBottomOf="@+id/linear_comment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
