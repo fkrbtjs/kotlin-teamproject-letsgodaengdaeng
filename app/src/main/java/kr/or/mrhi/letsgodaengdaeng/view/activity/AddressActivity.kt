@@ -16,9 +16,7 @@ class AddressActivity : AppCompatActivity() {
     inner class MyJavaScriptInterface {
         @JavascriptInterface
         fun processDATA(data: String?) {
-            val intent = Intent(this@AddressActivity, SignupUserActivity::class.java)
-            intent.putExtra("data", data)
-            startActivity(intent)
+            SignupUserActivity.address = data
             finish()
         }
     }
@@ -35,7 +33,7 @@ class AddressActivity : AppCompatActivity() {
         activityAddressApiBinding.webView!!.addJavascriptInterface(MyJavaScriptInterface(), "Android")
         activityAddressApiBinding.webView!!.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
-                /** 위 웹페이지가 load가 끝나면 코드에서 작성했던 script 을 호출 */
+                /** 위 웹페이지 로드가 끝나면 html 에디터에서 코드로 작성했던 script 를 호출 */
                 view.loadUrl("javascript:sample2_execDaumPostcode();")
                 activityAddressApiBinding.webView.visibility = View.VISIBLE
             }

@@ -2,12 +2,9 @@ package kr.or.mrhi.letsgodaengdaeng.view.fragment.walk
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +14,6 @@ import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapView
-
 
 class WalkMapActivity : AppCompatActivity() {
     lateinit var binding : ActivityWalkMapBinding
@@ -62,36 +58,37 @@ class WalkMapActivity : AppCompatActivity() {
         }
     }
 
-    // 권한 요청 후 행동
+    /** 권한 요청 후에 할 행동 */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == ACCESS_FINE_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 권한 요청 후 승인됨 (추적 시작)
+                // 권한 요청 후 승인이 되었다면 트래킹 모드를 활성화한다.
                 Toast.makeText(this, "위치 권한이 승인되었습니다", Toast.LENGTH_SHORT).show()
                 startTracking()
             } else {
-                // 권한 요청 후 거절됨 (다시 요청 or 토스트)
+                // 권한 요청 후 거절되었다면 재요청한다.
                 Toast.makeText(this, "위치 권한이 거절되었습니다", Toast.LENGTH_SHORT).show()
                 permissionCheck()
             }
         }
     }
 
-    // GPS가 켜져있는지 확인
+    /** GPS 가 켜져있는지 확인한다 */
     private fun checkLocationService(): Boolean {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    // 위치추적 시작
+    /** 맵 트래킹 모드를 활성화 하여 현재 위치를 동기화 시킨다 */
     private fun startTracking() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.ic_paw2, MapPOIItem.ImageOffset(16, 16))
+        binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.ic_paw2, MapPOIItem.ImageOffset(32, 32))
     }
 
-    // 위치추적 중지
-    private fun stopTracking() {
+    /** 액티비티 종료시 트래킹 모드가 활성화 되어 있다면 트래킹 모드를 정지시킨다 */
+    override fun onDestroy() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        super.onDestroy()
     }
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -33,8 +34,10 @@ class SeoulGilInfoActivity : AppCompatActivity() {
 
         seoulGil = intent.getParcelableExtra("seoulGil")
 
-        binding.btnBack.setOnClickListener { finish() }
-        binding.tvCourseName.setText(seoulGil?.name)
+        setSupportActionBar(binding.toolVeterinary)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "${seoulGil?.name}"
+
         binding.tvName.text = seoulGil?.name
         binding.tvLocal.text = seoulGil?.local
         binding.tvDistance.text = seoulGil?.distance
@@ -111,4 +114,13 @@ class SeoulGilInfoActivity : AppCompatActivity() {
         binding.mapView.addPOIItem(customMarker)
     }
 
+    /** 툴바 백버튼 누르면 홈 프래그먼트로 돌아감 */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

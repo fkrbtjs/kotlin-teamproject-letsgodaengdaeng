@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +17,7 @@ import androidx.core.content.ContextCompat
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Veterinary
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityVeterinaryBinding
+import kr.or.mrhi.letsgodaengdaeng.view.activity.LoginActivity
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 
@@ -32,11 +34,11 @@ class VeterinaryActivity : AppCompatActivity() {
         binding = ActivityVeterinaryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Actionbar -> Toolbar 변경
+        veterinary = intent.getParcelableExtra("veterinary")
+
         setSupportActionBar(binding.toolVeterinary)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        veterinary = intent.getParcelableExtra("veterinary")
+        supportActionBar?.title = veterinary?.name
 
         binding.tvHosName.text = veterinary?.name
         binding.tvAddress.text = veterinary?.address
@@ -93,7 +95,7 @@ class VeterinaryActivity : AppCompatActivity() {
         binding.mapView.visibility = View.VISIBLE
         binding.mapView.zoomIn(true)
         binding.mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude!!,longitude!!), 1,true)
-        
+
         val customMarker = MapPOIItem()
         customMarker.itemName = veterinary?.name
         customMarker.tag = 0
@@ -102,5 +104,15 @@ class VeterinaryActivity : AppCompatActivity() {
         customMarker.customImageResourceId = R.drawable.marker_hospital
 
         binding.mapView.addPOIItem(customMarker)
+    }
+
+    /** 툴바 백버튼 누르면 홈 프래그먼트로 돌아감 */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
