@@ -16,6 +16,7 @@ import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentAllBinding
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentFriendBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
+import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 
 
@@ -23,12 +24,14 @@ class FriendFragment : Fragment() {
 
 
     lateinit var binding : FragmentFriendBinding
-    lateinit var communityList: MutableList<CommunityVO>
     lateinit var adapter: CustomAdapter
+    var communityList: MutableList<CommunityVO> = mutableListOf()
+    var type = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +54,7 @@ class FriendFragment : Fragment() {
         return binding.root
     }
 
-    private fun selectUser() {
+    fun selectUser() {
         val communityDAO = CommunityDAO()
         communityDAO.selectFriendCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -62,7 +65,13 @@ class FriendFragment : Fragment() {
                     //비어있던 userKey 부분에 key 값을 넣어준다
                     community?.docID = userdata.key.toString()
                     if (community != null) {
-                        communityList.add(community)
+                        if (type == 0) {
+                            communityList.add(community)
+                        } else {
+                            if (community.local.equals(MainActivity.userInfo.address)) {
+                                communityList.add(community)
+                            }
+                        }
                     }
                 }// end of for
                 adapter.notifyDataSetChanged()

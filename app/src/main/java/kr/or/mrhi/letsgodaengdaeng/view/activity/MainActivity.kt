@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         userDAO.selectUser(userCode!!)?.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User? = snapshot.getValue(User::class.java)
-                userInfo = User("${user?.phone}", "${user?.password}", "${user?.nickname}","${user?.introduce}")
+                userInfo = User("${user?.phone}", "${user?.password}", "${user?.nickname}","${user?.introduce}","${user?.address}")
             }
             override fun onCancelled(error: DatabaseError) {
             }

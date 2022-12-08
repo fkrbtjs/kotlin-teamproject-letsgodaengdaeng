@@ -14,7 +14,9 @@ import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentAllBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
+import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 
 
 class AllFragment : Fragment() {
@@ -22,10 +24,12 @@ class AllFragment : Fragment() {
     lateinit var binding : FragmentAllBinding
     lateinit var communityList: MutableList<CommunityVO>
     lateinit var adapter: CustomAdapter
+    var type = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +37,6 @@ class AllFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAllBinding.inflate(inflater, container, false)
-
         communityList = mutableListOf()
         adapter = CustomAdapter(requireContext(),communityList)
         val linearLayout = LinearLayoutManager(context)
@@ -44,11 +47,10 @@ class AllFragment : Fragment() {
 
         selectUser()
 
-
         return binding.root
     }
 
-    private fun selectUser() {
+    fun selectUser() {
         val communityDAO = CommunityDAO()
         communityDAO.selectCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -59,7 +61,13 @@ class AllFragment : Fragment() {
                     //비어있던 userKey 부분에 key 값을 넣어준다
                     community?.docID = userdata.key.toString()
                     if (community != null) {
-                        communityList.add(community)
+                        if (type == 0) {
+                            communityList.add(community)
+                        } else {
+                            if (community.local.equals(MainActivity.userInfo.address)) {
+                                communityList.add(community)
+                            }
+                        }
                     }
                 }// end of for
                 adapter.notifyDataSetChanged()

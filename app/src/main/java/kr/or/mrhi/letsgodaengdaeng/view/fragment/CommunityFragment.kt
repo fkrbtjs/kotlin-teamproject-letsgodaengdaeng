@@ -38,7 +38,6 @@ class CommunityFragment : Fragment() {
     lateinit var shareFragment: ShareFragment
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -111,6 +110,10 @@ class CommunityFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    fun changeFragmentAll(){
+        binding.viewPager.currentItem = 0
     }
 
     private fun createTabView(title: String): View {

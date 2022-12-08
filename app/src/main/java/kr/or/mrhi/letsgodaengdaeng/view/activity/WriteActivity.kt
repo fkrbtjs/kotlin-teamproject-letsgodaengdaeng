@@ -116,7 +116,7 @@ class WriteActivity : AppCompatActivity() {
                 if(category.equals("카테고리 선택")){
                     Toast.makeText(this,"카테고리를 선택해주세요",Toast.LENGTH_SHORT).show()
                 }else{
-                    val community = CommunityVO(key,MainActivity.userCode,nickname,"성동구",date,category,content,0,0)
+                    val community = CommunityVO(key,MainActivity.userCode,nickname,MainActivity.userInfo.address,date,category,content,0,0)
                     //firebase storage 이미지를 업로드 경로명 셋팅한다.
                     val imageReference = communityDAO.storage?.reference?.child("images/${community.docID}.jpg")
                     Log.d("pictureurl","${imageReference}")
