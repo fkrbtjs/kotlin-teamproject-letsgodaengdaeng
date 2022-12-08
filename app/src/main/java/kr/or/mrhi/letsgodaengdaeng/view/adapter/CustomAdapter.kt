@@ -35,7 +35,6 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
         binding.tvCategory.text = community.category
         binding.tvLocal.text = community.local
         binding.tvContent.text = community.content
-        binding.tvLikesCount.text = community.likeCount.toString()
         binding.tvCommentCount.text = community.commentCount.toString()
         //사진을 firebase storage에서 가져와야된다.(경로를 지정해서 : data.docID)
         val communityDAO = CommunityDAO()
@@ -59,15 +58,7 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
                     .into(binding.ivPicture)
             }
         }
-        binding.linearLikes.setOnClickListener {
-            if (likeFlag==0){
-                binding.ivLike.setImageResource(R.drawable.ic_fill_favorite)
-                likeFlag = 1
-            }else{
-                binding.ivLike.setImageResource(R.drawable.ic_border_favorite)
-                likeFlag = 0
-            }
-        }
+
 
         binding.root.setOnClickListener {
             val intent = Intent(context,CommentActivity::class.java)
