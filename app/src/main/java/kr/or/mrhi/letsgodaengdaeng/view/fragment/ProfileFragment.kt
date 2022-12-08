@@ -6,16 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommentVO
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
-import kr.or.mrhi.letsgodaengdaeng.dataClass.ProfileAlbum
-import kr.or.mrhi.letsgodaengdaeng.dataClass.Puppy
+import kr.or.mrhi.letsgodaengdaeng.dataClass.*
 import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentProfileBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.firebase.PuppyDAO
@@ -47,9 +45,14 @@ class ProfileFragment : Fragment() {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         val communityDAO = CommunityDAO()
 
+        if(imageList.isEmpty()){
+            binding.tvImageDefault.visibility = View.VISIBLE
+            binding.reAlbum.visibility = View.INVISIBLE
+        }else{
+            binding.tvImageDefault.visibility = View.INVISIBLE
+            binding.reAlbum.visibility = View.VISIBLE
+        }
 
-
-//        var albumList: MutableList<ProfileAlbum> = mutableListOf()
         val albumAdapter = AlbumAdapter(requireContext(), imageList)
         binding.reAlbum.adapter = albumAdapter
         binding.reAlbum.layoutManager =
@@ -94,39 +97,30 @@ class ProfileFragment : Fragment() {
             }
         })
 
-        /**firebase storage 에서 사진 가져오기.**/
         val userDAO = UserDAO()
-        /**firebase storage 이미지 경로를 알려준다*/
-        val img = userDAO.storage!!.reference.child("images/.png")
-
-        img.downloadUrl.addOnCompleteListener{
+        /** firebase storage 의 현재 로그인된 유저가 저장한 이미지를 불러온다*/
+        val userImg = userDAO.storage!!.reference.child("userImage/${MainActivity.userCode}.jpg")
+        userImg.downloadUrl.addOnCompleteListener {
             if(it.isSuccessful){
-                Glide.with(container!!.context)
+                Glide.with(this)
                     .load(it.result)
-                    .into(binding.ivPicture)
+                    .into(binding.ivUserPicture)
             }
         }
 
-        binding.writing.setOnClickListener{
-            val intent = Intent(context, MyreviewActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.ivSetting.setOnClickListener{
-            val intent = Intent(context, SettingActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.review.setOnClickListener {
-            val intent = Intent(context, MyCommentActivity::class.java)
-            startActivity(intent)
-        }
-        
-        binding.cdIdCard.setOnClickListener{
-            val intent = Intent(context, InfoActivity::class.java)
-            intent.putExtra("userID",MainActivity.userCode)
-            startActivity(intent)
-        }
+        /** firebase 유저 정보를 불러온다*/
+        userDAO.selectUser(MainActivity.userCode!!)?.addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(userData in snapshot.children){
+                    val user: User? = snapshot.getValue(User::class.java)
+                    binding.tvUserName.text = user?.nickname
+                    binding.tvIntroduce.text = user?.introduce
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+            }
+        })
 
         val puppyDAO = PuppyDAO()
         val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${MainActivity.userCode}.jpg")
@@ -151,6 +145,28 @@ class ProfileFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {
             }
         })
+
+        binding.writing.setOnClickListener{
+            val intent = Intent(context, MyreviewActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.ivSetting.setOnClickListener{
+            val intent = Intent(context, SettingActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.review.setOnClickListener {
+            val intent = Intent(context, MyCommentActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.cdIdCard.setOnClickListener{
+            val intent = Intent(context, InfoActivity::class.java)
+            intent.putExtra("userID",MainActivity.userCode)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 }
