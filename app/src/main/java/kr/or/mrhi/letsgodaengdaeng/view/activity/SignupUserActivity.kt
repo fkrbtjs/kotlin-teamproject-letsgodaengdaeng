@@ -10,7 +10,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.JavascriptInterface
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +36,9 @@ import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import java.util.concurrent.TimeUnit
 
 class SignupUserActivity : AppCompatActivity() {
+    companion object {
+        var address: String? = null
+    }
     lateinit var binding: ActivitySignupUserBinding
 
     val TAG = this.javaClass.simpleName
@@ -63,14 +70,6 @@ class SignupUserActivity : AppCompatActivity() {
                     .into(binding.ivUserImage)
             }
             userImageUri = it.data?.data
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (intent.hasExtra("data")){
-            binding.edtAddress.setText("${intent.getStringExtra("data")}")
         }
     }
 
@@ -295,16 +294,16 @@ class SignupUserActivity : AppCompatActivity() {
 
         /** 다음 버튼 누르면 강아지 정보 입력 액티비티로 전환 */
         binding.btnNext.setOnClickListener {
-            if (nicknameFlag && passwordFlag && passwordCheckFlag) {
+            if (nicknameFlag && passwordFlag && passwordCheckFlag && binding.edtAddress.text.isNotEmpty()) {
                 softkeyboardHide(binding.edtIntroduce)
 
                 val userCode = auth.uid
                 val phone = "${binding.edtPhone1.text}${binding.edtPhone2.text}${binding.edtPhone3.text}"
-
                 val password = binding.edtPassword.text.toString()
                 val nickname = binding.edtNickname.text.toString()
                 val introduce = binding.edtIntroduce.text.toString()
-                user = User(phone, password, nickname, introduce)
+
+                user = User(phone, password, nickname, introduce, address)
 
                 val intent = Intent(this@SignupUserActivity, SignupPuppyActivity::class.java)
                 intent.putExtra("userCode", userCode)
@@ -328,6 +327,14 @@ class SignupUserActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 
+    /** 주소 검색 후 받은 값이 null 이 아니라면 주소 입력란에 값을 넣어준다 */
+    override fun onRestart() {
+        super.onRestart()
+        if (address != null) {
+            binding.edtAddress.setText(address)
+        }
+    }
+
     /** 핸드폰 인증을 하면 파이어베이스에 유저가 생성된다(Authentication 식별자와 uid)
     그렇기때문에 정보를 입력하지 않고 창을 닫아버렸을때 그 생성된 식별자를 삭제한다 SignupPuppy 에도 동일 기능있음 */
     override fun onDestroy() {
@@ -336,4 +343,5 @@ class SignupUserActivity : AppCompatActivity() {
             auth.currentUser?.delete()
         }
     }
+
 }

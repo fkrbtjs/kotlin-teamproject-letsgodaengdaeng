@@ -48,6 +48,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".view.fragment.profile.WithdrawalActivity"
+            android:exported="false" />
         <activity
             android:name=".view.activity.AddressActivity"
             android:exported="false" />

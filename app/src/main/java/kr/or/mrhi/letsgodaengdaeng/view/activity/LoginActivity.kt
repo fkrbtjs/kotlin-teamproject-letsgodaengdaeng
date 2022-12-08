@@ -1,8 +1,11 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +17,8 @@ import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityLoginBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = this.javaClass.simpleName
@@ -62,6 +67,26 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, SignupUserActivity::class.java)
             startActivity(intent)
             finish()
+        }
+        getHashKey()
+    }
+
+    fun getHashKey(){
+        var packageInfo : PackageInfo = PackageInfo()
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        } catch (e: PackageManager.NameNotFoundException){
+            e.printStackTrace()
+        }
+
+        for (signature: Signature in packageInfo.signatures){
+            try{
+                var md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            } catch(e: NoSuchAlgorithmException){
+                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
+            }
         }
     }
 
