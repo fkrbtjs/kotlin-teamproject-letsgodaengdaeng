@@ -50,7 +50,11 @@ class HomeViewFragment : Fragment() {
         seoulgilAdapter = SeoulGilAdapter(requireContext(), seoulgilList)
         binding.rvSeoulgil.adapter = seoulgilAdapter
         binding.rvSeoulgil.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        /** 모든 서울길 정보를 보여준다 */
         dbHelper.selectSeoulGil("all")?.let { seoulgilList.addAll(it) }
+
+        /** 버튼을 눌렀을 때 해당 지역의 서울길 정보만 보여준다 */
         binding.btnAll.setOnClickListener { filterLocal("all") }
         binding.btnGwanak.setOnClickListener { filterLocal("관악구") }
         binding.btnJongro.setOnClickListener { filterLocal("종로구") }

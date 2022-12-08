@@ -28,22 +28,22 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         val communityFragment = (context as MainActivity).communityFragment
         val allFragment = (context as MainActivity).communityFragment.allFragment
-        val friendFragment = (context as MainActivity).communityFragment.friendFragment
-        val shareFragment = (context as MainActivity).communityFragment.shareFragment
-        val questionFragment = (context as MainActivity).communityFragment.questionFragment
 
+        /** 우리동네 게시물만 보여주기 */
         binding.btnDongnae.setOnClickListener {
 
             communityFragment.type = 1
-//            communityFragment.changeFragmentAll()
+            allFragment.selectUser()
+            communityFragment.changeFragmentAll()
 
             dismiss()
         }
-
+        /** 전체동네 게시물 보여주기 */
         binding.btnAll.setOnClickListener {
 
             communityFragment.type = 0
-//            communityFragment.changeFragmentAll()
+            allFragment.selectUser()
+            communityFragment.changeFragmentAll()
 
             dismiss()
         }

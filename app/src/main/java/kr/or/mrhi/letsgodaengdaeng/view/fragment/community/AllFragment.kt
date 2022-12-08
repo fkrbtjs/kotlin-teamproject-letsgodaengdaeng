@@ -30,6 +30,11 @@ class AllFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    /** 화면이 다시 넘어올 때 어댑터를 다시 연결 */
+    override fun onResume() {
+        super.onResume()
+        selectUser()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +54,7 @@ class AllFragment : Fragment() {
 
         return binding.root
     }
-
+    /** 모든 게시물을 불러온다 단 type에 따라서 동네범위 설정 */
     fun selectUser() {
         val communityDAO = CommunityDAO()
         val communityFragment = (context as MainActivity).communityFragment

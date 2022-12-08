@@ -41,7 +41,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchRecyclerView.layoutManager = linearLayout
         binding.searchRecyclerView.adapter = adapter
 
-
+        /** 서치뷰의 텍스트가 바뀔때마다 해당 텍스트의 컨텐츠들을 찾아 보여줌 */
         binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true

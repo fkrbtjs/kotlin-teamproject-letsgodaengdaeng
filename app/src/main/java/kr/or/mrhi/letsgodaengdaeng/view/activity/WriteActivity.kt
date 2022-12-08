@@ -108,11 +108,11 @@ class WriteActivity : AppCompatActivity() {
             //firebase realtime database diary 테이블에 입력할때 가져오는 key
             val key = communityDAO.databaseReference?.push()?.key
 
-            // 내용이 없을 때 예외처리
+            /** 내용이 없을때 예외처리 */
             if (content.equals("")){
                 Toast.makeText(this,"내용을 입력해주세요",Toast.LENGTH_SHORT).show()
             }else{
-                // 카테고리 선택을 안했을 때 예외처리
+                /** 카테고리 선택을 안했을 때 예외처리 */
                 if(category.equals("카테고리 선택")){
                     Toast.makeText(this,"카테고리를 선택해주세요",Toast.LENGTH_SHORT).show()
                 }else{
@@ -121,7 +121,7 @@ class WriteActivity : AppCompatActivity() {
                     val imageReference = communityDAO.storage?.reference?.child("images/${community.docID}.jpg")
                     Log.d("pictureurl","${imageReference}")
 
-                    // 사진을 등록하지 않았을때 예외처리
+                    /** 사진을 등록하지 않았을 때 예외처리 */
                     if(imageUri != null){
                         imageReference?.putFile(imageUri!!)?.addOnSuccessListener {
                             //firebase realtime database diary 테이블에 입력
