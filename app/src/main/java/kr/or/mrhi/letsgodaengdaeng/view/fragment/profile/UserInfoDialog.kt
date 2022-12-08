@@ -44,6 +44,7 @@ class UserInfoDialog(val context: Context) {
                     val user: User? = snapshot.getValue(User::class.java)
                     binding.tvUserNic.text = user?.nickname
                     binding.tvUserPhone.text = user?.phone
+                    binding.tvAddress.text = user?.address
                     binding.tvIntroduce.text = user?.introduce
                 }
             }

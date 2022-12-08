@@ -82,26 +82,16 @@
         app:layout_constraintTop_toBottomOf="@+id/cd_idCard2" />
 
     <Button
-        android:id="@+id/btn_all"
-        android:layout_width="380dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:text="알림설정                                              〉"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_infoChange" />
-
-    <Button
         android:id="@+id/btn_withdrawal"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/white"
         android:text="회원탈퇴                                              〉"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_all" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_infoChange" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
