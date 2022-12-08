@@ -24,8 +24,8 @@ class AddressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /** 서버를 만들어 업로드 하지 않기위해 구글 블로그에 html 업로드 */
-        val blogspot = "https://21yong0525.blogspot.com/2022/12/blog-post.html"
+        /** 파이어 베이스 Hostiong 서비스에 등록한 html 주소 */
+        val blogspot = "https://letsgodaengdaeng.web.app/"
 
         activityAddressApiBinding = ActivityAddressBinding.inflate(layoutInflater)
         setContentView(activityAddressApiBinding.root)

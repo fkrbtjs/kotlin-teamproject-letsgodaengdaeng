@@ -5,19 +5,28 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapView
+import java.text.SimpleDateFormat
 
 class WalkMapActivity : AppCompatActivity() {
     lateinit var binding : ActivityWalkMapBinding
     val ACCESS_FINE_LOCATION = 1000     // Request Code
+    var walkJob: Job? = null
+    var walkJobFlag = false
+    var point = 0
+    var point1 = 0
+    val TAG = this.javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +34,16 @@ class WalkMapActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        if (checkLocationService()) {
-            // GPS가 켜져있을 경우
-            permissionCheck()
-        } else {
-            // GPS가 꺼져있을 경우
-            Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+        binding.cardView.bringToFront()
+
+        binding.btnStart.setOnClickListener {
+            if (checkLocationService()) {
+                // GPS가 켜져있을 경우
+                permissionCheck()
+            } else {
+                // GPS가 꺼져있을 경우
+                Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -55,6 +68,7 @@ class WalkMapActivity : AppCompatActivity() {
         } else {
             // 권한이 있는 상태
             startTracking()
+            visible()
         }
     }
 
@@ -65,6 +79,7 @@ class WalkMapActivity : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 권한 요청 후 승인이 되었다면 트래킹 모드를 활성화한다.
                 Toast.makeText(this, "위치 권한이 승인되었습니다", Toast.LENGTH_SHORT).show()
+                visible()
                 startTracking()
             } else {
                 // 권한 요청 후 거절되었다면 재요청한다.
@@ -84,11 +99,42 @@ class WalkMapActivity : AppCompatActivity() {
     private fun startTracking() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
         binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.ic_paw2, MapPOIItem.ImageOffset(32, 32))
+        walkJobFlag = true
+        start()
+        binding.tvTime.start()
     }
 
     /** 액티비티 종료시 트래킹 모드가 활성화 되어 있다면 트래킹 모드를 정지시킨다 */
     override fun onDestroy() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+        walkJobFlag = false
+        walkJob?.cancel()
         super.onDestroy()
+    }
+
+    fun start() {
+        val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
+        walkJob = backgroundScope.launch {
+            while (walkJobFlag == true) {
+                try {
+                    delay(6000)
+                } catch (e: Exception) {
+                    Log.d(TAG, "${e.stackTrace}")
+                }
+                runOnUiThread {
+                    point++
+                    binding.tvPoint.text = "${point}점"
+                    Toast.makeText(this@WalkMapActivity  ,"포인트 1점 획득!",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+    fun visible() {
+        binding.btnStart.visibility = View.GONE
+        binding.cardView.visibility = View.VISIBLE
+        binding.mapView.visibility = View.VISIBLE
     }
 }

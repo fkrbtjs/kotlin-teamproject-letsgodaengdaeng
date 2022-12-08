@@ -30,7 +30,6 @@ class HomeFragment : Fragment() {
     var mainActivity: MainActivity? = null
     lateinit var homeViewFragment: HomeViewFragment
 
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -45,7 +44,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        bannerJobFlag = true
         binding.BannerRecyclerView.isSaveEnabled = false
 
         binding.toolbar.bringToFront()
@@ -67,6 +65,7 @@ class HomeFragment : Fragment() {
         val indicator: CircleIndicator2 = binding.indicator
         indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
 
+        bannerJobFlag = true
         rollingBanner()
 
         homeViewFragment = HomeViewFragment()
@@ -74,7 +73,6 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
-
 
     /** 프래그먼트가 onDestroy() 될때 bannerJob 취소 */
     override fun onDestroy() {
@@ -105,28 +103,3 @@ class HomeFragment : Fragment() {
             }
     }
 }
-
-
-
-// binding.toolbar.setOnClickListener {
-//            val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
-//            messengerJob = backgroundScope.launch {
-//                Log.e("Dsadsadas","$no")
-//                while (true) {
-//                    runOnUiThread {
-//                        if (no == 3) {
-//                            no = 0
-//                        }
-//                        binding.viewpager.currentItem = no
-//                        no += 1
-//                        Log.e("Dsadsadas","$no")
-//                    }
-//                    try {
-//                        delay(1000)
-//                    } catch (e: Exception) {
-//                        Log.d("yongmusicplayer", "${e.stackTrace}")
-//                    }
-//
-//                }
-//            }
-//        }
