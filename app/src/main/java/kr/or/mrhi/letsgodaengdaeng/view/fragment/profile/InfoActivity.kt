@@ -28,7 +28,7 @@ class InfoActivity: AppCompatActivity() {
             binding.ivUpdate.visibility = View.VISIBLE
         }
 
-        //Actionbar -> Toolbar 변경
+        /**Actionbar -> Toolbar 변경*/
         setSupportActionBar(binding.toolInfo)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -37,7 +37,33 @@ class InfoActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.cdUserIdCard.setOnClickListener{
+            val dialog = UserInfoDialog(binding.root.context)
+            dialog.showDialog()
+        }
+
+        /** firebase storage 의 현재 로그인된 유저가 저장한 이미지를 불러온다*/
         val puppyDAO = PuppyDAO()
+        val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${userID}.jpg")
+        puppyImg.downloadUrl.addOnCompleteListener{
+            if(it.isSuccessful){
+                Glide.with(applicationContext)
+                    .load(it.result)
+                    .into(binding.ivPicture)
+            }
+        }
+
+        val userDAO = UserDAO()
+        val userImg = userDAO.storage!!.reference.child("userImage/${userID}.jpg")
+        userImg.downloadUrl.addOnCompleteListener {
+            if(it.isSuccessful){
+                Glide.with(applicationContext)
+                    .load(it.result)
+                    .into(binding.ivUserPicture)
+            }
+        }
+
+        /** firebase 반려견 정보를 불러온다*/
         puppyDAO.selectPuppy(userID!!)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -54,15 +80,7 @@ class InfoActivity: AppCompatActivity() {
             }
         })
 
-        val userDAO = UserDAO()
-        val puppyImg = puppyDAO.storage!!.reference.child("puppyImage/${userID}.jpg")
-        puppyImg.downloadUrl.addOnCompleteListener{
-            if(it.isSuccessful){
-                Glide.with(applicationContext)
-                    .load(it.result)
-                    .into(binding.ivPicture)
-            }
-        }
+        /** firebase 유저 정보를 불러온다*/
         userDAO.selectUser(userID)?.addValueEventListener(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -70,7 +88,6 @@ class InfoActivity: AppCompatActivity() {
                     val user: User? = snapshot.getValue(User::class.java)
                     binding.tvUserName.text = user?.nickname
                     binding.tvUserPhone.text = user?.phone
-                    binding.tvUserIntroduce.text = user?.introduce
                 }
             }
             override fun onCancelled(error: DatabaseError) {

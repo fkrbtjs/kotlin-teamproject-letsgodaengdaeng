@@ -1,64 +1,47 @@
-package kr.or.mrhi.letsgodaengdaeng.view.fragment.home
+package kr.or.mrhi.letsgodaengdaeng.view.fragment.walk
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.SeoulGil
-import kr.or.mrhi.letsgodaengdaeng.databinding.ActivitySeoulGilInfoBinding
+import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
 import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
-class SeoulGilInfoActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivitySeoulGilInfoBinding
-    var seoulGil: SeoulGil? = null
-    val ACCESS_FINE_LOCATION = 1000
-    var longitude: Double? = null
-    var latitude: Double? = null
+class WalkMapActivity : AppCompatActivity() {
+    lateinit var binding : ActivityWalkMapBinding
+    val ACCESS_FINE_LOCATION = 1000     // Request Code
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySeoulGilInfoBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = ActivityWalkMapBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        seoulGil = intent.getParcelableExtra("seoulGil")
-
-        binding.btnBack.setOnClickListener { finish() }
-        binding.tvCourseName.setText(seoulGil?.name)
-        binding.tvName.text = seoulGil?.name
-        binding.tvLocal.text = seoulGil?.local
-        binding.tvDistance.text = seoulGil?.distance
-        binding.tvTime.text = seoulGil?.time
-        binding.tvDetailCourse.text = seoulGil?.detailCourse
-        binding.tvContent.text = seoulGil?.content
-        var level = seoulGil?.courseLevel
-        if (level.equals("1")){
-            level = "초급"
-        }else if (level.equals("2")){
-            level = "중급"
-        }else{
-            level = "고급"
+        if (checkLocationService()) {
+            // GPS가 켜져있을 경우
+            permissionCheck()
+        } else {
+            // GPS가 꺼져있을 경우
+            Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
         }
-        binding.tvLevel.text = level
-        longitude = seoulGil?.longitude!!.toDouble()
-        latitude = seoulGil?.latitude!!.toDouble()
-
-        permissionCheck()
     }
 
-    /** 위치 권한 확인 */
-    fun permissionCheck() {
+    // 위치 권한 확인
+    private fun permissionCheck() {
         val preference = getPreferences(MODE_PRIVATE)
+        val isFirstCheck = preference.getBoolean("isFirstPermissionCheck", true)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // 권한이 없는 상태
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -75,18 +58,18 @@ class SeoulGilInfoActivity : AppCompatActivity() {
             }
         } else {
             // 권한이 있는 상태
-            startMap()
+            startTracking()
         }
     }
 
-    /** 권한 요청 후 행동 */
+    // 권한 요청 후 행동
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == ACCESS_FINE_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 권한 요청 후 승인됨 (추적 시작)
                 Toast.makeText(this, "위치 권한이 승인되었습니다", Toast.LENGTH_SHORT).show()
-                startMap()
+                startTracking()
             } else {
                 // 권한 요청 후 거절됨 (다시 요청 or 토스트)
                 Toast.makeText(this, "위치 권한이 거절되었습니다", Toast.LENGTH_SHORT).show()
@@ -95,20 +78,20 @@ class SeoulGilInfoActivity : AppCompatActivity() {
         }
     }
 
-    /** 위치로 이동하여 커스텀 마커 찍기 */
-    fun startMap() {
-        binding.mapView.visibility = View.VISIBLE
-        binding.mapView.zoomIn(true)
-        binding.mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(latitude!!,longitude!!), 1,true)
-
-        val customMarker = MapPOIItem()
-        customMarker.itemName = seoulGil?.name
-        customMarker.tag = 0
-        customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude!!,longitude!!)
-        customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-        customMarker.customImageResourceId = R.drawable.marker_forest
-
-        binding.mapView.addPOIItem(customMarker)
+    // GPS가 켜져있는지 확인
+    private fun checkLocationService(): Boolean {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
+    // 위치추적 시작
+    private fun startTracking() {
+        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.ic_paw2, MapPOIItem.ImageOffset(16, 16))
+    }
+
+    // 위치추적 중지
+    private fun stopTracking() {
+        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
+    }
 }

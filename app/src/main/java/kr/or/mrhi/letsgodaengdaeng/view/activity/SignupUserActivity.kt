@@ -1,6 +1,5 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -9,8 +8,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.text.method.TextKeyListener
-import android.text.method.TextKeyListener.clear
 import android.util.Log
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -27,7 +24,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.RepoManager.clear
 import com.google.firebase.ktx.Firebase
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
@@ -57,8 +53,6 @@ class SignupUserActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = null
 
-        auth.signOut()
-
         Listener()
 
         requestLauncher = registerForActivityResult(
@@ -70,8 +64,15 @@ class SignupUserActivity : AppCompatActivity() {
             }
             userImageUri = it.data?.data
         }
+
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (intent.hasExtra("data")){
+            binding.edtAddress.setText("${intent.getStringExtra("data")}")
+        }
+    }
 
     /** 툴바 백버튼 누르면 로그인 액티비티로 돌아감 */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -109,6 +110,7 @@ class SignupUserActivity : AppCompatActivity() {
 
     /** 리스너 모음 */
     fun Listener() {
+        auth.signOut()
 
         /** 유저 프로필 이미지 등록 */
         binding.ivUserImage.setOnClickListener {
@@ -125,8 +127,6 @@ class SignupUserActivity : AppCompatActivity() {
             userImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.default_person}")
             return@setOnLongClickListener true
         }
-
-
 
         /** 인증받기 버튼 누르면 입력한 전화번호로 인증번호 발송 */
         binding.btnPhone.setOnClickListener {
@@ -243,6 +243,12 @@ class SignupUserActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
+
+        /** 주소 액티비티 이동 후 주소 받기 */
+        binding.edtAddress.setOnClickListener {
+            val intent = Intent(this@SignupUserActivity, AddressActivity::class.java)
+            startActivity(intent)
+        }
 
         /** 닉네임 패턴 체크 */
         binding.edtNickname.addTextChangedListener(object : TextWatcher {

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,15 +21,35 @@
         android:theme="@style/Theme.Letsgodaengdaeng"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <uses-library android:name="org.apache.http.legacy" android:required="true"/>
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="app.BuildConfig.MAP_KEY"/>
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-        <activity android:name=".view.fragment.home.SeoulGilInfoActivity"
+            android:name="com.kakao.sdk.AppKey"
+            android:value="app.BuildConfig.MAP_KEY" />
+        <activity
+            android:name=".view.fragment.walk.WalkMapActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".view.fragment.profile.InfochangeActivity"
             android:exported="false" />
-        <activity android:name=".view.fragment.home.VeterinaryActivity"
+        <activity
+            android:name=".view.fragment.home.SeoulGilInfoActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".view.fragment.home.VeterinaryActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".view.activity.AddressActivity"
             android:exported="false" />
         <activity
             android:name=".view.fragment.profile.MyreviewActivity"
@@ -42,7 +62,7 @@
             android:exported="false" />
         <activity
             android:name=".view.activity.SeouldataActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".view.activity.UpdateCommentActivity"
             android:exported="false" />
