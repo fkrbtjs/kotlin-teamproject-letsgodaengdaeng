@@ -36,9 +36,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/papaya_whip"
+        android:backgroundTint="@color/white_smoke"
         android:elevation="5dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,13 +55,26 @@
                 android:id="@+id/tvP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="포인트 : "
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                android:layout_marginBottom="10dp"
+                android:text="포인트"
+                android:textColor="@color/light_gray"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tvStop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+
+                android:id="@+id/tvT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="시간"
+                android:textColor="@color/light_gray"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvStop" />
 
             <TextView
                 android:id="@+id/tvPoint"
@@ -70,16 +83,16 @@
                 android:text="0"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvP"
-                app:layout_constraintStart_toEndOf="@+id/tvP"
-                app:layout_constraintTop_toTopOf="@+id/tvP"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintBottom_toTopOf="@+id/tvP"
+                app:layout_constraintEnd_toEndOf="@+id/tvP"
+                app:layout_constraintStart_toStartOf="@+id/tvP"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvStop"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/stop_icon"
+                android:background="@drawable/ic_stop_circle_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,12 +102,12 @@
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00 : 00"
+                android:text="00:00"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvStop"
+                app:layout_constraintBottom_toTopOf="@+id/tvT"
+                app:layout_constraintEnd_toEndOf="@+id/tvT"
+                app:layout_constraintStart_toStartOf="@+id/tvT"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

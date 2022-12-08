@@ -1,21 +1,28 @@
 package kr.or.mrhi.letsgodaengdaeng.view.fragment.walk
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
+import kr.or.mrhi.letsgodaengdaeng.dataClass.WalkMarker
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
+import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.text.SimpleDateFormat
 
@@ -25,16 +32,19 @@ class WalkMapActivity : AppCompatActivity() {
     var walkJob: Job? = null
     var walkJobFlag = false
     var point = 0
-    var point1 = 0
     val TAG = this.javaClass.simpleName
+
+    var locationManager: LocationManager? = null
+    var uLatitude: Double? = null
+    var uLongitude: Double? = null
+    var uNowPosition: MapPoint? = null
+    var locationList = arrayListOf<WalkMarker>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWalkMapBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        binding.cardView.bringToFront()
 
         binding.btnStart.setOnClickListener {
             if (checkLocationService()) {
@@ -45,12 +55,19 @@ class WalkMapActivity : AppCompatActivity() {
                 Toast.makeText(this, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.tvStop.setOnClickListener {
+            val intent = Intent(this, WalkFinishActivity::class.java)
+            intent.putExtra("point", point)
+            intent.putExtra("time", binding.tvTime.text)
+            intent.putExtra("locationList",locationList)
+            startActivity(intent)
+            finish()
+        }
     }
 
     // 위치 권한 확인
     private fun permissionCheck() {
-        val preference = getPreferences(MODE_PRIVATE)
-        val isFirstCheck = preference.getBoolean("isFirstPermissionCheck", true)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // 권한이 없는 상태
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -58,7 +75,7 @@ class WalkMapActivity : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요.")
                 builder.setPositiveButton("그래요") { dialog, which ->
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), ACCESS_FINE_LOCATION)
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_NETWORK_STATE), ACCESS_FINE_LOCATION)
                 }
                 builder.setNegativeButton("싫어요") { dialog, which ->
                     finish()
@@ -67,8 +84,8 @@ class WalkMapActivity : AppCompatActivity() {
             }
         } else {
             // 권한이 있는 상태
-            startTracking()
             visible()
+            startTracking()
         }
     }
 
@@ -91,14 +108,26 @@ class WalkMapActivity : AppCompatActivity() {
 
     /** GPS 가 켜져있는지 확인한다 */
     private fun checkLocationService(): Boolean {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     /** 맵 트래킹 모드를 활성화 하여 현재 위치를 동기화 시킨다 */
+
+    @SuppressLint("MissingPermission")
     private fun startTracking() {
-        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.ic_paw2, MapPOIItem.ImageOffset(32, 32))
+        binding.mapView.apply {
+            setZoomLevelFloat(0.1f,false)
+            currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        }
+        binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.walkdog2, MapPOIItem.ImageOffset(16, 16))
+
+        val userNowLocation: Location? = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        //위도 , 경도
+        uLatitude = userNowLocation?.latitude
+        uLongitude = userNowLocation?.longitude
+        uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+
         walkJobFlag = true
         start()
         binding.tvTime.start()
@@ -109,6 +138,7 @@ class WalkMapActivity : AppCompatActivity() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOff
         walkJobFlag = false
         walkJob?.cancel()
+        binding.tvTime.stop()
         super.onDestroy()
     }
 
@@ -123,14 +153,20 @@ class WalkMapActivity : AppCompatActivity() {
                 }
                 runOnUiThread {
                     point++
-                    binding.tvPoint.text = "${point}점"
-                    Toast.makeText(this@WalkMapActivity  ,"포인트 1점 획득!",Toast.LENGTH_SHORT).show()
+
+                    binding.tvPoint.text = "$point"
+                    val customMarker = MapPOIItem()
+                    customMarker.itemName = MainActivity.userInfo.nickname
+                    customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!,uLongitude!!)
+                    customMarker.markerType = MapPOIItem.MarkerType.CustomImage
+                    customMarker.customImageResourceId = R.drawable.pawmarker
+                    val walkMarker = WalkMarker("$uLatitude","$uLongitude")
+                    locationList.add(walkMarker)
+                    binding.mapView.addPOIItem(customMarker)
                 }
             }
         }
     }
-
-
 
     fun visible() {
         binding.btnStart.visibility = View.GONE

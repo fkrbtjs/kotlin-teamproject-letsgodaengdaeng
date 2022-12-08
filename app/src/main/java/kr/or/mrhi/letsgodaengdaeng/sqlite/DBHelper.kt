@@ -106,7 +106,6 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         } finally {
             db.close()
         }
-
         return flag
     }
 
@@ -201,6 +200,7 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         """.trimIndent()
         val db = this.readableDatabase
         var photo: String? = null
+
         try {
             cursor = db.rawQuery(query, null)
             if (cursor.moveToFirst()) {
@@ -223,6 +223,7 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
             '${seoulGil.content}','${seoulGil.longitude}','${seoulGil.latitude}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
+
         try {
             db.execSQL(query)
             flag = true
@@ -232,7 +233,6 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         } finally {
             db.close()
         }
-
         return flag
     }
 
@@ -285,6 +285,7 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
             '${veterinary.phone}','${veterinary.longitude}','${veterinary.latitude}')
         """.trimIndent()
         val db: SQLiteDatabase = writableDatabase
+
         try {
             db.execSQL(query)
             flag = true
@@ -330,5 +331,4 @@ class DBHelper(val context: Context?, val name: String?, val version: Int) :
         }
         return veterinaryList
     }
-
 }

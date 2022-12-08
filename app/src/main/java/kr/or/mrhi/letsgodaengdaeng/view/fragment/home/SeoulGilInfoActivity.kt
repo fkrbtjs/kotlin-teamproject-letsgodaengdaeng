@@ -34,7 +34,7 @@ class SeoulGilInfoActivity : AppCompatActivity() {
 
         seoulGil = intent.getParcelableExtra("seoulGil")
 
-        setSupportActionBar(binding.toolVeterinary)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "${seoulGil?.name}"
 
@@ -61,20 +61,10 @@ class SeoulGilInfoActivity : AppCompatActivity() {
 
     /** 위치 권한 확인 */
     fun permissionCheck() {
-        val preference = getPreferences(MODE_PRIVATE)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // 권한이 없는 상태
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // 권한 거절 (다시 한 번 물어보기)
-                val builder = AlertDialog.Builder(this)
-                builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요.")
-                builder.setPositiveButton("그래요") { dialog, which ->
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), ACCESS_FINE_LOCATION)
-                }
-                builder.setNegativeButton("싫어요") { dialog, which ->
-                    finish()
-                }
-                builder.show()
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), ACCESS_FINE_LOCATION)
             }
         } else {
             // 권한이 있는 상태

@@ -15,7 +15,6 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
     lateinit var binding : FragmentBottomSheetDialogBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

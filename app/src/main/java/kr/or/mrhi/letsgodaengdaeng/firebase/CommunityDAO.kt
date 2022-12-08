@@ -42,10 +42,6 @@ class CommunityDAO {
         databaseReference?.child(communityID)?.child("comment")?.child(commentID)?.removeValue()
     }
 
-    fun minusLikeCount(docID:String, userCode: String) {
-        databaseReference!!.child(docID).child("like").child(userCode).removeValue()
-    }
-
     fun selectFriendCommunity(): Query? {
         return databaseReference?.orderByChild("category")?.equalTo("친구해요")
     }

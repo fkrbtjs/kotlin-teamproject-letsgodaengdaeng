@@ -33,35 +33,6 @@ class AlbumAdapter(val context: Context, val albumList: MutableList<String>) :
                     .into(binding.ivAlbum)
             }
         }
-
-
-//        if (ProfileFragment.imageList.isNotEmpty()) {
-//            for (i in 0 until ProfileFragment.imageList.size) {
-//                val image =
-//                    communityDAO.storage!!.reference.child("images/${ProfileFragment.imageList[i]}.jpg")
-//                Glide.with(context).load(image).into(binding.ivAlbum)
-//            }
-//        }
-
-//        communityDAO.selectCommunity()?.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (userdata in snapshot.children) {
-//                    val community = userdata.getValue(CommunityVO::class.java)
-//
-//                    if (community?.userID.equals(MainActivity.userCode)) {
-//                        if (community != null) {
-//                            communityDAO.storage!!.reference.child("images/${community.docID}.jpg")
-//                            Log.e("letsgodaengdaeng", "community album success")
-//                        }
-//                    }
-//                }// end of for
-//            }// end of onDataChange
-//
-//            override fun onCancelled(error: DatabaseError) {
-//                Log.e("letsgodaengdaeng", "community album fail $error")
-//            }
-//        })
-
     }
 
     override fun getItemCount(): Int {

@@ -59,6 +59,8 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(container?.context,LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = bannerAdapter
 
+        
+        /** indicator 추가 */
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(recyclerView)
 
