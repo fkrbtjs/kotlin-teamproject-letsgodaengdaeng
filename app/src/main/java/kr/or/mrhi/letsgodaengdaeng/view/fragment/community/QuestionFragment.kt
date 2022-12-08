@@ -18,18 +18,23 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentQuestionBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 
 
 class QuestionFragment : Fragment() {
     lateinit var binding : FragmentQuestionBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-    var type = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        selectQuestion()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +59,7 @@ class QuestionFragment : Fragment() {
 
     fun selectQuestion() {
         val communityDAO = CommunityDAO()
+        val communityFragment = (context as MainActivity).communityFragment
         communityDAO.selectQuestionCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 communityList.clear()
@@ -63,7 +69,7 @@ class QuestionFragment : Fragment() {
                     //비어있던 userKey 부분에 key 값을 넣어준다
                     community?.docID = userdata.key.toString()
                     if (community != null) {
-                        if (type == 0) {
+                        if (communityFragment.type == 0) {
                             communityList.add(community)
                         } else {
                             if (community.local.equals(MainActivity.userInfo.address)) {

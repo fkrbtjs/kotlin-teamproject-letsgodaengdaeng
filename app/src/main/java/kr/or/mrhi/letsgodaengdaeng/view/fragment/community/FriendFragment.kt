@@ -26,7 +26,7 @@ class FriendFragment : Fragment() {
     lateinit var binding : FragmentFriendBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-    var type = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +56,7 @@ class FriendFragment : Fragment() {
 
     fun selectUser() {
         val communityDAO = CommunityDAO()
+        val communityFragment = (context as MainActivity).communityFragment
         communityDAO.selectFriendCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 communityList.clear()
@@ -65,7 +66,7 @@ class FriendFragment : Fragment() {
                     //비어있던 userKey 부분에 key 값을 넣어준다
                     community?.docID = userdata.key.toString()
                     if (community != null) {
-                        if (type == 0) {
+                        if (communityFragment.type == 0) {
                             communityList.add(community)
                         } else {
                             if (community.local.equals(MainActivity.userInfo.address)) {

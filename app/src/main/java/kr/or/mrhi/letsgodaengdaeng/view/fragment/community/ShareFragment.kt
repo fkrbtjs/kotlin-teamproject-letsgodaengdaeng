@@ -18,13 +18,14 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentShareBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 
 
 class ShareFragment : Fragment() {
     lateinit var binding : FragmentShareBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-    var type = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,7 @@ class ShareFragment : Fragment() {
 
     fun selectShare() {
         val communityDAO = CommunityDAO()
+        val communityFragment = (context as MainActivity).communityFragment
         communityDAO.selectShareCommunity()?.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 communityList.clear()
@@ -63,7 +65,7 @@ class ShareFragment : Fragment() {
                     //비어있던 userKey 부분에 key 값을 넣어준다
                     community?.docID = userdata.key.toString()
                     if (community != null) {
-                        if (type == 0) {
+                        if (communityFragment.type == 0) {
                             communityList.add(community)
                         } else {
                             if (community.local.equals(MainActivity.userInfo.address)) {

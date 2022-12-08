@@ -34,24 +34,16 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         binding.btnDongnae.setOnClickListener {
 
-            allFragment.type = 1
-            allFragment.selectUser()
-            friendFragment.type = 1
-            shareFragment.type = 1
-            questionFragment.type = 1
-            communityFragment.changeFragmentAll()
+            communityFragment.type = 1
+//            communityFragment.changeFragmentAll()
 
             dismiss()
         }
 
         binding.btnAll.setOnClickListener {
 
-            allFragment.type = 0
-            allFragment.selectUser()
-            friendFragment.type = 0
-            shareFragment.type = 0
-            questionFragment.type = 0
-            communityFragment.changeFragmentAll()
+            communityFragment.type = 0
+//            communityFragment.changeFragmentAll()
 
             dismiss()
         }
