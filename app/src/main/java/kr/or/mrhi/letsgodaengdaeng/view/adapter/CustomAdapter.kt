@@ -12,9 +12,11 @@ import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.databinding.ItemMainBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.CommunityDAO
+import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.CommentActivity
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.profile.InfoActivity
+import java.util.HashMap
 
 class CustomAdapter(val context: Context, val communityList: MutableList<CommunityVO>): RecyclerView.Adapter<CustomAdapter.CustomViewHolder>() {
 
@@ -60,12 +62,9 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
         binding.linearLikes.setOnClickListener {
             if (likeFlag==0){
                 binding.ivLike.setImageResource(R.drawable.ic_fill_favorite)
-                community.likeCount += 1
                 likeFlag = 1
             }else{
-                communityDAO.minusLikeCount(community.docID!!, MainActivity.userCode!!)
                 binding.ivLike.setImageResource(R.drawable.ic_border_favorite)
-                community.likeCount += -1
                 likeFlag = 0
             }
         }

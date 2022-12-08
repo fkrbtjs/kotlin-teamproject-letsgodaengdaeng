@@ -1,6 +1,5 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kr.or.mrhi.letsgodaengdaeng.R
