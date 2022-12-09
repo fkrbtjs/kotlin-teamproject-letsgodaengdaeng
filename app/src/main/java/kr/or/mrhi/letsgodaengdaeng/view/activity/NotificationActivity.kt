@@ -5,7 +5,6 @@ import android.os.Bundle
 import kr.or.mrhi.letsgodaengdaeng.R
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityNotificationBinding
 
-
 class NotificationActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityNotificationBinding

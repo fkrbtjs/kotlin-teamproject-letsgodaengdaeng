@@ -50,11 +50,9 @@ class WalkFragment : Fragment() {
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 walkList.clear()
-                Log.e("dsadas",snapshot.toString())
                 for (walkData in snapshot.children) {
                     val walk = walkData.getValue(Walk::class.java)
                     walkList.add(walk!!)
-                    Log.e("dsadas",walk.toString())
                 }
                 adapter.notifyDataSetChanged()
             }

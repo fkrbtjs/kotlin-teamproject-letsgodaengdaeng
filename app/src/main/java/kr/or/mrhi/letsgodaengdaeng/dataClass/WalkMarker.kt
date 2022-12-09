@@ -7,8 +7,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class WalkMarker(
-    var latitude: String?,
-    var longitude: String?,
+    var userID: String? = null,
+    var latitude: String? = null,
+    var longitude: String? = null
 ) :
     Parcelable {
 
@@ -18,14 +19,15 @@ class WalkMarker(
         }
 
         override fun WalkMarker.write(parcel: Parcel, flags: Int) {
+            parcel.writeString(userID)
             parcel.writeString(latitude)
             parcel.writeString(longitude)
-
         }
     }
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
+        parcel.readString()
     )
 }

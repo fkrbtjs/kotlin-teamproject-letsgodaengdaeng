@@ -9,13 +9,16 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.dataClass.Walk
+import kr.or.mrhi.letsgodaengdaeng.dataClass.WalkMarker
 
 class WalkDAO {
     var databaseReference: DatabaseReference? = null
+    var databaseReferenceMarker: DatabaseReference? = null
 
     init {
         val db: FirebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = db.getReference("walk")
+        databaseReferenceMarker = db.getReference("marker")
     }
 
     fun insert(walk: Walk): Task<Void> {
@@ -26,5 +29,11 @@ class WalkDAO {
         return databaseReference!!.orderByChild("userID").equalTo(userCode)
     }
 
+    fun insertMarker(walkMarker: WalkMarker): Task<Void> {
+        return databaseReferenceMarker!!.push().setValue(walkMarker)
+    }
 
+    fun selectMarker(): Query? {
+        return databaseReferenceMarker
+    }
 }

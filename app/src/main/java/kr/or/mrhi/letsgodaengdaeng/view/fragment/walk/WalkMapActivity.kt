@@ -16,10 +16,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
+import kr.or.mrhi.letsgodaengdaeng.dataClass.User
+import kr.or.mrhi.letsgodaengdaeng.dataClass.Walk
 import kr.or.mrhi.letsgodaengdaeng.dataClass.WalkMarker
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
+import kr.or.mrhi.letsgodaengdaeng.firebase.WalkDAO
 import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -114,7 +120,6 @@ class WalkMapActivity : AppCompatActivity() {
 
     /** 맵 트래킹 모드를 활성화 하여 현재 위치를 동기화 시킨다 */
 
-    @SuppressLint("MissingPermission")
     private fun startTracking() {
         binding.mapView.apply {
             setZoomLevelFloat(0.1f,false)
@@ -122,11 +127,25 @@ class WalkMapActivity : AppCompatActivity() {
         }
         binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.walkdog2, MapPOIItem.ImageOffset(16, 16))
 
-        val userNowLocation: Location? = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        //위도 , 경도
-        uLatitude = userNowLocation?.latitude
-        uLongitude = userNowLocation?.longitude
-        uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+        val walkDAO = WalkDAO()
+        walkDAO.selectMarker()?.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                locationList.clear()
+                for (walkData in snapshot.children) {
+                    val walk = walkData.getValue(WalkMarker::class.java)
+                    val customMarker = MapPOIItem()
+                    customMarker.itemName = MainActivity.userInfo.nickname
+                    customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(walk?.latitude!!.toDouble(),walk?.longitude!!.toDouble())
+                    customMarker.markerType = MapPOIItem.MarkerType.CustomImage
+                    customMarker.customImageResourceId = R.drawable.pawmarker
+
+                    binding.mapView.addPOIItem(customMarker)
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("WalkFragment", "selectUserPhone onCancelled $error")
+            }
+        })
 
         walkJobFlag = true
         start()
@@ -142,6 +161,7 @@ class WalkMapActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    @SuppressLint("MissingPermission")
     fun start() {
         val backgroundScope = CoroutineScope(Dispatchers.Default + Job())
         walkJob = backgroundScope.launch {
@@ -153,16 +173,26 @@ class WalkMapActivity : AppCompatActivity() {
                 }
                 runOnUiThread {
                     point++
-
                     binding.tvPoint.text = "$point"
+
+                    val userNowLocation: Location? = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                    //위도 , 경도
+                    uLatitude = userNowLocation?.latitude
+                    uLongitude = userNowLocation?.longitude
+                    uNowPosition = MapPoint.mapPointWithGeoCoord(uLatitude!!, uLongitude!!)
+
                     val customMarker = MapPOIItem()
+
                     customMarker.itemName = MainActivity.userInfo.nickname
                     customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!,uLongitude!!)
                     customMarker.markerType = MapPOIItem.MarkerType.CustomImage
                     customMarker.customImageResourceId = R.drawable.pawmarker
-                    val walkMarker = WalkMarker("$uLatitude","$uLongitude")
+                    val walkMarker = WalkMarker(MainActivity.userCode,"$uLatitude","$uLongitude")
                     locationList.add(walkMarker)
                     binding.mapView.addPOIItem(customMarker)
+
+                    val walkDAO = WalkDAO()
+                    walkDAO.insertMarker(walkMarker)
                 }
             }
         }
