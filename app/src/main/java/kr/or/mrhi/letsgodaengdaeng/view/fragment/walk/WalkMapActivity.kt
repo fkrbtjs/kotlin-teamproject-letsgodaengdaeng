@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.*
 import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.User
-import kr.or.mrhi.letsgodaengdaeng.dataClass.Walk
 import kr.or.mrhi.letsgodaengdaeng.dataClass.WalkMarker
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityWalkMapBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.WalkDAO
@@ -30,7 +27,6 @@ import kr.or.mrhi.letsgodaengdaeng.view.activity.MainActivity
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import java.text.SimpleDateFormat
 
 class WalkMapActivity : AppCompatActivity() {
     lateinit var binding : ActivityWalkMapBinding
@@ -119,7 +115,6 @@ class WalkMapActivity : AppCompatActivity() {
     }
 
     /** 맵 트래킹 모드를 활성화 하여 현재 위치를 동기화 시킨다 */
-
     private fun startTracking() {
         binding.mapView.apply {
             setZoomLevelFloat(0.1f,false)
@@ -134,7 +129,7 @@ class WalkMapActivity : AppCompatActivity() {
                 for (walkData in snapshot.children) {
                     val walk = walkData.getValue(WalkMarker::class.java)
                     val customMarker = MapPOIItem()
-                    customMarker.itemName = MainActivity.userInfo.nickname
+                    customMarker.itemName = walk?.userID
                     customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(walk?.latitude!!.toDouble(),walk?.longitude!!.toDouble())
                     customMarker.markerType = MapPOIItem.MarkerType.CustomImage
                     customMarker.customImageResourceId = R.drawable.pawmarker
@@ -187,7 +182,7 @@ class WalkMapActivity : AppCompatActivity() {
                     customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!,uLongitude!!)
                     customMarker.markerType = MapPOIItem.MarkerType.CustomImage
                     customMarker.customImageResourceId = R.drawable.pawmarker
-                    val walkMarker = WalkMarker(MainActivity.userCode,"$uLatitude","$uLongitude")
+                    val walkMarker = WalkMarker(MainActivity.userInfo.nickname,"$uLatitude","$uLongitude")
                     locationList.add(walkMarker)
                     binding.mapView.addPOIItem(customMarker)
 
