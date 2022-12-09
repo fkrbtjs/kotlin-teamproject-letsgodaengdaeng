@@ -35,7 +35,6 @@ class VeterinaryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         veterinary = intent.getParcelableExtra("veterinary")
-
         setSupportActionBar(binding.toolVeterinary)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = veterinary?.name

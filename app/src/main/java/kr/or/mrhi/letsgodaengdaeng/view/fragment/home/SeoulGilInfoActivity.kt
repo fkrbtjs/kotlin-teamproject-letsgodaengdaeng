@@ -33,7 +33,6 @@ class SeoulGilInfoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         seoulGil = intent.getParcelableExtra("seoulGil")
-
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "${seoulGil?.name}"

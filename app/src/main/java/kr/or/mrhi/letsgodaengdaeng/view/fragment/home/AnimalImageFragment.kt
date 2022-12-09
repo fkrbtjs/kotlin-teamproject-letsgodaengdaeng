@@ -38,9 +38,7 @@ class AnimalImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAnimalImageBinding.inflate(inflater, container, false)
-
         val dbHelper = DBHelper(animalInfoActivity, DB_NAME, VERSION)
-
         val animal = animalInfoActivity?.animal
 
         animalImageList.clear()
@@ -49,8 +47,6 @@ class AnimalImageFragment : Fragment() {
         val animalPhotoAdapter = AnimalPhotoAdapter(requireContext() , animalImageList!!)
         binding.recyclerView.adapter = animalPhotoAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-
 
         return binding.root
     }

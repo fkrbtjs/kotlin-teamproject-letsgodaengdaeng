@@ -28,7 +28,6 @@ class AnimalPhotoAdapter (val context: Context, val animalPhotoList: MutableList
         Glide.with(context)
             .load("https://${animal.photo}")
             .into(binding.ivAnimalImage)
-
     }
 
     override fun getItemCount(): Int {

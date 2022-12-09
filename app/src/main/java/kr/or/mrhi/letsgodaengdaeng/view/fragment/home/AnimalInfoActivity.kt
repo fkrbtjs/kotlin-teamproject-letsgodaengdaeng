@@ -19,18 +19,13 @@ class AnimalInfoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         animal = intent.getParcelableExtra("animal")
-
         binding.tvName.text = animal?.name
-
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = null
-
         animalInfoFragment = AnimalInfoFragment()
         animalImageFragment = AnimalImageFragment()
-
         supportFragmentManager.beginTransaction().replace(R.id.animalFrameLayout, animalInfoFragment).commit()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,5 +47,4 @@ class AnimalInfoActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

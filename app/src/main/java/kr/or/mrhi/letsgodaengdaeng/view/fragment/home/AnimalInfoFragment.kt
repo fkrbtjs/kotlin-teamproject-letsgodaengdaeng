@@ -33,7 +33,6 @@ class AnimalInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAnimalInfoBinding.inflate(inflater, container, false)
-
         val animal = animalInfoActivity?.animal
 
         binding.tvName.text = animal?.name
@@ -53,6 +52,5 @@ class AnimalInfoFragment : Fragment() {
 
         return binding.root
     }
-
 }
 

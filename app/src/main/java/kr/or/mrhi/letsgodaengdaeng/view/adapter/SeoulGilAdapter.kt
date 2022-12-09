@@ -35,7 +35,6 @@ class SeoulGilAdapter  (val context: Context, val seoulGilList: MutableList<Seou
         }
         binding.tvLevel.text = level
 
-
         binding.root.setOnClickListener {
             val intent = Intent(context, SeoulGilInfoActivity::class.java)
             intent.putExtra("seoulGil", seoulGil)

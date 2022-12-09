@@ -50,7 +50,6 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
                 }
             }
 
-
         imgRef.downloadUrl.addOnCompleteListener {
             if (it.isSuccessful){
                 Glide.with(context)
@@ -59,22 +58,18 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
             }
         }
 
-
         binding.root.setOnClickListener {
             val intent = Intent(context,CommentActivity::class.java)
             intent.putExtra("communityCode","${community.docID}")
             ContextCompat.startActivity(binding.linearComment.context,intent,null)
             (holder.itemView.context as Activity).overridePendingTransition(R.anim.slide_right_enter,R.anim.slide_right_exit)
-
         }
-
 
         binding.ivProfilePicture.setOnClickListener {
             val intent = Intent(context,InfoActivity::class.java)
             intent.putExtra("userID",community.userID)
             ContextCompat.startActivity(binding.ivProfilePicture.context,intent,null)
         }
-
     }
 
     override fun getItemCount(): Int {

@@ -30,20 +30,17 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         /** 우리동네 게시물만 보여주기 */
         binding.btnDongnae.setOnClickListener {
-
             communityFragment.type = 1
             allFragment.selectUser()
             communityFragment.changeFragmentAll()
-
             dismiss()
         }
+
         /** 전체동네 게시물 보여주기 */
         binding.btnAll.setOnClickListener {
-
             communityFragment.type = 0
             allFragment.selectUser()
             communityFragment.changeFragmentAll()
-
             dismiss()
         }
 

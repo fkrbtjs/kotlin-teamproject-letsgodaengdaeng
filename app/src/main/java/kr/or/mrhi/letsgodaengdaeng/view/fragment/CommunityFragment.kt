@@ -115,7 +115,4 @@ class CommunityFragment : Fragment() {
         userTabBinding.tvName.text = title
         return userTabBinding.root
     }
-
-
-
 }

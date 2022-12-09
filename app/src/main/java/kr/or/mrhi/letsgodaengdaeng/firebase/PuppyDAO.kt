@@ -35,5 +35,4 @@ class PuppyDAO {
     fun deletePuppy(key: String): Task<Void> {
         return databaseReference!!.child(key).removeValue()
     }
-
 }

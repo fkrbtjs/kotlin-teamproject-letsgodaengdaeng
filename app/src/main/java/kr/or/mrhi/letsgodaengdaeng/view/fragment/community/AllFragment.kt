@@ -25,7 +25,6 @@ class AllFragment : Fragment() {
     lateinit var communityList: MutableList<CommunityVO>
     lateinit var adapter: CustomAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -54,6 +53,7 @@ class AllFragment : Fragment() {
 
         return binding.root
     }
+
     /** 모든 게시물을 불러온다 단 type에 따라서 동네범위 설정 */
     fun selectUser() {
         val communityDAO = CommunityDAO()
@@ -84,8 +84,5 @@ class AllFragment : Fragment() {
                 Log.e("firebasecrud22", "selectUser() ValueEventListener cancel $error")
             }
         })
-
-
     }
-
 }

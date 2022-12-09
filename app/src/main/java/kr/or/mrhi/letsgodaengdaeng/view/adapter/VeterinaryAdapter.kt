@@ -26,7 +26,6 @@ class VeterinaryAdapter(val context: Context, val VeterinaryList: MutableList<Ve
         binding.tvName.text = veterinary.name
         binding.tvAddress.text = veterinary.address
         binding.tvPhone.text = veterinary.phone
-
         binding.root.setOnClickListener {
             val intent = Intent(context, VeterinaryActivity::class.java)
             intent.putExtra("veterinary", veterinary)

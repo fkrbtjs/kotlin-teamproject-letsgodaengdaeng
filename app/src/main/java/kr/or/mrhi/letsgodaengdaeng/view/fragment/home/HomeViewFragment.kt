@@ -31,21 +31,16 @@ class HomeViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentHomeViewBinding.inflate(inflater, container, false)
-
-        val dbHelper =
-            DBHelper(requireContext(), SeouldataActivity.DB_NAME, SeouldataActivity.VERSION)
-
+        val dbHelper = DBHelper(requireContext(), SeouldataActivity.DB_NAME, SeouldataActivity.VERSION)
         val veterinaryList = dbHelper.selectVeterinary()
         val veterinaryAdapter = VeterinaryAdapter(requireContext(), veterinaryList!!, dbHelper)
         binding.rvVeterinary.adapter = veterinaryAdapter
-        binding.rvVeterinary.layoutManager =
-            LinearLayoutManager(requireContext())
+        binding.rvVeterinary.layoutManager = LinearLayoutManager(requireContext())
 
         val animalList = dbHelper.selectAnimal()
         val animalAdapter = AnimalAdapter(requireContext(), animalList!!, dbHelper)
         binding.rvAnimal.adapter = animalAdapter
-        binding.rvAnimal.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvAnimal.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         seoulgilAdapter = SeoulGilAdapter(requireContext(), seoulgilList)
         binding.rvSeoulgil.adapter = seoulgilAdapter
@@ -71,5 +66,4 @@ class HomeViewFragment : Fragment() {
         dbHelper.selectSeoulGil(gu)?.let { seoulgilList.addAll(it) }
         seoulgilAdapter.notifyDataSetChanged()
     }
-
 }

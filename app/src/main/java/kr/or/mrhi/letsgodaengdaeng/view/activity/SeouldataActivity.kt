@@ -55,7 +55,6 @@ class SeouldataActivity : AppCompatActivity() {
         val animalPhotoservice = retrofit.create(TbAdpWaitAnimalPhoto::class.java)
         val seoulGilservice = retrofit.create(SeoulGilWalk::class.java)
         val veterinaryService = retrofit.create(VeterinaryClinic::class.java)
-
         val dbHelper = DBHelper(this, DB_NAME, VERSION)
 
         /** 인터페이스 함수를 오버라이딩해서 구현*/
@@ -92,7 +91,6 @@ class SeouldataActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<Library>, t: Throwable) {
                     Log.e(TAG, "veterinaryService.getLibrarys 정보 누락")
                 }
-
             }) // end of veterinaryService.getLibrarys
 
         seoulGilservice.getSeoulGil(SeoulGil_API_KEY, SeoulGil_LIMIT)

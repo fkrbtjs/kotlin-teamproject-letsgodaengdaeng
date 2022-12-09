@@ -45,11 +45,8 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.BannerRecyclerView.isSaveEnabled = false
-
         binding.toolbar.bringToFront()
-
         bannerList.clear()
-
         bannerList.add(R.drawable.bannerdog2)
         bannerList.add(R.drawable.bannerseoulcenter)
         bannerList.add(R.drawable.bannerkaps)
@@ -59,11 +56,9 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(container?.context,LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = bannerAdapter
 
-        
         /** indicator 추가 */
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(recyclerView)
-
         val indicator: CircleIndicator2 = binding.indicator
         indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
 

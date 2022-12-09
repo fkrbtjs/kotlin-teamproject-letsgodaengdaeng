@@ -22,10 +22,10 @@ import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 
 
 class QuestionFragment : Fragment() {
+
     lateinit var binding : FragmentQuestionBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,6 @@ class QuestionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentQuestionBinding.inflate(inflater, container, false)
-
         communityList = mutableListOf()
         adapter = CustomAdapter(requireContext(),communityList)
         val linearLayout = LinearLayoutManager(context)
@@ -52,7 +51,6 @@ class QuestionFragment : Fragment() {
         binding.recyclerviewQuestion.adapter = adapter
 
         selectQuestion()
-
 
         return binding.root
     }

@@ -22,11 +22,9 @@ import kr.or.mrhi.letsgodaengdaeng.view.adapter.CustomAdapter
 
 class FriendFragment : Fragment() {
 
-
     lateinit var binding : FragmentFriendBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +40,6 @@ class FriendFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFriendBinding.inflate(inflater, container, false)
-
         communityList = mutableListOf()
         adapter = CustomAdapter(requireContext(),communityList)
         val linearLayout = LinearLayoutManager(context)
@@ -52,7 +49,6 @@ class FriendFragment : Fragment() {
         binding.recyclerviewFriend.adapter = adapter
 
         selectUser()
-
 
         return binding.root
     }

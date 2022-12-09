@@ -20,5 +20,4 @@ class StoreFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_store, container, false)
     }
-
 }

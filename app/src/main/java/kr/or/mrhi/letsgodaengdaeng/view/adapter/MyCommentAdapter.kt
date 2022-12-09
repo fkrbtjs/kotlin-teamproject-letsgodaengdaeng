@@ -53,7 +53,6 @@ class MyCommentAdapter(val context: Context, val commentList: MutableList<Commen
             (holder.itemView.context as Activity).overridePendingTransition(
                 R.anim.slide_right_enter,
                 R.anim.slide_right_exit)
-
         }
 
         binding.btnMore.setOnClickListener {

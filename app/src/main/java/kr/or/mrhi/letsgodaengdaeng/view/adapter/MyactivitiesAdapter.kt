@@ -48,7 +48,6 @@ class MyactivitiesAdapter(val context: Context, val communityList: MutableList<C
             }
         }
 
-
         imgRef.downloadUrl.addOnCompleteListener {
             if (it.isSuccessful){
                 Glide.with(context)

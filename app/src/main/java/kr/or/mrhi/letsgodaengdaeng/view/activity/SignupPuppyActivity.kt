@@ -175,7 +175,6 @@ class SignupPuppyActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
             finish()
-
         }
     }
 

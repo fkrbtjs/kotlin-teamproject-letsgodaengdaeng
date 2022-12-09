@@ -152,5 +152,4 @@ class CommentActivity : AppCompatActivity() {
         }
 
     }
-
 }

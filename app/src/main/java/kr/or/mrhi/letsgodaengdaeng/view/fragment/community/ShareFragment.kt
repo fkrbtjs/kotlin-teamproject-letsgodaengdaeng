@@ -22,10 +22,10 @@ import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 
 
 class ShareFragment : Fragment() {
+
     lateinit var binding : FragmentShareBinding
     lateinit var adapter: CustomAdapter
     var communityList: MutableList<CommunityVO> = mutableListOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +35,12 @@ class ShareFragment : Fragment() {
         selectShare()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentShareBinding.inflate(inflater, container, false)
-
         communityList = mutableListOf()
         adapter = CustomAdapter(requireContext(),communityList)
         val linearLayout = LinearLayoutManager(context)
@@ -52,7 +50,6 @@ class ShareFragment : Fragment() {
         binding.recyclerviewShare.adapter = adapter
 
         selectShare()
-
 
         return binding.root
     }

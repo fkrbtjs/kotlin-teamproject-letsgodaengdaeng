@@ -80,6 +80,5 @@ class SearchActivity : AppCompatActivity() {
                return true
             }
         })
-
     }
 }

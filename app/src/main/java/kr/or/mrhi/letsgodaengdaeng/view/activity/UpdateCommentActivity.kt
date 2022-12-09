@@ -145,10 +145,7 @@ class UpdateCommentActivity : AppCompatActivity() {
                     }
                     finish()
                 }
-
             }
-
         }
-
     }
 }

@@ -22,7 +22,6 @@ class CommentAdapter (val context: Context, val commentList: MutableList<Comment
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         val binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return CommentViewHolder(binding)
     }
 
@@ -58,7 +57,6 @@ class CommentAdapter (val context: Context, val commentList: MutableList<Comment
             val bottomSheetDialogComment = BottomSheetDialogComment(docID,comment.commentID!!,commentList)
             bottomSheetDialogComment.show((context as CommentActivity).supportFragmentManager,bottomSheetDialogComment.tag)
         }
-
     }
 
     override fun getItemCount(): Int {
