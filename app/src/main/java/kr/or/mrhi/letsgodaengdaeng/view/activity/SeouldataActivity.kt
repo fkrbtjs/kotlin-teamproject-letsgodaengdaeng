@@ -33,31 +33,36 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SeouldataActivity : AppCompatActivity() {
     companion object {
-        const val DB_NAME = "testDB"
-        const val VERSION = 49
+        const val DB_NAME = "seoulDataDB"
+        const val VERSION = 1
     }
 
     val TAG = this.javaClass.simpleName
+
+    /** retrofit 객체 생성*/
+    val retrofit = Retrofit.Builder()
+        .baseUrl(DOMAIN)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    /** retrofit 객체 인터페이스 전달*/
+    val animalservice = retrofit.create(TbAdpWaitAnimal::class.java)
+    val animalPhotoservice = retrofit.create(TbAdpWaitAnimalPhoto::class.java)
+    val seoulGilservice = retrofit.create(SeoulGilWalk::class.java)
+    val veterinaryService = retrofit.create(VeterinaryClinic::class.java)
+    val dbHelper = DBHelper(this, DB_NAME, VERSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivitySeouldataBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /** retrofit 객체 생성*/
-        val retrofit = Retrofit.Builder()
-            .baseUrl(DOMAIN)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        /** retrofit 객체 인터페이스 전달*/
-        val animalservice = retrofit.create(TbAdpWaitAnimal::class.java)
-        val animalPhotoservice = retrofit.create(TbAdpWaitAnimalPhoto::class.java)
-        val seoulGilservice = retrofit.create(SeoulGilWalk::class.java)
-        val veterinaryService = retrofit.create(VeterinaryClinic::class.java)
-        val dbHelper = DBHelper(this, DB_NAME, VERSION)
-
         /** 인터페이스 함수를 오버라이딩해서 구현*/
+        veterinary()
+
+    } // end of onCreate
+
+    fun veterinary() {
         veterinaryService.getLibrarys(VeterinaryApi.API_KEY, VeterinaryApi.LIMIT)
             .enqueue(object : Callback<Library> {
 
@@ -72,11 +77,7 @@ class SeouldataActivity : AppCompatActivity() {
                                 val address = loadData.RDNWHLADDR
                                 val phone = loadData.SITETEL
                                 val tmPt = CoordPoint(loadData.X.toDouble(), loadData.Y.toDouble())
-                                val wgsPt = TransCoord.getTransCoord(
-                                    tmPt,
-                                    TransCoord.COORD_TYPE_TM,
-                                    TransCoord.COORD_TYPE_WGS84
-                                )
+                                val wgsPt = TransCoord.getTransCoord(tmPt, TransCoord.COORD_TYPE_TM, TransCoord.COORD_TYPE_WGS84)
                                 val longitude = wgsPt.x
                                 val latitude = wgsPt.y
 
@@ -85,6 +86,7 @@ class SeouldataActivity : AppCompatActivity() {
                                 dbHelper.insertVeterinary(veterinary)
                             }
                         }
+                        seoulGil()
                     }
                 } // end of onResponse
 
@@ -92,7 +94,9 @@ class SeouldataActivity : AppCompatActivity() {
                     Log.e(TAG, "veterinaryService.getLibrarys 정보 누락")
                 }
             }) // end of veterinaryService.getLibrarys
+    }
 
+    fun seoulGil() {
         seoulGilservice.getSeoulGil(SeoulGil_API_KEY, SeoulGil_LIMIT)
             .enqueue(object : Callback<SeoulGil> {
                 override fun onResponse(
@@ -130,6 +134,7 @@ class SeouldataActivity : AppCompatActivity() {
                             )
                             dbHelper.insertSeoulGil(seoulGil)
                         } // end of for
+                        animal()
                     } ?: let {
                         Log.e(TAG, "SeoulGilWalkCourse 정보 누락")
                     }
@@ -139,7 +144,9 @@ class SeouldataActivity : AppCompatActivity() {
                     Log.e(TAG, "seoulGilservice.getSeoulGil ${t.stackTraceToString()}")
                 }
             }) // end of seoulGilservice.getSeoulGil
+    }
 
+    fun animal() {
         animalservice.getLibrarys(ANIMAL_API_KEY, ANIMAL_LIMIT)
             .enqueue(object : Callback<AnimalLibrary> {
                 override fun onResponse(
@@ -169,6 +176,7 @@ class SeouldataActivity : AppCompatActivity() {
                             val animal = Animal(num, name, breeds, gender, age, weight, intro)
                             dbHelper.insertAnimal(animal)
                         } // end of for
+                        animalPhoto()
                     } ?: let {
                         Log.e(TAG, "TbAdpWaitAnimalView 정보 누락")
                     }
@@ -178,7 +186,9 @@ class SeouldataActivity : AppCompatActivity() {
                     Log.e(TAG, "animalservice.getLibrarys ${t.stackTraceToString()}")
                 }
             }) // end of animalservice.getLibrarys
+    }
 
+    fun animalPhoto() {
         animalPhotoservice.getLibrarys(PHOTO_API_KEY, PHOTO_LIMIT)
             .enqueue(object : Callback<AnimalPhotoLibrary> {
                 override fun onResponse(
@@ -219,5 +229,5 @@ class SeouldataActivity : AppCompatActivity() {
                     Log.e(TAG, "animalPhotoservice.getLibrarys ${t.stackTraceToString()}")
                 }
             }) // end of animalPhotoservice.getLibrarys
-    } // end of onCreate
+    }
 }

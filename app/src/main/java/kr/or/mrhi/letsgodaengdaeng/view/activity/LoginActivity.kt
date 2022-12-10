@@ -39,27 +39,37 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             var loginFlag = false
             val userDAO = UserDAO()
-            userDAO.selectUserType("phone","${binding.edtPhone.text}")?.addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (userData in snapshot.children) {
-                        val user = userData.getValue(User::class.java)
-                        if (user?.password == "${binding.edtPassword.text}") {
-                            Toast.makeText(this@LoginActivity, "로그인이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                            loginFlag = true
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            intent.putExtra("userCode", userData.key)
-                            startActivity(intent)
-                            finish()
+            userDAO.selectUserType("phone", "${binding.edtPhone.text}")
+                ?.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (userData in snapshot.children) {
+                            val user = userData.getValue(User::class.java)
+                            if (user?.password == "${binding.edtPassword.text}") {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "로그인이 완료되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loginFlag = true
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                intent.putExtra("userCode", userData.key)
+                                startActivity(intent)
+                                finish()
+                            }
+                        }
+                        if (!loginFlag) {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "핸드폰과 비밀번호를 확인해주세요",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
-                    if (!loginFlag) {
-                        Toast.makeText(this@LoginActivity, "핸드폰과 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e(TAG, "selectUserPhone onCancelled $error")
                     }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e (TAG, "selectUserPhone onCancelled $error")
-                }
-            })
+                })
         }
 
         /** 회원가입 */
@@ -67,26 +77,6 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, SignupUserActivity::class.java)
             startActivity(intent)
             finish()
-        }
-        getHashKey()
-    }
-
-    fun getHashKey(){
-        var packageInfo : PackageInfo = PackageInfo()
-        try {
-            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        } catch (e: PackageManager.NameNotFoundException){
-            e.printStackTrace()
-        }
-
-        for (signature: Signature in packageInfo.signatures){
-            try{
-                var md: MessageDigest = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            } catch(e: NoSuchAlgorithmException){
-                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
-            }
         }
     }
 

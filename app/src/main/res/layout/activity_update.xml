@@ -278,7 +278,7 @@
 
             <EditText
                 android:id="@+id/edt_tendency"
-                android:layout_width="match_parent"
+                android:layout_width="380dp"
                 android:layout_height="100dp"
                 android:hint="Text"
                 android:layout_marginTop="10dp"

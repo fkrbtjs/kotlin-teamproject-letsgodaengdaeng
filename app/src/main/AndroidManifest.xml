@@ -89,9 +89,6 @@
             android:name=".view.activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.NotificationActivity"
-            android:exported="false" />
-        <activity
             android:name=".view.activity.WriteActivity"
             android:exported="false" />
         <activity
@@ -110,7 +107,7 @@
             android:name=".view.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.SplashActivity"
+            android:name=".view.activity.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

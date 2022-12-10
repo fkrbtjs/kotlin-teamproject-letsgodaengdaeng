@@ -56,6 +56,7 @@ class InfochangeActivity : AppCompatActivity() {
             }
         }
 
+        /** 현재 로그인된 유저의 패스워드와 입력한 패스워드를 비교한다. */
         binding.btnSuccess.setOnClickListener {
             userDAO.selectUser(MainActivity.userCode!!)
                 ?.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -66,6 +67,7 @@ class InfochangeActivity : AppCompatActivity() {
                             binding.scChangeView.visibility = View.VISIBLE
                             binding.llUserCheck.visibility = View.INVISIBLE
                             userPassword = user.password
+                            softkeyboardHide(binding.edtPassword)
                         }else{
                             Toast.makeText(this@InfochangeActivity, "패스워드가 일치하지 않습니다.", Toast.LENGTH_SHORT).show()
                         }

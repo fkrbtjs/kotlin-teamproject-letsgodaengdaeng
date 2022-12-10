@@ -125,7 +125,8 @@
                             android:id="@+id/ivUserImage"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:srcCompat="@drawable/default_person" />
+                            android:background="#F6F5F5"
+                            android:scaleType="centerCrop"/>
 
                     </androidx.cardview.widget.CardView>
 

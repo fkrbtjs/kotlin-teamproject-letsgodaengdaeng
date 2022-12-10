@@ -116,6 +116,7 @@ class ProfileFragment : Fragment() {
                     val user: User? = snapshot.getValue(User::class.java)
                     binding.tvUserName.text = user?.nickname
                     binding.tvIntroduce.text = user?.introduce
+                    binding.tvPointCount.text = user?.point
                 }
             }
             override fun onCancelled(error: DatabaseError) {

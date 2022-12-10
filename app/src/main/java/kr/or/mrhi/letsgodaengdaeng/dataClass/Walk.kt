@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Walk(
-    var data: String? = "",
+    var date: String? = "",
     var time: String? = "",
     var point: String? = "",
     var userID : String? = ""
@@ -20,7 +20,7 @@ class Walk(
         }
 
         override fun Walk.write(parcel: Parcel, flags: Int) {
-            parcel.writeString(data)
+            parcel.writeString(date)
             parcel.writeString(time)
             parcel.writeString(point)
             parcel.writeString(userID)

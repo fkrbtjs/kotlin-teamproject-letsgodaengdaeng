@@ -1,23 +1,23 @@
 package kr.or.mrhi.letsgodaengdaeng.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kr.or.mrhi.letsgodaengdaeng.R
-import kr.or.mrhi.letsgodaengdaeng.dataClass.CommunityVO
 import kr.or.mrhi.letsgodaengdaeng.dataClass.User
 import kr.or.mrhi.letsgodaengdaeng.databinding.ActivityMainBinding
 import kr.or.mrhi.letsgodaengdaeng.databinding.TabMainBinding
 import kr.or.mrhi.letsgodaengdaeng.firebase.UserDAO
-import kr.or.mrhi.letsgodaengdaeng.view.fragment.*
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.HomeFragment
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.ProfileFragment
+import kr.or.mrhi.letsgodaengdaeng.view.fragment.WalkFragment
 
 class MainActivity : AppCompatActivity() {
-
     companion object{
         var userCode: String? = null
         lateinit var userInfo: User

@@ -1,5 +1,6 @@
 package kr.or.mrhi.letsgodaengdaeng.view.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -26,6 +27,7 @@ class CustomAdapter(val context: Context, val communityList: MutableList<Communi
         return CustomViewHolder(binding)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         var likeFlag = 0
         val community = communityList[position]

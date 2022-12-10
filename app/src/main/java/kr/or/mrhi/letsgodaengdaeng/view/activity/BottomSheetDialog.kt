@@ -10,7 +10,6 @@ import kr.or.mrhi.letsgodaengdaeng.databinding.FragmentBottomSheetDialogBinding
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.CommunityFragment
 import kr.or.mrhi.letsgodaengdaeng.view.fragment.community.AllFragment
 
-
 class BottomSheetDialog : BottomSheetDialogFragment() {
 
     lateinit var binding : FragmentBottomSheetDialogBinding

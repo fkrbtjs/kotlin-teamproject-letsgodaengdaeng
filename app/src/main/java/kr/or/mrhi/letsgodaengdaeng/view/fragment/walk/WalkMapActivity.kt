@@ -42,6 +42,8 @@ class WalkMapActivity : AppCompatActivity() {
     var uNowPosition: MapPoint? = null
     var locationList = arrayListOf<WalkMarker>()
 
+    val customImage = R.drawable.pawmarker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWalkMapBinding.inflate(layoutInflater)
@@ -72,8 +74,6 @@ class WalkMapActivity : AppCompatActivity() {
     private fun permissionCheck() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // 권한이 없는 상태
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // 권한 거절 (다시 한 번 물어보기)
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("현재 위치를 확인하시려면 위치 권한을 허용해주세요.")
                 builder.setPositiveButton("그래요") { dialog, which ->
@@ -83,7 +83,6 @@ class WalkMapActivity : AppCompatActivity() {
                     finish()
                 }
                 builder.show()
-            }
         } else {
             // 권한이 있는 상태
             visible()
@@ -116,12 +115,11 @@ class WalkMapActivity : AppCompatActivity() {
 
     /** 맵 트래킹 모드를 활성화 하여 현재 위치를 동기화 시킨다 */
     private fun startTracking() {
-        binding.mapView.apply {
-            setZoomLevelFloat(0.1f,false)
-            currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
-        }
+        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+
         binding.mapView.setCustomCurrentLocationMarkerTrackingImage(R.drawable.walkdog2, MapPOIItem.ImageOffset(16, 16))
 
+        /** 맵이 켜질때 커스텀 마커를 찍어준다. */
         val walkDAO = WalkDAO()
         walkDAO.selectMarker()?.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -132,7 +130,7 @@ class WalkMapActivity : AppCompatActivity() {
                     customMarker.itemName = walk?.userID
                     customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(walk?.latitude!!.toDouble(),walk?.longitude!!.toDouble())
                     customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-                    customMarker.customImageResourceId = R.drawable.pawmarker
+                    customMarker.customImageResourceId = customImage
 
                     binding.mapView.addPOIItem(customMarker)
                 }
@@ -181,7 +179,7 @@ class WalkMapActivity : AppCompatActivity() {
                     customMarker.itemName = MainActivity.userInfo.nickname
                     customMarker.mapPoint = MapPoint.mapPointWithGeoCoord(uLatitude!!,uLongitude!!)
                     customMarker.markerType = MapPOIItem.MarkerType.CustomImage
-                    customMarker.customImageResourceId = R.drawable.pawmarker
+                    customMarker.customImageResourceId = customImage
                     val walkMarker = WalkMarker(MainActivity.userInfo.nickname,"$uLatitude","$uLongitude")
                     locationList.add(walkMarker)
                     binding.mapView.addPOIItem(customMarker)
@@ -194,6 +192,7 @@ class WalkMapActivity : AppCompatActivity() {
     }
 
     fun visible() {
+        binding.cardView.bringToFront()
         binding.btnStart.visibility = View.GONE
         binding.cardView.visibility = View.VISIBLE
         binding.mapView.visibility = View.VISIBLE

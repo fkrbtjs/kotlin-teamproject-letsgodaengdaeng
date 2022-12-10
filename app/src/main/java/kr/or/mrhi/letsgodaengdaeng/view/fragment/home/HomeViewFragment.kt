@@ -59,6 +59,7 @@ class HomeViewFragment : Fragment() {
         return binding.root
     }
 
+    /** gu에 해당되는 목록을 리사이클러뷰에 다시 띄운다 */
     fun filterLocal(gu: String) {
         val dbHelper =
             DBHelper(requireContext(), SeouldataActivity.DB_NAME, SeouldataActivity.VERSION)

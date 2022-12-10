@@ -10,11 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.JavascriptInterface
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -110,7 +106,6 @@ class SignupUserActivity : AppCompatActivity() {
     /** 리스너 모음 */
     fun Listener() {
         auth.signOut()
-
         /** 유저 프로필 이미지 등록 */
         binding.ivUserImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -126,6 +121,37 @@ class SignupUserActivity : AppCompatActivity() {
             userImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.default_person}")
             return@setOnLongClickListener true
         }
+
+        /** 핸드폰 두번째값 : 모두 입력시 세번째값으로 포커스 넘김 && 둘,셋 번호 길이 8이면 인증받기 버튼 활성화 , 키보드 다운  */
+        binding.edtPhone2.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (text?.length == 4) {
+                    binding.edtPhone3.requestFocus()
+                }
+                if ((text!!.length + binding.edtPhone3.text.length) == 8) {
+                    binding.btnPhone.isEnabled = true
+                    softkeyboardHide(binding.edtPhone2)
+                } else {
+                    binding.btnPhone.isEnabled = false
+                }
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+        })
+
+        /** 핸드폰 세번쨰값 : 둘,셋 번호 길이 8이면 인증받기 버튼 활성화 , 키보드 다운 */
+        binding.edtPhone3.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if ((text!!.length + binding.edtPhone2.text.length) == 8) {
+                    binding.btnPhone.isEnabled = true
+                    softkeyboardHide(binding.edtPhone3)
+                } else {
+                    binding.btnPhone.isEnabled = false
+                }
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {}
+        })
 
         /** 인증받기 버튼 누르면 입력한 전화번호로 인증번호 발송 */
         binding.btnPhone.setOnClickListener {
@@ -172,41 +198,21 @@ class SignupUserActivity : AppCompatActivity() {
                 })
         }
 
-        /** 번호확인 버튼 누르면 입력한 인증번호 확인 후 토스트 메시지 */
+        /** 핸드폰 번호확인 버튼 누르면 입력한 인증번호 확인 후 토스트 메시지 */
         binding.btnPhoneCheck.setOnClickListener {
-            val credential =
-                PhoneAuthProvider.getCredential(verificationId!!, "${binding.edtPhoneCheck.text}")
+            val credential = PhoneAuthProvider.getCredential(verificationId!!, "${binding.edtPhoneCheck.text}")
             signInWithPhoneAuthCredential(credential)
         }
 
-        /** 핸드폰 두번째값 : 모두 입력시 세번째값으로 포커스 넘김 && 둘,셋 번호 길이 8이면 인증받기 버튼 활성화 , 키보드 다운  */
-        binding.edtPhone2.addTextChangedListener(object : TextWatcher {
+        /** 비밀번호 패턴 체크 */
+        binding.edtPassword.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text?.length == 4) {
-                    binding.edtPhone3.requestFocus()
-                }
-                if ((text!!.length + binding.edtPhone3.text.length) == 8) {
-                    binding.btnPhone.isEnabled = true
-                    softkeyboardHide(binding.edtPhone2)
+                if (text!!.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#$%^&*])(?=.*[0-9!@#$%^&*]).{4,10}$".toRegex())) {
+                    binding.tilPassword.isErrorEnabled = false
+                    passwordFlag = true
                 } else {
-                    binding.btnPhone.isEnabled = false
-                }
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-        })
-
-        /** 핸드폰 세번쨰값 : 둘,셋 번호 길이 8이면 인증받기 버튼 활성화 , 키보드 다운 */
-        binding.edtPhone3.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text?.length == 4) {
-                    binding.edtPhone3.requestFocus()
-                }
-                if ((text!!.length + binding.edtPhone2.text.length) == 8) {
-                    binding.btnPhone.isEnabled = true
-                    softkeyboardHide(binding.edtPhone3)
-                } else {
-                    binding.btnPhone.isEnabled = false
+                    binding.tilPassword.error = "영문,숫자,특수문자 두가지 이상 , 4자 이상 입력해주세요"
+                    passwordFlag = false
                 }
             }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -228,20 +234,6 @@ class SignupUserActivity : AppCompatActivity() {
             override fun afterTextChanged(text: Editable?) {}
         })
 
-        /** 비밀번호 패턴 체크 */
-        binding.edtPassword.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text!!.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#$%^&*])(?=.*[0-9!@#$%^&*]).{4,10}$".toRegex())) {
-                    binding.tilPassword.isErrorEnabled = false
-                    passwordFlag = true
-                } else {
-                    binding.tilPassword.error = "영문,숫자,특수문자 두가지 이상 , 4자 이상 입력해주세요"
-                    passwordFlag = false
-                }
-            }
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-        })
 
         /** 주소 액티비티 이동 후 주소 받기 */
         binding.edtAddress.setOnClickListener {
@@ -303,7 +295,7 @@ class SignupUserActivity : AppCompatActivity() {
                 val nickname = binding.edtNickname.text.toString()
                 val introduce = binding.edtIntroduce.text.toString()
 
-                user = User(phone, password, nickname, introduce, address)
+                user = User(phone, password, nickname, introduce, address, "0")
 
                 val intent = Intent(this@SignupUserActivity, SignupPuppyActivity::class.java)
                 intent.putExtra("userCode", userCode)
@@ -311,6 +303,7 @@ class SignupUserActivity : AppCompatActivity() {
                 if (userImageUri != null) {
                     intent.putExtra("userImageUri", userImageUri)
                 }
+
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
                 finish()

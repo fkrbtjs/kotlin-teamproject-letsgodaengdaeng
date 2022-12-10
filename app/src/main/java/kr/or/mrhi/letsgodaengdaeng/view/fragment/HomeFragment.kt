@@ -47,24 +47,31 @@ class HomeFragment : Fragment() {
         binding.BannerRecyclerView.isSaveEnabled = false
         binding.toolbar.bringToFront()
         bannerList.clear()
+
+        /** 배너에 넣을 이미지 3개를 저장 */
         bannerList.add(R.drawable.bannerdog2)
         bannerList.add(R.drawable.bannerseoulcenter)
         bannerList.add(R.drawable.bannerkaps)
 
+        /** 리사이클러뷰 구현 */
         val bannerAdapter = BannerAdapter(requireActivity(), bannerList)
         val recyclerView: RecyclerView = binding.BannerRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(container?.context,LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = bannerAdapter
 
-        /** indicator 추가 */
+        /** indicator 추가 리사이클러뷰 밑에 같이 연동되는 동그라미친구들 */
+        /** RecyclerView를 집어넣고 Pager의 느낌을 내기 위하여 PagerSnapHelper를 이용 (뷰페이저가 아닌 리사이클러뷰의 페이지어댑터)  */
         val pagerSnapHelper = PagerSnapHelper()
         pagerSnapHelper.attachToRecyclerView(recyclerView)
         val indicator: CircleIndicator2 = binding.indicator
         indicator.attachToRecyclerView(recyclerView, pagerSnapHelper)
 
+        /** 플래그 TRUE 변경으로 bannerJob 이 실행될 수 있도록 설정 */
         bannerJobFlag = true
+        /** 자동 슬라이드 배너를 실행 */
         rollingBanner()
 
+        /** 프레임레이아웃에 홈뷰프래그먼트를 집어넣고 바로 보이게 만든다 */
         homeViewFragment = HomeViewFragment()
         childFragmentManager.beginTransaction().replace(R.id.homeFrameLayout, homeViewFragment).commit()
 
@@ -74,7 +81,9 @@ class HomeFragment : Fragment() {
     /** 프래그먼트가 onDestroy() 될때 bannerJob 취소 */
     override fun onDestroy() {
         super.onDestroy()
+        /** 플래그 false 변경하여 종료하게끔 설정 */
         bannerJobFlag = false
+        /** bannerJob을 취소한다 */
         bannerJob?.cancel()
     }
 

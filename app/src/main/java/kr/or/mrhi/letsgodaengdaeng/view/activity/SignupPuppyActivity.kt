@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -28,8 +29,10 @@ class SignupPuppyActivity : AppCompatActivity() {
     var breedFlag = false
     var tendencyFlag = false
     var puppy: Puppy? = null
-    var puppyImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.ic_dog}")
-    var requestLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+    var puppyImageUri =
+        Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.ic_dog}")
+    var requestLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,8 @@ class SignupPuppyActivity : AppCompatActivity() {
         listener()
 
         requestLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()) {
+            ActivityResultContracts.StartActivityForResult()
+        ) {
             if (it.resultCode == Activity.RESULT_OK) {
                 Glide.with(applicationContext)
                     .load(it.data?.data)
@@ -64,7 +68,7 @@ class SignupPuppyActivity : AppCompatActivity() {
             Glide.with(this@SignupPuppyActivity)
                 .load(R.drawable.default_person)
                 .into(binding.ivPuppyPicture)
-            puppyImageUri = null
+            puppyImageUri = Uri.parse("android.resource://kr.or.mrhi.letsgodaengdaeng/${R.drawable.ic_dog}")
             return@setOnLongClickListener true
         }
 
@@ -73,9 +77,9 @@ class SignupPuppyActivity : AppCompatActivity() {
         binding.rbtnSizeLarge.isChecked = true
 
         /** 이름 패턴 체크 */
-        binding.edtName.addTextChangedListener(object: TextWatcher {
+        binding.edtName.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())){
+                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())) {
                     binding.tilName.isErrorEnabled = false
                     nameFlag = true
                 } else {
@@ -84,14 +88,15 @@ class SignupPuppyActivity : AppCompatActivity() {
                 }
                 valueCheck()
             }
+
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
 
         /** 견종 패턴 체크 */
-        binding.edtBreed.addTextChangedListener(object: TextWatcher {
+        binding.edtBreed.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())){
+                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())) {
                     binding.tilBreed.isErrorEnabled = false
                     breedFlag = true
                 } else {
@@ -100,14 +105,15 @@ class SignupPuppyActivity : AppCompatActivity() {
                 }
                 valueCheck()
             }
+
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
 
         /** 성향 패턴 체크 */
-        binding.edtTendency.addTextChangedListener(object: TextWatcher {
+        binding.edtTendency.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())){
+                if (text!!.matches("^[가-힣a-zA-Z]{1,10}$".toRegex())) {
                     binding.tilTendency.isErrorEnabled = false
                     tendencyFlag = true
                 } else {
@@ -116,6 +122,7 @@ class SignupPuppyActivity : AppCompatActivity() {
                 }
                 valueCheck()
             }
+
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
         })
@@ -146,6 +153,7 @@ class SignupPuppyActivity : AppCompatActivity() {
             /** 유저 정보 */
             val user = intent.getParcelableExtra<User>("user")
             val userDAO = UserDAO()
+
             /** 유저 이미지 */
             var userImageUri: Uri? = null
             if (intent.hasExtra("userImageUri")) {
@@ -158,23 +166,37 @@ class SignupPuppyActivity : AppCompatActivity() {
             /** 유저 이미지 = puppyImageUri */
 
             /** 파이어베이스 리얼타임 & 스토리지 저장 */
-            userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)?.addOnSuccessListener {
-            }?.addOnFailureListener {
-                Log.e(TAG, "putFile(userImageUri) $it")
-            }
-            puppyDAO.storage?.reference?.child("puppyImage/$userCode.jpg")?.putFile(puppyImageUri!!)?.addOnSuccessListener {
-            }?.addOnFailureListener {
-                Log.e(TAG, "putFile(userImageUri) $it")
-            }
+            userDAO.storage?.reference?.child("userImage/$userCode.jpg")?.putFile(userImageUri!!)
+                ?.addOnSuccessListener {
+                        Toast.makeText(this@SignupPuppyActivity, "정보를 확인하고 있습니다.\n잠시만 기다려주세요",Toast.LENGTH_SHORT).show()
+                    puppyDAO.storage?.reference?.child("puppyImage/$userCode.jpg")
+                        ?.putFile(puppyImageUri!!)?.addOnSuccessListener {
 
-            userDAO.signUpUser(userCode!!, user)
-            puppyDAO.signUpPuppy(userCode!!, puppy!!)
+                        userDAO.signUpUser(userCode!!, user).addOnSuccessListener {
 
-            val intent = Intent(this@SignupPuppyActivity, MainActivity::class.java)
-            intent.putExtra("userCode", userCode)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
-            finish()
+                            puppyDAO.signUpPuppy(userCode!!, puppy!!).addOnSuccessListener {
+
+                                val intent = Intent(this@SignupPuppyActivity, MainActivity::class.java)
+                                intent.putExtra("userCode", userCode)
+                                startActivity(intent)
+                                overridePendingTransition(R.anim.slide_right_enter, R.anim.slide_right_exit)
+                                finish()
+
+                            }?.addOnFailureListener {
+                                Log.e(TAG, "signUpPuppy $it")
+                            } // end of signUpPuppy
+
+                        }?.addOnFailureListener {
+                            Log.e(TAG, "signUpUser $it")
+                        } // end of signUpUser
+
+                    }?.addOnFailureListener {
+                        Log.e(TAG, "putFile(userImageUri) $it")
+                    } // end of putFile(puppyImageUri!!)
+
+                }?.addOnFailureListener {
+                Log.e(TAG, "putFile(userImageUri) $it")
+            } // end of putFile(userImageUri!!)
         }
     }
 
@@ -184,7 +206,7 @@ class SignupPuppyActivity : AppCompatActivity() {
     }
 
     /** 핸드폰 인증을 하면 파이어베이스에 유저가 생성된다(Authentication 식별자와 uid)
-        그렇기때문에 정보를 입력하지 않고 창을 닫아버렸을때 그 생성된 식별자를 삭제한다 SignupUser 에도 동일 기능있음 */
+    그렇기때문에 정보를 입력하지 않고 창을 닫아버렸을때 그 생성된 식별자를 삭제한다 SignupUser 에도 동일 기능있음 */
     override fun onDestroy() {
         super.onDestroy()
         val auth = Firebase.auth

@@ -25,9 +25,8 @@ class WalkAdapter(val context: Context, val walkList: MutableList<Walk>) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val binding = holder.binding
         val walk = walkList[position]
-        val communityDAO = CommunityDAO()
 
-        binding.tvDate.text = walk.data
+        binding.tvDate.text = walk.date
         binding.tvTime.text = walk.time
         binding.tvPoint.text = walk.point
     }

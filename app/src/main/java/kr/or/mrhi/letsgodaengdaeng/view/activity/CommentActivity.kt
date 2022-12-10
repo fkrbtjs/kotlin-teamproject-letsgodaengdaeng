@@ -143,13 +143,5 @@ class CommentActivity : AppCompatActivity() {
             inputMethodManager.hideSoftInputFromWindow(binding.edtComment.windowToken, 0)
 
         }
-        if(intent.hasExtra("content")) {
-            for (i in 0 until commentList.size) {
-                if (commentList[i].content == intent.getStringExtra("content")!!) {
-                    binding.recyclerview.smoothScrollToPosition(i)
-                }
-            }
-        }
-
     }
 }
