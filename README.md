@@ -22,7 +22,7 @@
 2022.11.25(금) ~ 2022.12.09(금)
 
 
-##화면구성 및 기능
+## 화면구성 및 기능
 
 [Lets-Go-Daeng-Daeng.pdf](https://github.com/fkrbtjs/kotlin-teamproject-letsgodaengdaeng/files/10534457/Lets-Go-Daeng-Daeng.pdf)
 
