@@ -14,7 +14,7 @@
 | Language | Kotlin |
 | Editor | Android Studio Dolphin |
 | DB | Firebase,SQLite |
-| Github | https://github.com/fkrbtjs/MP3Player-kotlin-project |
+| Github | https://github.com/fkrbtjs/kotlin-teamproject-letsgodaengdaeng.git |
 
 
 ## 개발기간
