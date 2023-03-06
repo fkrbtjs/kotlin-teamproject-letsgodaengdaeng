@@ -26,4 +26,5 @@
 
 [Lets-Go-Daeng-Daeng.pdf](https://github.com/fkrbtjs/kotlin-teamproject-letsgodaengdaeng/files/10534457/Lets-Go-Daeng-Daeng.pdf)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/31ec31b4-492a-46bb-b05d-19e4dbbd4ce3/Untitled.png)
+![Untitled](https://user-images.githubusercontent.com/115532120/223151303-26f3c4a0-8a88-4025-b90d-08cad44b63ce.png)
+
